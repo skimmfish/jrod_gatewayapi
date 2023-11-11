@@ -1,0 +1,1276 @@
+openapi: 3.0.3
+info:
+  title: 'Gatewayblvd Documentation'
+  description: 'This documentation highlights all endpoints needed to integrate backend services with the skyline modem'
+  version: 1.0.0
+servers:
+  -
+    url: 'https://gatewayblvd.net/app/en/api'
+paths:
+  /api/login:
+    post:
+      summary: 'This function logs in a user that has been verified previously'
+      operationId: thisFunctionLogsInAUserThatHasBeenVerifiedPreviously
+      description: ''
+      parameters:
+        -
+          in: header
+          name: 'Accept-Language:'
+          description: ''
+          example: 'en,'
+          schema:
+            type: string
+        -
+          in: header
+          name: 'Accept:'
+          description: ''
+          example: 'application/json;utf-8,'
+          schema:
+            type: string
+        -
+          in: header
+          name: 'Connection:'
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n\"data\": $user information payload\n\"message\": 'success' or 'error'\n\"auth_token\": \"Bearer 3|7dUd16GpVXPwy530oqndmGXNDCShwYaQd2cXcp...........\" for this only extract the token excluding the 'Bearer' string, pass this in the header to see sample response payload that is returned\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: 'The username of the  user.'
+                  example: jayden
+                password:
+                  type: string
+                  description: 'The password of the  user.'
+                  example: Rock1234@
+              required:
+                - username
+                - password
+      security: []
+  /api/new-user:
+    post:
+      summary: 'Create a new user saved in the database users table.'
+      operationId: createANewUserSavedInTheDatabaseUsersTable
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n\"data\": $user information payload\n\"message\": 'success' or 'error'\n\"auth_token\": \"Bearer 3|7dUd16GpVXPwy530oqndmGXNDCShwYaQd2cXcp...........\" for this only extract the token excluding the 'Bearer' string, pass this in the header to see sample response payload that is returned\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json;utf-8:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: String
+                  description: 'The name of the user'
+                  example: solay
+                username:
+                  type: string
+                  description: 'The username of the  user.'
+                  example: jayden
+                password:
+                  type: string
+                  description: 'The password of the  user, required to be confirmed.'
+                  example: Rock1234@
+                email:
+                  type: string
+                  description: 'The email'
+                  example: Rock1234@gmail.com
+              required:
+                - name
+                - username
+                - password
+                - email
+      security: []
+  /api/v1/get-all-contacts:
+    get:
+      summary: 'Display a listing of the resource.'
+      operationId: displayAListingOfTheResource
+      description: ''
+      parameters:
+        -
+          in: query
+          name: 'NULL'
+          description: ''
+          example: id
+          required: false
+          schema:
+            type: string
+            description: ''
+            example: id
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': ContactModel $allContact,\n'message': 'success'\n}"
+      tags:
+        - Endpoints
+      security: []
+  /api/v1/logout-user:
+    post:
+      summary: 'This function logs out the currently authenticated user and clear the AUTH_TOKEN'
+      operationId: thisFunctionLogsOutTheCurrentlyAuthenticatedUserAndClearTheAUTHTOKEN
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n\"data\": $user information payload\n\"message\": 'success'or 'error'\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json;utf-8:
+            schema:
+              type: object
+              properties:
+                Request:
+                  type: $request
+                  description: object
+                  example: nemo
+      security: []
+  '/api/v1/get-sim-details-by-port-port-number/{port_id}':
+    get:
+      summary: 'This displays the entire information about a sim card fetching by the port number.'
+      operationId: thisDisplaysTheEntireInformationAboutASimCardFetchingByThePortNumber
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': \\Illuminate\\Http\\Response $simData,\n'message': 'success'\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                $port_id:
+                  type: Integer
+                  description: ''
+                  example: '1'
+      security: []
+    parameters:
+      -
+        in: path
+        name: port_id
+        description: 'The ID of the port.'
+        example: debitis
+        required: true
+        schema:
+          type: string
+  '/api/v1/get-sims-by-simcard-number/{sim_number}':
+    get:
+      summary: 'This displays the entire information about a sim card fetching by the port number.'
+      operationId: thisDisplaysTheEntireInformationAboutASimCardFetchingByThePortNumber
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': \\Illuminate\\Http\\Response $simData,\n'message': 'success'\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                $sim_number:
+                  type: Integer
+                  description: ''
+                  example: '+1520109209'
+      security: []
+    parameters:
+      -
+        in: path
+        name: sim_number
+        description: ''
+        example: minima
+        required: true
+        schema:
+          type: string
+  '/api/v1/update-user/{id}':
+    put:
+      summary: 'Update the specified resource in storage.'
+      operationId: updateTheSpecifiedResourceInStorage
+      description: 'The username and email field is non-updateable to avoid conflicts with other users'
+      parameters:
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': \\App\\Models\\User $userModified,\n'message':'success' or 'error'\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json;utf-8:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: String
+                  description: ''
+                  example: johnreid
+                password:
+                  type: String
+                  description: 'maximum of 15 characters of'
+                  example: JoyKam
+              required:
+                - name
+                - password
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the update user.'
+        example: nesciunt
+        required: true
+        schema:
+          type: string
+  '/api/v1/get-contact/{id}':
+    get:
+      summary: 'Display a single contact.'
+      operationId: displayASingleContact
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n 'data': \\Illuminate\\Http\\Response $response,\n 'message': 'success' or 'error\n\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                $id:
+                  type: Integer
+                  description: ''
+                  example: '1'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the get contact.'
+        example: tenetur
+        required: true
+        schema:
+          type: string
+  /api/v1/update-sim-contact:
+    put:
+      summary: 'Show the form for editing the specified resource.'
+      operationId: showTheFormForEditingTheSpecifiedResource
+      description: ''
+      parameters:
+        -
+          in: query
+          name: \Illuminate\Http\Request
+          description: $request
+          example: aut
+          required: false
+          schema:
+            type: string
+            description: $request
+            example: aut
+        -
+          in: query
+          name: Integer
+          description: $id
+          example: magnam
+          required: false
+          schema:
+            type: string
+            description: $id
+            example: magnam
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': \\Illuminate\\Http\\Response $contactModel,\n'message':'success' or 'error'\n}\n\nrequest payload\n$request = ['contact_no','contact_alt_number','contact_fname,'contact_lname,sim_contact_saved_to]"
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                $contact_no:
+                  type: String
+                  description: ''
+                  example: '+102901990190'
+                $contact_alt_number:
+                  type: String
+                  description: ''
+                  example: '+1290091800029'
+                $contact_fname:
+                  type: String
+                  description: ''
+                  example: John
+                $contact_lname:
+                  type: String
+                  description: ''
+                  example: Sean
+                $sim_contact_saved_to:
+                  type: String
+                  description: ''
+                  example: '+12390930944'
+      security: []
+  '/api/v1/delete-sim-module/{id}':
+    delete:
+      summary: 'Remove the specified resource from storage.'
+      operationId: removeTheSpecifiedResourceFromStorage
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': \\Illuminate\\Http\\Response,\n'status':'success' or 'error'\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                $simModule:
+                  type: \App\Models\SimModule
+                  description: 'a SimModule object'
+                  example: est
+                $id:
+                  type: Integer
+                  description: ''
+                  example: voluptatem
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the delete sim module.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/update-sim-module/{id}':
+    put:
+      summary: 'Update the specified resource in storage.'
+      operationId: updateTheSpecifiedResourceInStorage
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n\n'data':\\Illuminate\\Http\\Response $simModule,\n'message': 'success' or 'fail'\n\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                \Illuminate\Http\Request:
+                  type: $request
+                  description: ''
+                  example: iste
+                \App\Models\SimModule:
+                  type: $simModule
+                  description: ''
+                  example: ab
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the update sim module.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/save-new-contact:
+    post:
+      summary: 'Store a newly created contact'
+      operationId: storeANewlyCreatedContact
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': \\Illuminate\\Http\\Response $newcontact,\n'message':'success' or 'error',\n\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                \Illuminate\Http\Request:
+                  type: $request
+                  description: 'Request Object'
+                  example: earum
+      security: []
+  /api/v1/add-new-sim-configuration:
+    post:
+      summary: 'Creating a new sim module in modem port, saved to the database for state retrieval during app loading.'
+      operationId: creatingANewSimModuleInModemPortSavedToTheDatabaseForStateRetrievalDuringAppLoading
+      description: ''
+      parameters:
+        -
+          in: query
+          name: \Illuminate\Http\Request
+          description: $request
+          example: fugit
+          required: false
+          schema:
+            type: string
+            description: $request
+            example: fugit
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data'=>\\Illuminate\\Http\\Response $newSim object, this represents the sim module that was just created\n'message'=>'Sim card module set and saved successfully\n\n\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json;utf-8:
+            schema:
+              type: object
+              properties:
+                sim_number:
+                  type: string
+                  description: ''
+                  example: '+16302901990'
+                sim_port_number:
+                  type: Integer
+                  description: 'unique:'
+                  example: '1,2'
+                current_port_state:
+                  type: Integer
+                  description: 'Default: 1'
+                  example: repellat
+              required:
+                - sim_number
+                - sim_port_number
+                - current_port_state
+      security: []
+  '/api/v1/get_contact_by_fname/{}':
+    get:
+      summary: 'This function retrieves a contact by searching with the first name'
+      operationId: thisFunctionRetrievesAContactBySearchingWithTheFirstName
+      description: ''
+      parameters:
+        -
+          in: query
+          name: $f_name
+          description: String
+          example: voluptates
+          required: false
+          schema:
+            type: string
+            description: String
+            example: voluptates
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': \\Illuminate\\Http\\Response $response $result,\n'message': 'success' or 'error'\n}"
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: ''
+        description: ''
+        example: aliquam
+        required: true
+        schema:
+          type: string
+  '/api/v1/get-sim-port-state/{port_id}':
+    get:
+      summary: "This function retrieves the port state of a modem port that has a sim on it, if the reason token is 'OK', modify the state of the sim\nby calling API /update-sim-module endpoint"
+      operationId: thisFunctionRetrievesThePortStateOfAModemPortThatHasASimOnItIfTheReasonTokenIsOKModifyTheStateOfTheSimbyCallingAPIupdateSimModuleEndpoint
+      description: ''
+      parameters:
+        -
+          in: query
+          name: $port_id
+          description: Integer
+          example: '1,2,3-8'
+          required: false
+          schema:
+            type: string
+            description: Integer
+            example: '1,2,3-8'
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+        -
+          in: header
+          name: Host
+          description: ''
+          example: '54.179.122.227:52538'
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data':json_decode(\\Illuminate\\Http\\Response $response),\n'id': sim_module primary key reference\n'message':'success' or 'error'\n}"
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: port_id
+        description: 'The ID of the port.'
+        example: aut
+        required: true
+        schema:
+          type: string
+  /api/v1/get-contact-by-number:
+    get:
+      summary: 'Show Contact by Phone Number, this retrieves all the isntances of the phone number perhaps its saved on more than one sim'
+      operationId: showContactByPhoneNumberThisRetrievesAllTheIsntancesOfThePhoneNumberPerhapsItsSavedOnMoreThanOneSim
+      description: ''
+      parameters:
+        -
+          in: query
+          name: String
+          description: $contact_number
+          example: 17
+          required: false
+          schema:
+            type: integer
+            description: $contact_number
+            example: 17
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': \\Illuminate\\Http\\Response $contact,\n'message':'success'\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                $contact_number:
+                  type: String
+                  description: ''
+                  example: '+1239028800'
+      security: []
+  /api/v1/get-contact-by-host:
+    get:
+      summary: 'this function gets all contacts on a particular sim card by its number'
+      operationId: thisFunctionGetsAllContactsOnAParticularSimCardByItsNumber
+      description: ''
+      parameters:
+        -
+          in: query
+          name: $sim_number
+          description: String
+          example: ut
+          required: false
+          schema:
+            type: string
+            description: String
+            example: ut
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': \\Illuminate\\Http\\Response $response $allContacts,\n'message': 'success' or 'error'\n}"
+      tags:
+        - Endpoints
+      security: []
+  '/api/v1/change-contact-number-state/{contact_id}':
+    put:
+      summary: 'This function alters the state of a sim contact'
+      operationId: thisFunctionAltersTheStateOfASimContact
+      description: ''
+      parameters:
+        -
+          in: query
+          name: Request
+          description: $request
+          example: commodi
+          required: false
+          schema:
+            type: string
+            description: $request
+            example: commodi
+        -
+          in: query
+          name: $contact_id
+          description: Integer
+          example: '1,2,3 etc'
+          required: false
+          schema:
+            type: string
+            description: Integer
+            example: '1,2,3 etc'
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': \\Illuminate\\Http\\Response $response $res,\n'message': 'success' or 'error'\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json;utf-8:
+            schema:
+              type: object
+              properties:
+                $contact_state:
+                  type: 'Example:'
+                  description: true/false
+                  example: voluptas
+      security: []
+    parameters:
+      -
+        in: path
+        name: contact_id
+        description: 'The ID of the contact.'
+        example: unde
+        required: true
+        schema:
+          type: string
+  '/api/v1/get-sms-messages-by-portnum/{sim_num}':
+    get:
+      summary: ''
+      operationId: getApiV1GetSmsMessagesByPortnumSim_num
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: sim_num
+        description: ''
+        example: soluta
+        required: true
+        schema:
+          type: string
+  '/api/v1/delete-sms-resource/{id}':
+    delete:
+      summary: 'This function is to remove or change the state of an sms'
+      operationId: thisFunctionIsToRemoveOrChangeTheStateOfAnSms
+      description: ''
+      parameters:
+        -
+          in: query
+          name: Integer
+          description: '$id Sms id in the database table'
+          example: in
+          required: false
+          schema:
+            type: string
+            description: '$id Sms id in the database table'
+            example: in
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: close
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'message':'success' or 'error'\n}"
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the delete sms resource.'
+        example: doloremque
+        required: true
+        schema:
+          type: string
+  /api/v1/get-all-sms-on-modem:
+    get:
+      summary: ''
+      operationId: getApiV1GetAllSmsOnModem
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://gatewayblvd.net/app/en/api/login'\" />\n\n        <title>Redirecting to http://gatewayblvd.net/app/en/api/login</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://gatewayblvd.net/app/en/api/login\">http://gatewayblvd.net/app/en/api/login</a>.\n    </body>\n</html>"
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                'NULL':
+                  type: This
+                  description: 'function retrieves all the sms sent to the sim cards on all used ports on modem'
+                  example: quam
+      security: []
+  '/api/v1/get-sms-stats/{port_id}/{slots}/{type}':
+    get:
+      summary: 'This function fetches all sms sent to the modem via the sim cards'
+      operationId: thisFunctionFetchesAllSmsSentToTheModemViaTheSimCards
+      description: ''
+      parameters:
+        -
+          in: query
+          name: Integer
+          description: '$id $slots'
+          example: '1'
+          required: false
+          schema:
+            type: string
+            description: '$id $slots'
+            example: '1'
+        -
+          in: query
+          name: String
+          description: $type
+          example: '0,1,2,3 or all'
+          required: false
+          schema:
+            type: string
+            description: $type
+            example: '0,1,2,3 or all'
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: close
+          schema:
+            type: string
+        -
+          in: header
+          name: Host
+          description: ''
+          example: '54.179.122.227:52538'
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'message':'success' or 'error'\n}"
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: port_id
+        description: 'The ID of the port.'
+        example: eos
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: slots
+        description: ''
+        example: est
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: type
+        description: ''
+        example: deserunt
+        required: true
+        schema:
+          type: string
+  /api/v1/send-single-sms:
+    post:
+      summary: 'This function sends single sms'
+      operationId: thisFunctionSendsSingleSms
+      description: ''
+      parameters:
+        -
+          in: query
+          name: \illuminate\Http\Request
+          description: $request
+          example: beatae
+          required: false
+          schema:
+            type: string
+            description: $request
+            example: beatae
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+        -
+          in: header
+          name: Host
+          description: ''
+          example: '54.179.122.227:52538'
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data':'message',\n'status': Response $response\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json;utf-8:
+            schema:
+              type: object
+              properties:
+                recipient:
+                  type: string
+                  description: ''
+                  example: occaecati
+                _msg:
+                  type: string
+                  description: ''
+                  example: et
+                sim_port_number:
+                  type: string
+                  description: ''
+                  example: et
+              required:
+                - recipient
+                - _msg
+                - sim_port_number
+      security: []
+  /api/v1/send-bulk-sms:
+    post:
+      summary: 'This function sends bulk sms'
+      operationId: thisFunctionSendsBulkSms
+      description: ''
+      parameters:
+        -
+          in: query
+          name: \illuminate\Http\Request
+          description: $request
+          example: ex
+          required: false
+          schema:
+            type: string
+            description: $request
+            example: ex
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+        -
+          in: header
+          name: Host
+          description: ''
+          example: '54.179.122.227:52538'
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data':'message',\n'status': Response $response\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                _msg:
+                  type: string
+                  description: 'Must not be greater than 255 characters. Must be at least 1 character.'
+                  example: kodydnehbuxgmydalkxgbgvwcalsbnrqyfoyhgkwzmdnimekcltvbeepuspfeyhzzuzrmsroslcosdncxqiqm
+                sim_port_number:
+                  type: integer
+                  description: ''
+                  example: 10
+                recipient:
+                  type: object
+                  description: ''
+                  example: []
+                  properties: {  }
+              required:
+                - _msg
+                - sim_port_number
+                - recipient
+      security: []
+  '/api/v1/change-sms-state/{sms_id}':
+    put:
+      summary: 'This function changes the state of the sms'
+      operationId: thisFunctionChangesTheStateOfTheSms
+      description: ''
+      parameters:
+        -
+          in: query
+          name: Integer
+          description: $sms_id
+          example: voluptatem
+          required: false
+          schema:
+            type: string
+            description: $sms_id
+            example: voluptatem
+        -
+          in: query
+          name: \Illuminate\Http\Request
+          description: $request
+          example: dolorem
+          required: false
+          schema:
+            type: string
+            description: $request
+            example: dolorem
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': \\Illuminate\\Http\\Response $response $res,\n'id': $sms_id Integer,\n'message': 'successful'\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/octet-stream:
+            schema:
+              type: object
+              properties:
+                new_state:
+                  type: required
+                  description: ''
+                  example: '1, or 2 or 3'
+      security: []
+    parameters:
+      -
+        in: path
+        name: sms_id
+        description: 'The ID of the sms.'
+        example: ut
+        required: true
+        schema:
+          type: string
+  /api/v1/parse-sms:
+    post:
+      summary: 'This function parses sms, and decodes it back into its original form using base64_decode()'
+      operationId: thisFunctionParsesSmsAndDecodesItBackIntoItsOriginalFormUsingBase64Decode
+      description: ''
+      parameters:
+        -
+          in: query
+          name: /Illuminate/Http/Request
+          description: "<$request>\n\n  * @header Connection keep-alive"
+          example: laudantium
+          required: false
+          schema:
+            type: string
+            description: "<$request>\n\n  * @header Connection keep-alive"
+            example: laudantium
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': String $msg,\n'message': 'success' or 'error'\n}"
+      tags:
+        - Endpoints
+      security: []
+tags:
+  -
+    name: Endpoints
+    description: ''
+components:
+  securitySchemes:
+    default:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: "You can retrieve your token by using the 'auth_token' object in the json_decode object returned in the response body dashboard and clicking <b>Generate API token</b>."
+security:
+  -
+    default: []

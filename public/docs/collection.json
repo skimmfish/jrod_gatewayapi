@@ -1,0 +1,1396 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "https:\/\/gatewayblvd.net\/app\/en\/api\/"
+        }
+    ],
+    "info": {
+        "name": "Gatewayblvd Documentation",
+        "_postman_id": "c29fff92-5b71-46d4-a555-e1e6e09919e2",
+        "description": "This documentation highlights all endpoints needed to integrate backend services with the skyline modem",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Endpoints",
+            "description": "",
+            "item": [
+                {
+                    "name": "This function logs in a user that has been verified previously",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/login",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/login"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json;UTF-8"
+                            },
+                            {
+                                "key": "Accept-Language:",
+                                "value": "en,"
+                            },
+                            {
+                                "key": "Accept:",
+                                "value": "application\/json;utf-8,"
+                            },
+                            {
+                                "key": "Connection:",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"username\":\"jayden\",\"password\":\"Rock1234@\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n\"data\": $user information payload\n\"message\": 'success' or 'error'\n\"auth_token\": \"Bearer 3|7dUd16GpVXPwy530oqndmGXNDCShwYaQd2cXcp...........\" for this only extract the token excluding the 'Bearer' string, pass this in the header to see sample response payload that is returned\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Create a new user saved in the database users table.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/new-user",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/new-user"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json;utf-8"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"solay\",\"username\":\"jayden\",\"password\":\"Rock1234@\",\"email\":\"Rock1234@gmail.com\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n\"data\": $user information payload\n\"message\": 'success' or 'error'\n\"auth_token\": \"Bearer 3|7dUd16GpVXPwy530oqndmGXNDCShwYaQd2cXcp...........\" for this only extract the token excluding the 'Bearer' string, pass this in the header to see sample response payload that is returned\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Display a listing of the resource.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/get-all-contacts",
+                            "query": [
+                                {
+                                    "key": "NULL",
+                                    "value": "id",
+                                    "description": "",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/get-all-contacts?NULL=id"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data': ContactModel $allContact,\n'message': 'success'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "This function logs out the currently authenticated user and clear the AUTH_TOKEN",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/logout-user",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/logout-user"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json;utf-8"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"Request\":\"nemo\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n\"data\": $user information payload\n\"message\": 'success'or 'error'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "This displays the entire information about a sim card fetching by the port number.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/get-sim-details-by-port-port-number\/:port_id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/get-sim-details-by-port-port-number\/:port_id",
+                            "variable": [
+                                {
+                                    "id": "port_id",
+                                    "key": "port_id",
+                                    "value": "debitis",
+                                    "description": "The ID of the port."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"$port_id\":\"1\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data': \\Illuminate\\Http\\Response $simData,\n'message': 'success'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "This displays the entire information about a sim card fetching by the port number.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/get-sims-by-simcard-number\/:sim_number",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/get-sims-by-simcard-number\/:sim_number",
+                            "variable": [
+                                {
+                                    "id": "sim_number",
+                                    "key": "sim_number",
+                                    "value": "minima",
+                                    "description": ""
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"$sim_number\":\"+1520109209\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data': \\Illuminate\\Http\\Response $simData,\n'message': 'success'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Update the specified resource in storage.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/update-user\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/update-user\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "nesciunt",
+                                    "description": "The ID of the update user."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json;utf-8"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"johnreid\",\"password\":\"JoyKam\"}"
+                        },
+                        "description": "The username and email field is non-updateable to avoid conflicts with other users",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data': \\App\\Models\\User $userModified,\n'message':'success' or 'error'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Display a single contact.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/get-contact\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/get-contact\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "tenetur",
+                                    "description": "The ID of the get contact."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"$id\":\"1\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n 'data': \\Illuminate\\Http\\Response $response,\n 'message': 'success' or 'error\n\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Show the form for editing the specified resource.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/update-sim-contact",
+                            "query": [
+                                {
+                                    "key": "%5CIlluminate%5CHttp%5CRequest",
+                                    "value": "aut",
+                                    "description": "$request",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "Integer",
+                                    "value": "magnam",
+                                    "description": "$id",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/update-sim-contact?%5CIlluminate%5CHttp%5CRequest=aut&Integer=magnam"
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"$contact_no\":\"+102901990190\",\"$contact_alt_number\":\"+1290091800029\",\"$contact_fname\":\"John\",\"$contact_lname\":\"Sean\",\"$sim_contact_saved_to\":\"+12390930944\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data': \\Illuminate\\Http\\Response $contactModel,\n'message':'success' or 'error'\n}\n\nrequest payload\n$request = ['contact_no','contact_alt_number','contact_fname,'contact_lname,sim_contact_saved_to]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Remove the specified resource from storage.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/delete-sim-module\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/delete-sim-module\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the delete sim module."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"$simModule\":\"est\",\"$id\":\"voluptatem\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data': \\Illuminate\\Http\\Response,\n'status':'success' or 'error'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Update the specified resource in storage.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/update-sim-module\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/update-sim-module\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the update sim module."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"\\\\Illuminate\\\\Http\\\\Request\":\"iste\",\"\\\\App\\\\Models\\\\SimModule\":\"ab\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n\n'data':\\Illuminate\\Http\\Response $simModule,\n'message': 'success' or 'fail'\n\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Store a newly created contact",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/save-new-contact",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/save-new-contact"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"\\\\Illuminate\\\\Http\\\\Request\":\"earum\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data': \\Illuminate\\Http\\Response $newcontact,\n'message':'success' or 'error',\n\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Creating a new sim module in modem port, saved to the database for state retrieval during app loading.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/add-new-sim-configuration",
+                            "query": [
+                                {
+                                    "key": "%5CIlluminate%5CHttp%5CRequest",
+                                    "value": "fugit",
+                                    "description": "$request",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/add-new-sim-configuration?%5CIlluminate%5CHttp%5CRequest=fugit"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json;utf-8"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"sim_number\":\"+16302901990\",\"sim_port_number\":\"1,2\",\"current_port_state\":\"repellat\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data'=>\\Illuminate\\Http\\Response $newSim object, this represents the sim module that was just created\n'message'=>'Sim card module set and saved successfully\n\n\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "This function retrieves a contact by searching with the first name",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/get_contact_by_fname\/{}",
+                            "query": [
+                                {
+                                    "key": "%24f_name",
+                                    "value": "voluptates",
+                                    "description": "String",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/get_contact_by_fname\/{}?%24f_name=voluptates",
+                            "variable": [
+                                {
+                                    "id": "",
+                                    "key": "",
+                                    "value": "aliquam",
+                                    "description": ""
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json;UTF-8"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data': \\Illuminate\\Http\\Response $response $result,\n'message': 'success' or 'error'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "This function retrieves the port state of a modem port that has a sim on it, if the reason token is 'OK', modify the state of the sim\nby calling API \/update-sim-module endpoint",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/get-sim-port-state\/:port_id",
+                            "query": [
+                                {
+                                    "key": "%24port_id",
+                                    "value": "1%2C2%2C3-8",
+                                    "description": "Integer",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/get-sim-port-state\/:port_id?%24port_id=1%2C2%2C3-8",
+                            "variable": [
+                                {
+                                    "id": "port_id",
+                                    "key": "port_id",
+                                    "value": "aut",
+                                    "description": "The ID of the port."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            },
+                            {
+                                "key": "Host",
+                                "value": "54.179.122.227:52538"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data':json_decode(\\Illuminate\\Http\\Response $response),\n'id': sim_module primary key reference\n'message':'success' or 'error'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Show Contact by Phone Number, this retrieves all the isntances of the phone number perhaps its saved on more than one sim",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/get-contact-by-number",
+                            "query": [
+                                {
+                                    "key": "String",
+                                    "value": "17",
+                                    "description": "$contact_number",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/get-contact-by-number?String=17"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"$contact_number\":\"+1239028800\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data': \\Illuminate\\Http\\Response $contact,\n'message':'success'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "this function gets all contacts on a particular sim card by its number",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/get-contact-by-host",
+                            "query": [
+                                {
+                                    "key": "%24sim_number",
+                                    "value": "ut",
+                                    "description": "String",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/get-contact-by-host?%24sim_number=ut"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data': \\Illuminate\\Http\\Response $response $allContacts,\n'message': 'success' or 'error'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "This function alters the state of a sim contact",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/change-contact-number-state\/:contact_id",
+                            "query": [
+                                {
+                                    "key": "Request",
+                                    "value": "commodi",
+                                    "description": "$request",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "%24contact_id",
+                                    "value": "1%2C2%2C3+etc",
+                                    "description": "Integer",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/change-contact-number-state\/:contact_id?Request=commodi&%24contact_id=1%2C2%2C3+etc",
+                            "variable": [
+                                {
+                                    "id": "contact_id",
+                                    "key": "contact_id",
+                                    "value": "unde",
+                                    "description": "The ID of the contact."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json;utf-8"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"$contact_state\":\"voluptas\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data': \\Illuminate\\Http\\Response $response $res,\n'message': 'success' or 'error'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "GET api\/v1\/get-sms-messages-by-portnum\/{sim_num}",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/get-sms-messages-by-portnum\/:sim_num",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/get-sms-messages-by-portnum\/:sim_num",
+                            "variable": [
+                                {
+                                    "id": "sim_num",
+                                    "key": "sim_num",
+                                    "value": "soluta",
+                                    "description": ""
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json;UTF-8"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "http:\/\/localhost:3000"
+                                },
+                                {
+                                    "key": "access-control-allow-credentials",
+                                    "value": "true"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "This function is to remove or change the state of an sms",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/delete-sms-resource\/:id",
+                            "query": [
+                                {
+                                    "key": "Integer",
+                                    "value": "in",
+                                    "description": "$id Sms id in the database table",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/delete-sms-resource\/:id?Integer=in",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "doloremque",
+                                    "description": "The ID of the delete sms resource."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json;utf-8"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "close"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'message':'success' or 'error'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "GET api\/v1\/get-all-sms-on-modem",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/get-all-sms-on-modem",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/get-all-sms-on-modem"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"NULL\":\"quam\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "location",
+                                    "value": "http:\/\/gatewayblvd.net\/app\/en\/api\/login"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "text\/html; charset=UTF-8"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "http:\/\/localhost:3000"
+                                },
+                                {
+                                    "key": "access-control-allow-credentials",
+                                    "value": "true"
+                                }
+                            ],
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/gatewayblvd.net\/app\/en\/api\/login'\" \/>\n\n        <title>Redirecting to http:\/\/gatewayblvd.net\/app\/en\/api\/login<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/gatewayblvd.net\/app\/en\/api\/login\">http:\/\/gatewayblvd.net\/app\/en\/api\/login<\/a>.\n    <\/body>\n<\/html>",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "This function fetches all sms sent to the modem via the sim cards",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/get-sms-stats\/:port_id\/:slots\/:type",
+                            "query": [
+                                {
+                                    "key": "Integer",
+                                    "value": "1",
+                                    "description": "$id $slots",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "String",
+                                    "value": "0%2C1%2C2%2C3+or+all",
+                                    "description": "$type",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/get-sms-stats\/:port_id\/:slots\/:type?Integer=1&String=0%2C1%2C2%2C3+or+all",
+                            "variable": [
+                                {
+                                    "id": "port_id",
+                                    "key": "port_id",
+                                    "value": "eos",
+                                    "description": "The ID of the port."
+                                },
+                                {
+                                    "id": "slots",
+                                    "key": "slots",
+                                    "value": "est",
+                                    "description": ""
+                                },
+                                {
+                                    "id": "type",
+                                    "key": "type",
+                                    "value": "deserunt",
+                                    "description": ""
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json;utf-8"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "close"
+                            },
+                            {
+                                "key": "Host",
+                                "value": "54.179.122.227:52538"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'message':'success' or 'error'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "This function sends single sms",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/send-single-sms",
+                            "query": [
+                                {
+                                    "key": "%5Cilluminate%5CHttp%5CRequest",
+                                    "value": "beatae",
+                                    "description": "$request",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/send-single-sms?%5Cilluminate%5CHttp%5CRequest=beatae"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json;utf-8"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            },
+                            {
+                                "key": "Host",
+                                "value": "54.179.122.227:52538"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"recipient\":\"occaecati\",\"_msg\":\"et\",\"sim_port_number\":\"et\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data':'message',\n'status': Response $response\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "This function sends bulk sms",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/send-bulk-sms",
+                            "query": [
+                                {
+                                    "key": "%5Cilluminate%5CHttp%5CRequest",
+                                    "value": "ex",
+                                    "description": "$request",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/send-bulk-sms?%5Cilluminate%5CHttp%5CRequest=ex"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            },
+                            {
+                                "key": "Host",
+                                "value": "54.179.122.227:52538"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"_msg\":\"kodydnehbuxgmydalkxgbgvwcalsbnrqyfoyhgkwzmdnimekcltvbeepuspfeyhzzuzrmsroslcosdncxqiqm\",\"sim_port_number\":10,\"recipient\":[]}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data':'message',\n'status': Response $response\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "This function changes the state of the sms",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/change-sms-state\/:sms_id",
+                            "query": [
+                                {
+                                    "key": "Integer",
+                                    "value": "voluptatem",
+                                    "description": "$sms_id",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "%5CIlluminate%5CHttp%5CRequest",
+                                    "value": "dolorem",
+                                    "description": "$request",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/change-sms-state\/:sms_id?Integer=voluptatem&%5CIlluminate%5CHttp%5CRequest=dolorem",
+                            "variable": [
+                                {
+                                    "id": "sms_id",
+                                    "key": "sms_id",
+                                    "value": "ut",
+                                    "description": "The ID of the sms."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"new_state\":\"1, or 2 or 3\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data': \\Illuminate\\Http\\Response $response $res,\n'id': $sms_id Integer,\n'message': 'successful'\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "This function parses sms, and decodes it back into its original form using base64_decode()",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/parse-sms",
+                            "query": [
+                                {
+                                    "key": "%2FIlluminate%2FHttp%2FRequest",
+                                    "value": "laudantium",
+                                    "description": "\n\n  * @header Connection keep-alive",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/parse-sms?%2FIlluminate%2FHttp%2FRequest=laudantium"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/octet-stream"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "* \/ *"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n'data': String $msg,\n'message': 'success' or 'error'\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "apikey",
+        "apikey": [
+            {
+                "key": "in",
+                "value": "header",
+                "type": "string"
+            },
+            {
+                "key": "key",
+                "value": "Authorization",
+                "type": "string"
+            }
+        ]
+    }
+}

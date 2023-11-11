@@ -1,0 +1,36 @@
+body{
+    background-color: #000 !important;
+}
+
+.theme, #theme, .overflow-hidden, .accordion-item, .faqBody, .darkbg{
+background-color: #000 !important;
+color:#fff !important;
+}
+
+#theme small, .heading_mb_1,.color_onion,.text-white, h1,h2,h3,h4,h5,h6{
+    color:#fff !important;
+}
+
+.subscription_box h3,.subscription_box_right h3{
+    color:#fff;
+}
+
+.btn-lite{
+    border:1px solid #fff;
+}
+.mb-5{
+    margin:auto auto 20px auto;
+    padding:22px 18px;
+    border-radius:7px;
+}
+
+
+.subscription_box{
+    border-top-left-radius: 45px !important;
+    border-bottom-right-radius: 45px !important;
+}
+
+.subscription_box_right{
+    border-top-right-radius: 45px !important;
+    border-bottom-left-radius: 45px !important;
+}

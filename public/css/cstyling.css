@@ -1,0 +1,15 @@
+/**cstyling.css**/
+.grid-box{
+    display:grid !important;
+    grid-template-columns: 60% 40%;
+}
+.bg_hero{
+    background-image:url('../img/home_right_one.jpg');
+    background-repeat:no-repeat;
+    background-size:200px 300px !important;
+    background-size:100%;width:200px;height:300px;
+}
+
+.img-responsive-logo{
+    width:140px;height:auto;
+}

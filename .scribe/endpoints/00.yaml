@@ -1,0 +1,1736 @@
+name: Endpoints
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/login
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'This function logs in a user that has been verified previously'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json;UTF-8
+      'Accept-Language:': 'en,'
+      'Accept:': 'application/json;utf-8,'
+      'Connection:': keep-alive
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      username:
+        name: username
+        description: 'The username of the  user.'
+        required: true
+        example: jayden
+        type: string
+        enumValues: []
+        custom: []
+      password:
+        name: password
+        description: 'The password of the  user.'
+        required: true
+        example: Rock1234@
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      username: jayden
+      password: Rock1234@
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          "data": $user information payload
+          "message": 'success' or 'error'
+          "auth_token": "Bearer 3|7dUd16GpVXPwy530oqndmGXNDCShwYaQd2cXcp..........." for this only extract the token excluding the 'Bearer' string, pass this in the header to see sample response payload that is returned
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/new-user
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Create a new user saved in the database users table.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json;utf-8
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'The name of the user'
+        required: true
+        example: solay
+        type: String
+        enumValues: []
+        custom: []
+      username:
+        name: username
+        description: 'The username of the  user.'
+        required: true
+        example: jayden
+        type: string
+        enumValues: []
+        custom: []
+      password:
+        name: password
+        description: 'The password of the  user, required to be confirmed.'
+        required: true
+        example: Rock1234@
+        type: string
+        enumValues: []
+        custom: []
+      email:
+        name: email
+        description: 'The email'
+        required: true
+        example: Rock1234@gmail.com
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      name: solay
+      username: jayden
+      password: Rock1234@
+      email: Rock1234@gmail.com
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          "data": $user information payload
+          "message": 'success' or 'error'
+          "auth_token": "Bearer 3|7dUd16GpVXPwy530oqndmGXNDCShwYaQd2cXcp..........." for this only extract the token excluding the 'Bearer' string, pass this in the header to see sample response payload that is returned
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/get-all-contacts
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a listing of the resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      'NULL':
+        name: 'NULL'
+        description: ''
+        required: false
+        example: id
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      'NULL': id
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': ContactModel $allContact,
+          'message': 'success'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/logout-user
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'This function logs out the currently authenticated user and clear the AUTH_TOKEN'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json;utf-8
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      Request:
+        name: Request
+        description: object
+        required: false
+        example: nemo
+        type: $request
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      Request: nemo
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          "data": $user information payload
+          "message": 'success'or 'error'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/get-sim-details-by-port-port-number/{port_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'This displays the entire information about a sim card fetching by the port number.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters:
+      port_id:
+        name: port_id
+        description: 'The ID of the port.'
+        required: true
+        example: debitis
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      port_id: debitis
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      $port_id:
+        name: $port_id
+        description: ''
+        required: false
+        example: '1'
+        type: Integer
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      $port_id: '1'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': \Illuminate\Http\Response $simData,
+          'message': 'success'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/get-sims-by-simcard-number/{sim_number}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'This displays the entire information about a sim card fetching by the port number.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters:
+      sim_number:
+        name: sim_number
+        description: ''
+        required: true
+        example: minima
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      sim_number: minima
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      $sim_number:
+        name: $sim_number
+        description: ''
+        required: false
+        example: '+1520109209'
+        type: Integer
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      $sim_number: '+1520109209'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': \Illuminate\Http\Response $simData,
+          'message': 'success'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/update-user/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified resource in storage.'
+      description: 'The username and email field is non-updateable to avoid conflicts with other users'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json;utf-8
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the update user.'
+        required: true
+        example: nesciunt
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: nesciunt
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: ''
+        required: true
+        example: johnreid
+        type: String
+        enumValues: []
+        custom: []
+      password:
+        name: password
+        description: 'maximum of 15 characters of'
+        required: true
+        example: JoyKam
+        type: String
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      name: johnreid
+      password: JoyKam
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': \App\Models\User $userModified,
+          'message':'success' or 'error'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/get-contact/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a single contact.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the get contact.'
+        required: true
+        example: tenetur
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: tenetur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      $id:
+        name: $id
+        description: ''
+        required: false
+        example: '1'
+        type: Integer
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      $id: '1'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+           'data': \Illuminate\Http\Response $response,
+           'message': 'success' or 'error
+
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: api/v1/update-sim-contact
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show the form for editing the specified resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      \Illuminate\Http\Request:
+        name: \Illuminate\Http\Request
+        description: $request
+        required: false
+        example: aut
+        type: string
+        enumValues: []
+        custom: []
+      Integer:
+        name: Integer
+        description: $id
+        required: false
+        example: magnam
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      \Illuminate\Http\Request: aut
+      Integer: magnam
+    bodyParameters:
+      $contact_no:
+        name: $contact_no
+        description: ''
+        required: false
+        example: '+102901990190'
+        type: String
+        enumValues: []
+        custom: []
+      $contact_alt_number:
+        name: $contact_alt_number
+        description: ''
+        required: false
+        example: '+1290091800029'
+        type: String
+        enumValues: []
+        custom: []
+      $contact_fname:
+        name: $contact_fname
+        description: ''
+        required: false
+        example: John
+        type: String
+        enumValues: []
+        custom: []
+      $contact_lname:
+        name: $contact_lname
+        description: ''
+        required: false
+        example: Sean
+        type: String
+        enumValues: []
+        custom: []
+      $sim_contact_saved_to:
+        name: $sim_contact_saved_to
+        description: ''
+        required: false
+        example: '+12390930944'
+        type: String
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      $contact_no: '+102901990190'
+      $contact_alt_number: '+1290091800029'
+      $contact_fname: John
+      $contact_lname: Sean
+      $sim_contact_saved_to: '+12390930944'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': \Illuminate\Http\Response $contactModel,
+          'message':'success' or 'error'
+          }
+
+          request payload
+          $request = ['contact_no','contact_alt_number','contact_fname,'contact_lname,sim_contact_saved_to]
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/delete-sim-module/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified resource from storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the delete sim module.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      $simModule:
+        name: $simModule
+        description: 'a SimModule object'
+        required: false
+        example: est
+        type: \App\Models\SimModule
+        enumValues: []
+        custom: []
+      $id:
+        name: $id
+        description: ''
+        required: false
+        example: voluptatem
+        type: Integer
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      $simModule: est
+      $id: voluptatem
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': \Illuminate\Http\Response,
+          'status':'success' or 'error'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/update-sim-module/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the update sim module.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      \Illuminate\Http\Request:
+        name: \Illuminate\Http\Request
+        description: ''
+        required: false
+        example: iste
+        type: $request
+        enumValues: []
+        custom: []
+      \App\Models\SimModule:
+        name: \App\Models\SimModule
+        description: ''
+        required: false
+        example: ab
+        type: $simModule
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      \Illuminate\Http\Request: iste
+      \App\Models\SimModule: ab
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+
+          'data':\Illuminate\Http\Response $simModule,
+          'message': 'success' or 'fail'
+
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/save-new-contact
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created contact'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      \Illuminate\Http\Request:
+        name: \Illuminate\Http\Request
+        description: 'Request Object'
+        required: false
+        example: earum
+        type: $request
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      \Illuminate\Http\Request: earum
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': \Illuminate\Http\Response $newcontact,
+          'message':'success' or 'error',
+
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/add-new-sim-configuration
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Creating a new sim module in modem port, saved to the database for state retrieval during app loading.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json;utf-8
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      \Illuminate\Http\Request:
+        name: \Illuminate\Http\Request
+        description: $request
+        required: false
+        example: fugit
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      \Illuminate\Http\Request: fugit
+    bodyParameters:
+      sim_number:
+        name: sim_number
+        description: ''
+        required: true
+        example: '+16302901990'
+        type: string
+        enumValues: []
+        custom: []
+      sim_port_number:
+        name: sim_port_number
+        description: 'unique:'
+        required: true
+        example: '1,2'
+        type: Integer
+        enumValues: []
+        custom: []
+      current_port_state:
+        name: current_port_state
+        description: 'Default: 1'
+        required: true
+        example: repellat
+        type: Integer
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      sim_number: '+16302901990'
+      sim_port_number: '1,2'
+      current_port_state: repellat
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data'=>\Illuminate\Http\Response $newSim object, this represents the sim module that was just created
+          'message'=>'Sim card module set and saved successfully
+
+
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/get_contact_by_fname/{}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'This function retrieves a contact by searching with the first name'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json;UTF-8
+    urlParameters:
+      '':
+        name: ''
+        description: ''
+        required: true
+        example: aliquam
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      '': aliquam
+    queryParameters:
+      $f_name:
+        name: $f_name
+        description: String
+        required: false
+        example: voluptates
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      $f_name: voluptates
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': \Illuminate\Http\Response $response $result,
+          'message': 'success' or 'error'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/get-sim-port-state/{port_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        This function retrieves the port state of a modem port that has a sim on it, if the reason token is 'OK', modify the state of the sim
+        by calling API /update-sim-module endpoint
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+      Host: '54.179.122.227:52538'
+    urlParameters:
+      port_id:
+        name: port_id
+        description: 'The ID of the port.'
+        required: true
+        example: aut
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      port_id: aut
+    queryParameters:
+      $port_id:
+        name: $port_id
+        description: Integer
+        required: false
+        example: '1,2,3-8'
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      $port_id: '1,2,3-8'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data':json_decode(\Illuminate\Http\Response $response),
+          'id': sim_module primary key reference
+          'message':'success' or 'error'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/get-contact-by-number
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show Contact by Phone Number, this retrieves all the isntances of the phone number perhaps its saved on more than one sim'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      String:
+        name: String
+        description: $contact_number
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      String: 17
+    bodyParameters:
+      $contact_number:
+        name: $contact_number
+        description: ''
+        required: false
+        example: '+1239028800'
+        type: String
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      $contact_number: '+1239028800'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': \Illuminate\Http\Response $contact,
+          'message':'success'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/get-contact-by-host
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'this function gets all contacts on a particular sim card by its number'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      $sim_number:
+        name: $sim_number
+        description: String
+        required: false
+        example: ut
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      $sim_number: ut
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': \Illuminate\Http\Response $response $allContacts,
+          'message': 'success' or 'error'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/change-contact-number-state/{contact_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'This function alters the state of a sim contact'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json;utf-8
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters:
+      contact_id:
+        name: contact_id
+        description: 'The ID of the contact.'
+        required: true
+        example: unde
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      contact_id: unde
+    queryParameters:
+      Request:
+        name: Request
+        description: $request
+        required: false
+        example: commodi
+        type: string
+        enumValues: []
+        custom: []
+      $contact_id:
+        name: $contact_id
+        description: Integer
+        required: false
+        example: '1,2,3 etc'
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      Request: commodi
+      $contact_id: '1,2,3 etc'
+    bodyParameters:
+      $contact_state:
+        name: $contact_state
+        description: true/false
+        required: false
+        example: voluptas
+        type: 'Example:'
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      $contact_state: voluptas
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': \Illuminate\Http\Response $response $res,
+          'message': 'success' or 'error'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/get-sms-messages-by-portnum/{sim_num}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json;UTF-8
+    urlParameters:
+      sim_num:
+        name: sim_num
+        description: ''
+        required: true
+        example: soluta
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      sim_num: soluta
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: 'http://localhost:3000'
+          access-control-allow-credentials: 'true'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/delete-sms-resource/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'This function is to remove or change the state of an sms'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json;utf-8
+      Accept: '* / *'
+      Connection: close
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the delete sms resource.'
+        required: true
+        example: doloremque
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: doloremque
+    queryParameters:
+      Integer:
+        name: Integer
+        description: '$id Sms id in the database table'
+        required: false
+        example: in
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      Integer: in
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'message':'success' or 'error'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/get-all-sms-on-modem
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      'NULL':
+        name: 'NULL'
+        description: 'function retrieves all the sms sent to the sim cards on all used ports on modem'
+        required: false
+        example: quam
+        type: This
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      'NULL': quam
+    fileParameters: []
+    responses:
+      -
+        status: 302
+        content: |-
+          <!DOCTYPE html>
+          <html>
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta http-equiv="refresh" content="0;url='http://gatewayblvd.net/app/en/api/login'" />
+
+                  <title>Redirecting to http://gatewayblvd.net/app/en/api/login</title>
+              </head>
+              <body>
+                  Redirecting to <a href="http://gatewayblvd.net/app/en/api/login">http://gatewayblvd.net/app/en/api/login</a>.
+              </body>
+          </html>
+        headers:
+          cache-control: 'no-cache, private'
+          location: 'http://gatewayblvd.net/app/en/api/login'
+          content-type: 'text/html; charset=UTF-8'
+          access-control-allow-origin: 'http://localhost:3000'
+          access-control-allow-credentials: 'true'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/get-sms-stats/{port_id}/{slots}/{type}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'This function fetches all sms sent to the modem via the sim cards'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json;utf-8
+      Accept: '* / *'
+      Connection: close
+      Authorization: 'Bearer AUTH_TOKEN'
+      Host: '54.179.122.227:52538'
+    urlParameters:
+      port_id:
+        name: port_id
+        description: 'The ID of the port.'
+        required: true
+        example: eos
+        type: string
+        enumValues: []
+        custom: []
+      slots:
+        name: slots
+        description: ''
+        required: true
+        example: est
+        type: string
+        enumValues: []
+        custom: []
+      type:
+        name: type
+        description: ''
+        required: true
+        example: deserunt
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      port_id: eos
+      slots: est
+      type: deserunt
+    queryParameters:
+      Integer:
+        name: Integer
+        description: '$id $slots'
+        required: false
+        example: '1'
+        type: string
+        enumValues: []
+        custom: []
+      String:
+        name: String
+        description: $type
+        required: false
+        example: '0,1,2,3 or all'
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      Integer: '1'
+      String: '0,1,2,3 or all'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'message':'success' or 'error'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/send-single-sms
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'This function sends single sms'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json;utf-8
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+      Host: '54.179.122.227:52538'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      \illuminate\Http\Request:
+        name: \illuminate\Http\Request
+        description: $request
+        required: false
+        example: beatae
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      \illuminate\Http\Request: beatae
+    bodyParameters:
+      recipient:
+        name: recipient
+        description: ''
+        required: true
+        example: occaecati
+        type: string
+        enumValues: []
+        custom: []
+      _msg:
+        name: _msg
+        description: ''
+        required: true
+        example: et
+        type: string
+        enumValues: []
+        custom: []
+      sim_port_number:
+        name: sim_port_number
+        description: ''
+        required: true
+        example: et
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      recipient: occaecati
+      _msg: et
+      sim_port_number: et
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data':'message',
+          'status': Response $response
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/send-bulk-sms
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'This function sends bulk sms'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+      Host: '54.179.122.227:52538'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      \illuminate\Http\Request:
+        name: \illuminate\Http\Request
+        description: $request
+        required: false
+        example: ex
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      \illuminate\Http\Request: ex
+    bodyParameters:
+      _msg:
+        name: _msg
+        description: 'Must not be greater than 255 characters. Must be at least 1 character.'
+        required: true
+        example: kodydnehbuxgmydalkxgbgvwcalsbnrqyfoyhgkwzmdnimekcltvbeepuspfeyhzzuzrmsroslcosdncxqiqm
+        type: string
+        enumValues: []
+        custom: []
+      sim_port_number:
+        name: sim_port_number
+        description: ''
+        required: true
+        example: 10
+        type: integer
+        enumValues: []
+        custom: []
+      recipient:
+        name: recipient
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      _msg: kodydnehbuxgmydalkxgbgvwcalsbnrqyfoyhgkwzmdnimekcltvbeepuspfeyhzzuzrmsroslcosdncxqiqm
+      sim_port_number: 10
+      recipient: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data':'message',
+          'status': Response $response
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/change-sms-state/{sms_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'This function changes the state of the sms'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters:
+      sms_id:
+        name: sms_id
+        description: 'The ID of the sms.'
+        required: true
+        example: ut
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      sms_id: ut
+    queryParameters:
+      Integer:
+        name: Integer
+        description: $sms_id
+        required: false
+        example: voluptatem
+        type: string
+        enumValues: []
+        custom: []
+      \Illuminate\Http\Request:
+        name: \Illuminate\Http\Request
+        description: $request
+        required: false
+        example: dolorem
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      Integer: voluptatem
+      \Illuminate\Http\Request: dolorem
+    bodyParameters:
+      new_state:
+        name: new_state
+        description: ''
+        required: false
+        example: '1, or 2 or 3'
+        type: required
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      new_state: '1, or 2 or 3'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': \Illuminate\Http\Response $response $res,
+          'id': $sms_id Integer,
+          'message': 'successful'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/parse-sms
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'This function parses sms, and decodes it back into its original form using base64_decode()'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      /Illuminate/Http/Request:
+        name: /Illuminate/Http/Request
+        description: |-
+          <$request>
+
+            * @header Connection keep-alive
+        required: false
+        example: laudantium
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      /Illuminate/Http/Request: laudantium
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': String $msg,
+          'message': 'success' or 'error'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
