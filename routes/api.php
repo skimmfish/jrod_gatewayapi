@@ -28,6 +28,9 @@ use Illuminate\Support\Facades\Route;
 //This route doesn't require the Host header, only Accept-Language. Accept Headers are needed
 Route::post('/login',[\App\Http\Controllers\Auth\UserController::class,'login_to_authenticate'])->name('login_to_authenticate');
 
+//confirm OTP code for new password modification for the user
+Route::post('/confirm-otp-code',[\App\Http\Controllers\Auth\UserController::class,'confirm_otp_code'])->name('confirm_otp_code');
+
 //NEW USER - fixed
 Route::post('/new-user',[\App\Http\Controllers\Auth\UserController::class,'store_usr']);
 
@@ -35,10 +38,7 @@ Route::post('/new-user',[\App\Http\Controllers\Auth\UserController::class,'store
 Route::post('/forgot-password',[\App\Http\Controllers\Auth\UserController::class,'verify_usr_email'])->name('forgot_password_ro');
 
 //FORGOT PASSWORD - non-authenticated endpoint but email must be verified first
-Route::post('/update-password',[\App\Http\Controllers\Auth\UserController::class,'update_usr_password'])->name('forgot_password_ro');
-
-//confirm OTP code for new password modification for the user
-Route::get('/confirm-otp-code',[\App\Http\Controllers\Auth\UserController::class,'confirm_otp_code'])->name('confirm_otp_code');
+Route::post('/update-password',[\App\Http\Controllers\Auth\UserController::class,'update_usr_password'])->name('update_forgotten_password_ro');
 
 
 
@@ -57,8 +57,11 @@ Route::post('/logout-user',[\App\Http\Controllers\Auth\UserController::class,'lo
 
 
 //GET USER PROFILE - an authenticated route --fixed
-Route::get('/get-user-profile/{id}',[\App\Http\Controllers\Auth\UserController::class,'get_user_profile'])->name('get_user_profile');
+Route::get('/get-user-profile',[\App\Http\Controllers\Auth\UserController::class,'get_user_profile'])->name('get_user_profile');
 
+
+//get all simcards information
+Route::get('/get-all-simcard-info',[\App\Http\Controllers\SimModuleController::class,'get_all_sims_info'])->name('get_all_simcard_info');
 
 //for getting all sim card details by assigning the port_number
 Route::get('/get-sim-details-by-port-port-number/{port_id}',[\App\Http\Controllers\SimModuleController::class,'show_by_port'])->name('get_sims');
@@ -76,7 +79,7 @@ Route::get('/get-contact/{id}',[\App\Http\Controllers\ContactModelController::cl
 
 
 //update a contact number
-Route::put('/update-sim-contact',[\App\Http\Controllers\ContactModelController::class,'update_contact'])->name('update_sim_contact');
+Route::put('/update-sim-contact/{id}',[\App\Http\Controllers\ContactModelController::class,'update_contact'])->name('update_sim_contact');
 
 //deleting a sim module configuration on app
 Route::delete('/delete-sim-module/{id}',[\App\Http\Controllers\SimModuleController::class,'destroy'])->name('delete_sim_module');
@@ -104,7 +107,7 @@ Route::get('/get-sim-port-state/{port_id}',[\App\Http\Controllers\SimModuleContr
 
 
 //to get all the ports and their availablility
-//Route::get('/get-all-port-state',[\App\Http\Controllers\SimModuleController::class,'get_all_port_state'])->name('get_all_port_state');
+Route::get('/get-all-port-state',[\App\Http\Controllers\SimModuleController::class,'get_all_port_state'])->name('get_all_port_state');
 
 
 //get sim by port number
@@ -155,7 +158,8 @@ Route::get('/get-sms-stats/{port_id}/{slots}/{type}',[\App\Http\Controllers\SmsM
 
 
 //REBOOT MODEM - for rebooting/reseting the modem remotely via app/mobile app
-//Route::post('/reboot-modem',[\App\Http\Controllers\SimModuleController::class,'reboot_modem']);
+Route::post('/reboot-modem',[\App\Http\Controllers\SimModuleController::class,'reboot_modem']);
+
 
 //===============THIS SECTION FOR SENDING SMS & ADMINISTERING SMS=========================
 //send sms by sim_at_a_port
@@ -171,6 +175,4 @@ Route::put('/change-sms-state/{sms_id}',[\App\Http\Controllers\SmsModelControlle
 Route::post('/parse-sms',[\App\Http\Controllers\SmsModelController::class,'parse_sms']);
 
 });
-
-
 

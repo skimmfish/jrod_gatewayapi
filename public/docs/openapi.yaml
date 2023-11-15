@@ -14,6 +14,36 @@ paths:
       description: ''
       parameters:
         -
+          in: query
+          name: \Illuminate\Http\Request
+          description: $request
+          example: maxime
+          required: false
+          schema:
+            type: string
+            description: $request
+            example: maxime
+        -
+          in: query
+          name: email_or_phone_number
+          description: 'The email/phone number of the  user.'
+          example: 'jayden@gm.co.uk / +1240291092'
+          required: true
+          schema:
+            type: string
+            description: 'The email/phone number of the  user.'
+            example: 'jayden@gm.co.uk / +1240291092'
+        -
+          in: query
+          name: password
+          description: 'The password of the  user.'
+          example: Rock1234@
+          required: true
+          schema:
+            type: string
+            description: 'The password of the  user.'
+            example: Rock1234@
+        -
           in: header
           name: 'Accept-Language:'
           description: ''
@@ -41,7 +71,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\"data\": $user information payload\n\"message\": 'success' or 'error'\n\"auth_token\": \"Bearer 3|7dUd16GpVXPwy530oqndmGXNDCShwYaQd2cXcp...........\" for this only extract the token excluding the 'Bearer' string, pass this in the header to see sample response payload that is returned\n}"
+                example: "{\n\"data\": []\n\"message\": string\n\"auth_token\": \"Bearer 3|7dUd16GpVXPwy530oqndmGXNDCShwYaQd2cXcp...........\" for this only extract the token excluding the 'Bearer' string, pass this in the header to see sample response payload that is returned\n}"
       tags:
         - Endpoints
       requestBody:
@@ -51,16 +81,16 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                email_or_phone_number:
                   type: string
-                  description: 'The username of the  user.'
-                  example: jayden
+                  description: 'The email/phone number of the  user.'
+                  example: 'jayden@gm.co.uk / +1240291092'
                 password:
                   type: string
                   description: 'The password of the  user.'
                   example: Rock1234@
               required:
-                - username
+                - email_or_phone_number
                 - password
       security: []
   /api/new-user:
@@ -69,6 +99,16 @@ paths:
       operationId: createANewUserSavedInTheDatabaseUsersTable
       description: ''
       parameters:
+        -
+          in: query
+          name: \Illuminate\Http\Request
+          description: $request
+          example: eos
+          required: false
+          schema:
+            type: string
+            description: $request
+            example: eos
         -
           in: header
           name: Connection
@@ -101,36 +141,36 @@ paths:
                   type: string
                   description: 'The username of the  user.'
                   example: jayden
-                password:
-                  type: string
-                  description: 'The password of the  user, required to be confirmed.'
-                  example: Rock1234@
                 email:
                   type: string
                   description: 'The email'
                   example: Rock1234@gmail.com
+                password:
+                  type: string
+                  description: 'The password of the  user, required to be confirmed.'
+                  example: Rock1234@
+                password_confirmation:
+                  type: string
+                  description: 'The password confirmation of the user registering or being registered'
+                  example: Rock1234@
+                phone_number:
+                  type: string
+                  description: 'the phone number of the user example: +1239028109211'
+                  example: molestiae
               required:
                 - name
                 - username
-                - password
                 - email
+                - password
+                - password_confirmation
+                - phone_number
       security: []
-  /api/v1/get-all-contacts:
-    get:
-      summary: 'Display a listing of the resource.'
-      operationId: displayAListingOfTheResource
+  /api/forgot-password:
+    post:
+      summary: 'This function finds a user and return the user to move to another page to enter the new password and confirm it'
+      operationId: thisFunctionFindsAUserAndReturnTheUserToMoveToAnotherPageToEnterTheNewPasswordAndConfirmIt
       description: ''
       parameters:
-        -
-          in: query
-          name: 'NULL'
-          description: ''
-          example: id
-          required: false
-          schema:
-            type: string
-            description: ''
-            example: id
         -
           in: header
           name: Connection
@@ -145,9 +185,103 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n'data': ContactModel $allContact,\n'message': 'success'\n}"
+                example: "{\n'data': [],\n'message': String,\n'status': boolean\n\n}"
       tags:
         - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json;utf-8:
+            schema:
+              type: object
+              properties:
+                String:
+                  type: email
+                  description: 'maximum of 15 characters of'
+                  example: JoyKam
+              required:
+                - String
+      security: []
+  /api/update-password:
+    post:
+      summary: "Update the user's password, this function doesn't require authentication token\nThe username and email field is non-updateable to avoid conflicts with other users"
+      operationId: updateTheUsersPasswordThisFunctionDoesntRequireAuthenticationTokenTheUsernameAndEmailFieldIsNonUpdateableToAvoidConflictsWithOtherUsers
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': []\n'message': String\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json;utf-8:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: String
+                  description: ''
+                  example: johnreid
+                password_confirmation:
+                  type: required
+                  description: ''
+                  example: johnreid
+                email:
+                  type: String
+                  description: 'maximum of 15 characters of'
+                  example: JoyKam
+              required:
+                - password
+                - email
+      security: []
+  /api/confirm-otp-code:
+    get:
+      summary: 'This function confirms otp code before navigation to the next screen to enter the new password'
+      operationId: thisFunctionConfirmsOtpCodeBeforeNavigationToTheNextScreenToEnterTheNewPassword
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': boolean\n'message': string\n}"
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json;utf-8:
+            schema:
+              type: object
+              properties:
+                String:
+                  type: email
+                  description: ''
+                  example: jro@gmail.co.uk
       security: []
   /api/v1/logout-user:
     post:
@@ -156,6 +290,16 @@ paths:
       description: ''
       parameters:
         -
+          in: query
+          name: Request
+          description: $request
+          example: culpa
+          required: false
+          schema:
+            type: string
+            description: $request
+            example: culpa
+        -
           in: header
           name: Connection
           description: ''
@@ -169,7 +313,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\"data\": $user information payload\n\"message\": 'success'or 'error'\n}"
+                example: "{\n\"data\": []\n\"message\": string\n}"
       tags:
         - Endpoints
       requestBody:
@@ -182,7 +326,7 @@ paths:
                 Request:
                   type: $request
                   description: object
-                  example: nemo
+                  example: voluptatibus
       security: []
   '/api/v1/get-sim-details-by-port-port-number/{port_id}':
     get:
@@ -224,7 +368,7 @@ paths:
         in: path
         name: port_id
         description: 'The ID of the port.'
-        example: debitis
+        example: ea
         required: true
         schema:
           type: string
@@ -268,7 +412,7 @@ paths:
         in: path
         name: sim_number
         description: ''
-        example: minima
+        example: consectetur
         required: true
         schema:
           type: string
@@ -319,7 +463,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the update user.'
-        example: nesciunt
+        example: debitis
         required: true
         schema:
           type: string
@@ -330,6 +474,16 @@ paths:
       description: ''
       parameters:
         -
+          in: query
+          name: Integer
+          description: $id
+          example: '1'
+          required: false
+          schema:
+            type: string
+            description: $id
+            example: '1'
+        -
           in: header
           name: Connection
           description: ''
@@ -343,56 +497,45 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n 'data': \\Illuminate\\Http\\Response $response,\n 'message': 'success' or 'error\n\n}"
+                example: "{\n 'data': [],\n 'message': 'success' or 'error\n\n}"
       tags:
         - Endpoints
-      requestBody:
-        required: false
-        content:
-          application/octet-stream:
-            schema:
-              type: object
-              properties:
-                $id:
-                  type: Integer
-                  description: ''
-                  example: '1'
       security: []
     parameters:
       -
         in: path
         name: id
         description: 'The ID of the get contact.'
-        example: tenetur
+        example: eaque
         required: true
         schema:
           type: string
-  /api/v1/update-sim-contact:
+  '/api/v1/update-sim-contact/{id}':
     put:
-      summary: 'Show the form for editing the specified resource.'
-      operationId: showTheFormForEditingTheSpecifiedResource
+      summary: 'This function modifies a contact'
+      operationId: thisFunctionModifiesAContact
       description: ''
       parameters:
         -
           in: query
           name: \Illuminate\Http\Request
           description: $request
-          example: aut
+          example: excepturi
           required: false
           schema:
             type: string
             description: $request
-            example: aut
+            example: excepturi
         -
           in: query
           name: Integer
           description: $id
-          example: magnam
+          example: aperiam
           required: false
           schema:
             type: string
             description: $id
-            example: magnam
+            example: aperiam
         -
           in: header
           name: Connection
@@ -407,7 +550,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n'data': \\Illuminate\\Http\\Response $contactModel,\n'message':'success' or 'error'\n}\n\nrequest payload\n$request = ['contact_no','contact_alt_number','contact_fname,'contact_lname,sim_contact_saved_to]"
+                example: "{\n'data': [],\n'message': string\n}"
       tags:
         - Endpoints
       requestBody:
@@ -438,6 +581,15 @@ paths:
                   description: ''
                   example: '+12390930944'
       security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the update sim contact.'
+        example: autem
+        required: true
+        schema:
+          type: string
   '/api/v1/delete-sim-module/{id}':
     delete:
       summary: 'Remove the specified resource from storage.'
@@ -471,11 +623,11 @@ paths:
                 $simModule:
                   type: \App\Models\SimModule
                   description: 'a SimModule object'
-                  example: est
+                  example: commodi
                 $id:
                   type: Integer
                   description: ''
-                  example: voluptatem
+                  example: laboriosam
       security: []
     parameters:
       -
@@ -519,11 +671,11 @@ paths:
                 \Illuminate\Http\Request:
                   type: $request
                   description: ''
-                  example: iste
+                  example: quas
                 \App\Models\SimModule:
                   type: $simModule
                   description: ''
-                  example: ab
+                  example: rem
       security: []
     parameters:
       -
@@ -548,13 +700,13 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        302:
           description: ''
           content:
             text/plain:
               schema:
                 type: string
-                example: "{\n'data': \\Illuminate\\Http\\Response $newcontact,\n'message':'success' or 'error',\n\n}"
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://gatewayblvd.net/app/en/api/login'\" />\n\n        <title>Redirecting to http://gatewayblvd.net/app/en/api/login</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://gatewayblvd.net/app/en/api/login\">http://gatewayblvd.net/app/en/api/login</a>.\n    </body>\n</html>"
       tags:
         - Endpoints
       requestBody:
@@ -564,10 +716,22 @@ paths:
             schema:
               type: object
               properties:
-                \Illuminate\Http\Request:
-                  type: $request
-                  description: 'Request Object'
-                  example: earum
+                contact_no:
+                  type: String
+                  description: ''
+                  example: '+12901009100'
+                contact_fname:
+                  type: String
+                  description: ''
+                  example: John
+                contact_lname:
+                  type: String
+                  description: ''
+                  example: Reid
+                sim_contact_saved_to:
+                  type: String
+                  description: ''
+                  example: "+12410209102 - //you can make this a drop-down selection to pick the sim number from the list of all sim cards' numbers stored initially instead of making the user enter it manually"
       security: []
   /api/v1/add-new-sim-configuration:
     post:
@@ -579,12 +743,12 @@ paths:
           in: query
           name: \Illuminate\Http\Request
           description: $request
-          example: fugit
+          example: molestias
           required: false
           schema:
             type: string
             description: $request
-            example: fugit
+            example: molestias
         -
           in: header
           name: Connection
@@ -620,7 +784,7 @@ paths:
                 current_port_state:
                   type: Integer
                   description: 'Default: 1'
-                  example: repellat
+                  example: unde
               required:
                 - sim_number
                 - sim_port_number
@@ -636,12 +800,12 @@ paths:
           in: query
           name: $f_name
           description: String
-          example: voluptates
+          example: john
           required: false
           schema:
             type: string
             description: String
-            example: voluptates
+            example: john
       responses:
         200:
           description: ''
@@ -658,7 +822,7 @@ paths:
         in: path
         name: ''
         description: ''
-        example: aliquam
+        example: voluptatem
         required: true
         schema:
           type: string
@@ -708,7 +872,7 @@ paths:
         in: path
         name: port_id
         description: 'The ID of the port.'
-        example: aut
+        example: quibusdam
         required: true
         schema:
           type: string
@@ -720,14 +884,14 @@ paths:
       parameters:
         -
           in: query
-          name: String
-          description: $contact_number
-          example: 17
+          name: $contact_number
+          description: String
+          example: '+1289309200019'
           required: false
           schema:
-            type: integer
-            description: $contact_number
-            example: 17
+            type: string
+            description: String
+            example: '+1289309200019'
         -
           in: header
           name: Connection
@@ -742,22 +906,11 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n'data': \\Illuminate\\Http\\Response $contact,\n'message':'success'\n}"
+                example: "{\n'data': []\n'message':'success'\n}"
       tags:
         - Endpoints
-      requestBody:
-        required: false
-        content:
-          application/octet-stream:
-            schema:
-              type: object
-              properties:
-                $contact_number:
-                  type: String
-                  description: ''
-                  example: '+1239028800'
       security: []
-  /api/v1/get-contact-by-host:
+  '/api/v1/get-contact-by-host/{sim_number}':
     get:
       summary: 'this function gets all contacts on a particular sim card by its number'
       operationId: thisFunctionGetsAllContactsOnAParticularSimCardByItsNumber
@@ -767,12 +920,12 @@ paths:
           in: query
           name: $sim_number
           description: String
-          example: ut
+          example: qui
           required: false
           schema:
             type: string
             description: String
-            example: ut
+            example: qui
         -
           in: header
           name: Connection
@@ -791,6 +944,58 @@ paths:
       tags:
         - Endpoints
       security: []
+    parameters:
+      -
+        in: path
+        name: sim_number
+        description: ''
+        example: adipisci
+        required: true
+        schema:
+          type: string
+  '/api/v1/get-contact-by-port-num/{port_number}':
+    get:
+      summary: 'this function gets all contacts on a particular sim card by its number'
+      operationId: thisFunctionGetsAllContactsOnAParticularSimCardByItsNumber
+      description: ''
+      parameters:
+        -
+          in: query
+          name: $port_number
+          description: String
+          example: dignissimos
+          required: false
+          schema:
+            type: string
+            description: String
+            example: dignissimos
+        -
+          in: header
+          name: Connection
+          description: ''
+          example: keep-alive
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n'data': \\Illuminate\\Http\\Response $response $allContacts,\n'message': 'success' or 'error'\n}"
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: port_number
+        description: ''
+        example: aut
+        required: true
+        schema:
+          type: string
   '/api/v1/change-contact-number-state/{contact_id}':
     put:
       summary: 'This function alters the state of a sim contact'
@@ -801,12 +1006,12 @@ paths:
           in: query
           name: Request
           description: $request
-          example: commodi
+          example: impedit
           required: false
           schema:
             type: string
             description: $request
-            example: commodi
+            example: impedit
         -
           in: query
           name: $contact_id
@@ -844,14 +1049,14 @@ paths:
                 $contact_state:
                   type: 'Example:'
                   description: true/false
-                  example: voluptas
+                  example: natus
       security: []
     parameters:
       -
         in: path
         name: contact_id
         description: 'The ID of the contact.'
-        example: unde
+        example: dolores
         required: true
         schema:
           type: string
@@ -882,7 +1087,38 @@ paths:
         in: path
         name: sim_num
         description: ''
-        example: soluta
+        example: impedit
+        required: true
+        schema:
+          type: string
+  '/api/v1/get-sms-messages-by-port/{port_num}':
+    get:
+      summary: ''
+      operationId: getApiV1GetSmsMessagesByPortPort_num
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: port_num
+        description: ''
+        example: sit
         required: true
         schema:
           type: string
@@ -894,14 +1130,14 @@ paths:
       parameters:
         -
           in: query
-          name: Integer
-          description: '$id Sms id in the database table'
-          example: in
+          name: $id
+          description: 'Integer Sms id in the database table'
+          example: est
           required: false
           schema:
             type: string
-            description: '$id Sms id in the database table'
-            example: in
+            description: 'Integer Sms id in the database table'
+            example: est
         -
           in: header
           name: Connection
@@ -925,7 +1161,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the delete sms resource.'
-        example: doloremque
+        example: sed
         required: true
         schema:
           type: string
@@ -962,7 +1198,7 @@ paths:
                 'NULL':
                   type: This
                   description: 'function retrieves all the sms sent to the sim cards on all used ports on modem'
-                  example: quam
+                  example: accusantium
       security: []
   '/api/v1/get-sms-stats/{port_id}/{slots}/{type}':
     get:
@@ -972,23 +1208,33 @@ paths:
       parameters:
         -
           in: query
-          name: Integer
-          description: '$id $slots'
+          name: $port_id
+          description: Integer
+          example: '1,2,3-8'
+          required: false
+          schema:
+            type: string
+            description: Integer
+            example: '1,2,3-8'
+        -
+          in: query
+          name: $id
+          description: 'Integer $slots'
           example: '1'
           required: false
           schema:
             type: string
-            description: '$id $slots'
+            description: 'Integer $slots'
             example: '1'
         -
           in: query
-          name: String
-          description: $type
+          name: $type
+          description: String
           example: '0,1,2,3 or all'
           required: false
           schema:
             type: string
-            description: $type
+            description: String
             example: '0,1,2,3 or all'
         -
           in: header
@@ -1020,7 +1266,7 @@ paths:
         in: path
         name: port_id
         description: 'The ID of the port.'
-        example: eos
+        example: inventore
         required: true
         schema:
           type: string
@@ -1028,7 +1274,7 @@ paths:
         in: path
         name: slots
         description: ''
-        example: est
+        example: maxime
         required: true
         schema:
           type: string
@@ -1036,7 +1282,7 @@ paths:
         in: path
         name: type
         description: ''
-        example: deserunt
+        example: debitis
         required: true
         schema:
           type: string
@@ -1050,12 +1296,12 @@ paths:
           in: query
           name: \illuminate\Http\Request
           description: $request
-          example: beatae
+          example: magni
           required: false
           schema:
             type: string
             description: $request
-            example: beatae
+            example: magni
         -
           in: header
           name: Connection
@@ -1081,28 +1327,24 @@ paths:
       tags:
         - Endpoints
       requestBody:
-        required: true
+        required: false
         content:
           application/json;utf-8:
             schema:
               type: object
               properties:
                 recipient:
-                  type: string
+                  type: String
                   description: ''
-                  example: occaecati
+                  example: '+1234567788'
                 _msg:
-                  type: string
+                  type: String
                   description: ''
-                  example: et
+                  example: 'hello how are you doing today?'
                 sim_port_number:
-                  type: string
+                  type: Integer
                   description: ''
-                  example: et
-              required:
-                - recipient
-                - _msg
-                - sim_port_number
+                  example: 1-8
       security: []
   /api/v1/send-bulk-sms:
     post:
@@ -1114,12 +1356,12 @@ paths:
           in: query
           name: \illuminate\Http\Request
           description: $request
-          example: ex
+          example: esse
           required: false
           schema:
             type: string
             description: $request
-            example: ex
+            example: esse
         -
           in: header
           name: Connection
@@ -1141,33 +1383,31 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n'data':'message',\n'status': Response $response\n}"
+                example: "{\n'data': String\n'status': Response $res\n}"
       tags:
         - Endpoints
       requestBody:
-        required: true
+        required: false
         content:
           application/octet-stream:
             schema:
               type: object
               properties:
                 _msg:
-                  type: string
-                  description: 'Must not be greater than 255 characters. Must be at least 1 character.'
-                  example: kodydnehbuxgmydalkxgbgvwcalsbnrqyfoyhgkwzmdnimekcltvbeepuspfeyhzzuzrmsroslcosdncxqiqm
+                  type: String
+                  description: ''
+                  example: 'hello how are you doing today?'
                 sim_port_number:
-                  type: integer
+                  type: Integer
                   description: ''
-                  example: 10
+                  example: 1-8
                 recipient:
-                  type: object
+                  type: array
                   description: ''
-                  example: []
-                  properties: {  }
-              required:
-                - _msg
-                - sim_port_number
-                - recipient
+                  example:
+                    - cumque
+                  items:
+                    type: String
       security: []
   '/api/v1/change-sms-state/{sms_id}':
     put:
@@ -1179,22 +1419,22 @@ paths:
           in: query
           name: Integer
           description: $sms_id
-          example: voluptatem
+          example: excepturi
           required: false
           schema:
             type: string
             description: $sms_id
-            example: voluptatem
+            example: excepturi
         -
           in: query
           name: \Illuminate\Http\Request
           description: $request
-          example: dolorem
+          example: enim
           required: false
           schema:
             type: string
             description: $request
-            example: dolorem
+            example: enim
         -
           in: header
           name: Connection
@@ -1229,7 +1469,7 @@ paths:
         in: path
         name: sms_id
         description: 'The ID of the sms.'
-        example: ut
+        example: hic
         required: true
         schema:
           type: string
@@ -1243,12 +1483,12 @@ paths:
           in: query
           name: /Illuminate/Http/Request
           description: "<$request>\n\n  * @header Connection keep-alive"
-          example: laudantium
+          example: sunt
           required: false
           schema:
             type: string
             description: "<$request>\n\n  * @header Connection keep-alive"
-            example: laudantium
+            example: sunt
       responses:
         200:
           description: ''

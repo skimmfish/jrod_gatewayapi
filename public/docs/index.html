@@ -79,8 +79,15 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-new-user">
                                 <a href="#endpoints-POSTapi-new-user">Create a new user saved in the database users table.</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-get-all-contacts">
-                                <a href="#endpoints-GETapi-v1-get-all-contacts">Display a listing of the resource.</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-forgot-password">
+                                <a href="#endpoints-POSTapi-forgot-password">This function finds a user and return the user to move to another page to enter the new password and confirm it</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-update-password">
+                                <a href="#endpoints-POSTapi-update-password">Update the user's password, this function doesn't require authentication token
+The username and email field is non-updateable to avoid conflicts with other users</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-confirm-otp-code">
+                                <a href="#endpoints-GETapi-confirm-otp-code">This function confirms otp code before navigation to the next screen to enter the new password</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-logout-user">
                                 <a href="#endpoints-POSTapi-v1-logout-user">This function logs out the currently authenticated user and clear the AUTH_TOKEN</a>
@@ -97,8 +104,8 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-get-contact--id-">
                                 <a href="#endpoints-GETapi-v1-get-contact--id-">Display a single contact.</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-v1-update-sim-contact">
-                                <a href="#endpoints-PUTapi-v1-update-sim-contact">Show the form for editing the specified resource.</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-v1-update-sim-contact--id-">
+                                <a href="#endpoints-PUTapi-v1-update-sim-contact--id-">This function modifies a contact</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-v1-delete-sim-module--id-">
                                 <a href="#endpoints-DELETEapi-v1-delete-sim-module--id-">Remove the specified resource from storage.</a>
@@ -122,14 +129,20 @@ by calling API /update-sim-module endpoint</a>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-get-contact-by-number">
                                 <a href="#endpoints-GETapi-v1-get-contact-by-number">Show Contact by Phone Number, this retrieves all the isntances of the phone number perhaps its saved on more than one sim</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-get-contact-by-host">
-                                <a href="#endpoints-GETapi-v1-get-contact-by-host">this function gets all contacts on a particular sim card by its number</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-get-contact-by-host--sim_number-">
+                                <a href="#endpoints-GETapi-v1-get-contact-by-host--sim_number-">this function gets all contacts on a particular sim card by its number</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-get-contact-by-port-num--port_number-">
+                                <a href="#endpoints-GETapi-v1-get-contact-by-port-num--port_number-">this function gets all contacts on a particular sim card by its number</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-PUTapi-v1-change-contact-number-state--contact_id-">
                                 <a href="#endpoints-PUTapi-v1-change-contact-number-state--contact_id-">This function alters the state of a sim contact</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-get-sms-messages-by-portnum--sim_num-">
                                 <a href="#endpoints-GETapi-v1-get-sms-messages-by-portnum--sim_num-">GET api/v1/get-sms-messages-by-portnum/{sim_num}</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-get-sms-messages-by-port--port_num-">
+                                <a href="#endpoints-GETapi-v1-get-sms-messages-by-port--port_num-">GET api/v1/get-sms-messages-by-port/{port_num}</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-v1-delete-sms-resource--id-">
                                 <a href="#endpoints-DELETEapi-v1-delete-sms-resource--id-">This function is to remove or change the state of an sms</a>
@@ -163,7 +176,7 @@ by calling API /update-sim-module endpoint</a>
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: November 1, 2023</li>
+        <li>Last updated: November 12, 2023</li>
     </ul>
 </div>
 
@@ -203,14 +216,14 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://gatewayblvd.net/app/en/api/api/login" \
+    "https://gatewayblvd.net/app/en/api/api/login?%5CIlluminate%5CHttp%5CRequest=maxime&amp;email_or_phone_number=jayden%40gm.co.uk+%2F+%2B1240291092&amp;password=Rock1234%40" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json;UTF-8" \
     --header "Accept-Language:: en," \
     --header "Accept:: application/json;utf-8," \
     --header "Connection:: keep-alive" \
     --data "{
-    \"username\": \"jayden\",
+    \"email_or_phone_number\": \"jayden@gm.co.uk \\/ +1240291092\",
     \"password\": \"Rock1234@\"
 }"
 </code></pre></div>
@@ -221,6 +234,14 @@ You can switch the language used with the tabs at the top right (or from the nav
     "https://gatewayblvd.net/app/en/api/api/login"
 );
 
+const params = {
+    "\Illuminate\Http\Request": "maxime",
+    "email_or_phone_number": "jayden@gm.co.uk / +1240291092",
+    "password": "Rock1234@",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
 const headers = {
     "Content-Type": "application/json",
     "Accept": "application/json;UTF-8",
@@ -230,7 +251,7 @@ const headers = {
 };
 
 let body = {
-    "username": "jayden",
+    "email_or_phone_number": "jayden@gm.co.uk \/ +1240291092",
     "password": "Rock1234@"
 };
 
@@ -254,8 +275,13 @@ $response = $client-&gt;post(
             'Accept:' =&gt; 'application/json;utf-8,',
             'Connection:' =&gt; 'keep-alive',
         ],
+        'query' =&gt; [
+            '\Illuminate\Http\Request' =&gt; 'maxime',
+            'email_or_phone_number' =&gt; 'jayden@gm.co.uk / +1240291092',
+            'password' =&gt; 'Rock1234@',
+        ],
         'json' =&gt; [
-            'username' =&gt; 'jayden',
+            'email_or_phone_number' =&gt; 'jayden@gm.co.uk / +1240291092',
             'password' =&gt; 'Rock1234@',
         ],
     ]
@@ -272,8 +298,8 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-&quot;data&quot;: $user information payload
-&quot;message&quot;: &#039;success&#039; or &#039;error&#039;
+&quot;data&quot;: []
+&quot;message&quot;: string
 &quot;auth_token&quot;: &quot;Bearer 3|7dUd16GpVXPwy530oqndmGXNDCShwYaQd2cXcp...........&quot; for this only extract the token excluding the &#039;Bearer&#039; string, pass this in the header to see sample response payload that is returned
 }</code>
  </pre>
@@ -380,17 +406,51 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Example: <code>keep-alive</code></p>
             </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>username</code></b>&nbsp;&nbsp;
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>\Illuminate\Http\Request</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="\Illuminate\Http\Request"                data-endpoint="POSTapi-login"
+               value="maxime"
+               data-component="query">
+    <br>
+<p>$request Example: <code>maxime</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>email_or_phone_number</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="username"                data-endpoint="POSTapi-login"
-               value="jayden"
+                              name="email_or_phone_number"                data-endpoint="POSTapi-login"
+               value="jayden@gm.co.uk / +1240291092"
+               data-component="query">
+    <br>
+<p>The email/phone number of the  user. Example: <code>jayden@gm.co.uk / +1240291092</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="password"                data-endpoint="POSTapi-login"
+               value="Rock1234@"
+               data-component="query">
+    <br>
+<p>The password of the  user. Example: <code>Rock1234@</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>email_or_phone_number</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="email_or_phone_number"                data-endpoint="POSTapi-login"
+               value="jayden@gm.co.uk / +1240291092"
                data-component="body">
     <br>
-<p>The username of the  user. Example: <code>jayden</code></p>
+<p>The email/phone number of the  user. Example: <code>jayden@gm.co.uk / +1240291092</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
@@ -418,16 +478,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://gatewayblvd.net/app/en/api/api/new-user" \
+    "https://gatewayblvd.net/app/en/api/api/new-user?%5CIlluminate%5CHttp%5CRequest=eos" \
     --header "Content-Type: application/json;utf-8" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
-    --header "Authorization: Bearer AUTH_TOKEN" \
     --data "{
     \"name\": \"solay\",
     \"username\": \"jayden\",
+    \"email\": \"Rock1234@gmail.com\",
     \"password\": \"Rock1234@\",
-    \"email\": \"Rock1234@gmail.com\"
+    \"password_confirmation\": \"Rock1234@\",
+    \"phone_number\": \"molestiae\"
 }"
 </code></pre></div>
 
@@ -437,18 +498,25 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "https://gatewayblvd.net/app/en/api/api/new-user"
 );
 
+const params = {
+    "\Illuminate\Http\Request": "eos",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
 const headers = {
     "Content-Type": "application/json;utf-8",
     "Accept": "* / *",
     "Connection": "keep-alive",
-    "Authorization": "Bearer AUTH_TOKEN",
 };
 
 let body = {
     "name": "solay",
     "username": "jayden",
+    "email": "Rock1234@gmail.com",
     "password": "Rock1234@",
-    "email": "Rock1234@gmail.com"
+    "password_confirmation": "Rock1234@",
+    "phone_number": "molestiae"
 };
 
 fetch(url, {
@@ -468,13 +536,17 @@ $response = $client-&gt;post(
             'Content-Type' =&gt; 'application/json;utf-8',
             'Accept' =&gt; '* / *',
             'Connection' =&gt; 'keep-alive',
-            'Authorization' =&gt; 'Bearer AUTH_TOKEN',
+        ],
+        'query' =&gt; [
+            '\Illuminate\Http\Request' =&gt; 'eos',
         ],
         'json' =&gt; [
             'name' =&gt; 'solay',
             'username' =&gt; 'jayden',
-            'password' =&gt; 'Rock1234@',
             'email' =&gt; 'Rock1234@gmail.com',
+            'password' =&gt; 'Rock1234@',
+            'password_confirmation' =&gt; 'Rock1234@',
+            'phone_number' =&gt; 'molestiae',
         ],
     ]
 );
@@ -576,18 +648,19 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Example: <code>keep-alive</code></p>
             </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>\Illuminate\Http\Request</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization"                data-endpoint="POSTapi-new-user"
-               value="Bearer AUTH_TOKEN"
-               data-component="header">
+                              name="\Illuminate\Http\Request"                data-endpoint="POSTapi-new-user"
+               value="eos"
+               data-component="query">
     <br>
-<p>Example: <code>Bearer AUTH_TOKEN</code></p>
+<p>$request Example: <code>eos</code></p>
             </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
 <small>String</small>&nbsp;
@@ -611,6 +684,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>The username of the  user. Example: <code>jayden</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="email"                data-endpoint="POSTapi-new-user"
+               value="Rock1234@gmail.com"
+               data-component="body">
+    <br>
+<p>The email Example: <code>Rock1234@gmail.com</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
  &nbsp;
@@ -622,76 +706,87 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>The password of the  user, required to be confirmed. Example: <code>Rock1234@</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+            <b style="line-height: 2;"><code>password_confirmation</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="email"                data-endpoint="POSTapi-new-user"
-               value="Rock1234@gmail.com"
+                              name="password_confirmation"                data-endpoint="POSTapi-new-user"
+               value="Rock1234@"
                data-component="body">
     <br>
-<p>The email Example: <code>Rock1234@gmail.com</code></p>
+<p>The password confirmation of the user registering or being registered Example: <code>Rock1234@</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>phone_number</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="phone_number"                data-endpoint="POSTapi-new-user"
+               value="molestiae"
+               data-component="body">
+    <br>
+<p>the phone number of the user example: +1239028109211 Example: <code>molestiae</code></p>
         </div>
         </form>
 
-                    <h2 id="endpoints-GETapi-v1-get-all-contacts">Display a listing of the resource.</h2>
+                    <h2 id="endpoints-POSTapi-forgot-password">This function finds a user and return the user to move to another page to enter the new password and confirm it</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-GETapi-v1-get-all-contacts">
+<span id="example-requests-POSTapi-forgot-password">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "https://gatewayblvd.net/app/en/api/api/v1/get-all-contacts?NULL=id" \
-    --header "Content-Type: application/octet-stream" \
+    <pre><code class="language-bash">curl --request POST \
+    "https://gatewayblvd.net/app/en/api/api/forgot-password" \
+    --header "Content-Type: application/json;utf-8" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
-    --header "Authorization: Bearer AUTH_TOKEN"</code></pre></div>
+    --data "{
+    \"String\": \"JoyKam\"
+}"
+</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/get-all-contacts"
+    "https://gatewayblvd.net/app/en/api/api/forgot-password"
 );
 
-const params = {
-    "NULL": "id",
-};
-Object.keys(params)
-    .forEach(key =&gt; url.searchParams.append(key, params[key]));
-
 const headers = {
-    "Content-Type": "application/octet-stream",
+    "Content-Type": "application/json;utf-8",
     "Accept": "* / *",
     "Connection": "keep-alive",
-    "Authorization": "Bearer AUTH_TOKEN",
+};
+
+let body = {
+    "String": "JoyKam"
 };
 
 fetch(url, {
-    method: "GET",
+    method: "POST",
     headers,
+    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-all-contacts';
-$response = $client-&gt;get(
+$url = 'https://gatewayblvd.net/app/en/api/api/forgot-password';
+$response = $client-&gt;post(
     $url,
     [
         'headers' =&gt; [
-            'Content-Type' =&gt; 'application/octet-stream',
+            'Content-Type' =&gt; 'application/json;utf-8',
             'Accept' =&gt; '* / *',
             'Connection' =&gt; 'keep-alive',
-            'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
-        'query' =&gt; [
-            'NULL' =&gt; 'id',
+        'json' =&gt; [
+            'String' =&gt; 'JoyKam',
         ],
     ]
 );
@@ -700,63 +795,65 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 </span>
 
-<span id="example-responses-GETapi-v1-get-all-contacts">
+<span id="example-responses-POSTapi-forgot-password">
             <blockquote>
             <p>Example response (200):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-&#039;data&#039;: ContactModel $allContact,
-&#039;message&#039;: &#039;success&#039;
+&#039;data&#039;: [],
+&#039;message&#039;: String,
+&#039;status&#039;: boolean
+
 }</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-v1-get-all-contacts" hidden>
+<span id="execution-results-POSTapi-forgot-password" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-get-all-contacts"></span>:
+                id="execution-response-status-POSTapi-forgot-password"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-get-all-contacts"
+    <pre class="json"><code id="execution-response-content-POSTapi-forgot-password"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-v1-get-all-contacts" hidden>
+<span id="execution-error-POSTapi-forgot-password" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-get-all-contacts">
+    <pre><code id="execution-error-message-POSTapi-forgot-password">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-GETapi-v1-get-all-contacts" data-method="GET"
-      data-path="api/v1/get-all-contacts"
+<form id="form-POSTapi-forgot-password" data-method="POST"
+      data-path="api/forgot-password"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-get-all-contacts', this);">
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-forgot-password', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-v1-get-all-contacts"
-                    onclick="tryItOut('GETapi-v1-get-all-contacts');">Try it out ⚡
+                    id="btn-tryout-POSTapi-forgot-password"
+                    onclick="tryItOut('POSTapi-forgot-password');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-v1-get-all-contacts"
-                    onclick="cancelTryOut('GETapi-v1-get-all-contacts');" hidden>Cancel 🛑
+                    id="btn-canceltryout-POSTapi-forgot-password"
+                    onclick="cancelTryOut('POSTapi-forgot-password');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-v1-get-all-contacts"
+                    id="btn-executetryout-POSTapi-forgot-password"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
             </button>
             </h3>
             <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/v1/get-all-contacts</code></b>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/forgot-password</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -764,18 +861,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-v1-get-all-contacts"
-               value="application/octet-stream"
+                              name="Content-Type"                data-endpoint="POSTapi-forgot-password"
+               value="application/json;utf-8"
                data-component="header">
     <br>
-<p>Example: <code>application/octet-stream</code></p>
+<p>Example: <code>application/json;utf-8</code></p>
             </div>
                                 <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-v1-get-all-contacts"
+                              name="Accept"                data-endpoint="POSTapi-forgot-password"
                value="* / *"
                data-component="header">
     <br>
@@ -786,36 +883,398 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Connection"                data-endpoint="GETapi-v1-get-all-contacts"
+                              name="Connection"                data-endpoint="POSTapi-forgot-password"
                value="keep-alive"
                data-component="header">
     <br>
 <p>Example: <code>keep-alive</code></p>
             </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>String</code></b>&nbsp;&nbsp;
+<small>email</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="String"                data-endpoint="POSTapi-forgot-password"
+               value="JoyKam"
+               data-component="body">
+    <br>
+<p>maximum of 15 characters of Example: <code>JoyKam</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-POSTapi-update-password">Update the user&#039;s password, this function doesn&#039;t require authentication token
+The username and email field is non-updateable to avoid conflicts with other users</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-update-password">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "https://gatewayblvd.net/app/en/api/api/update-password" \
+    --header "Content-Type: application/json;utf-8" \
+    --header "Accept: * / *" \
+    --header "Connection: keep-alive" \
+    --data "{
+    \"password\": \"johnreid\",
+    \"password_confirmation\": \"johnreid\",
+    \"email\": \"JoyKam\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://gatewayblvd.net/app/en/api/api/update-password"
+);
+
+const headers = {
+    "Content-Type": "application/json;utf-8",
+    "Accept": "* / *",
+    "Connection": "keep-alive",
+};
+
+let body = {
+    "password": "johnreid",
+    "password_confirmation": "johnreid",
+    "email": "JoyKam"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://gatewayblvd.net/app/en/api/api/update-password';
+$response = $client-&gt;post(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json;utf-8',
+            'Accept' =&gt; '* / *',
+            'Connection' =&gt; 'keep-alive',
+        ],
+        'json' =&gt; [
+            'password' =&gt; 'johnreid',
+            'password_confirmation' =&gt; 'johnreid',
+            'email' =&gt; 'JoyKam',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-update-password">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+&#039;data&#039;: []
+&#039;message&#039;: String
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-update-password" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-update-password"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-update-password"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-update-password" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-update-password">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-update-password" data-method="POST"
+      data-path="api/update-password"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-update-password', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-update-password"
+                    onclick="tryItOut('POSTapi-update-password');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-update-password"
+                    onclick="cancelTryOut('POSTapi-update-password');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-update-password"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/update-password</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization"                data-endpoint="GETapi-v1-get-all-contacts"
-               value="Bearer AUTH_TOKEN"
+                              name="Content-Type"                data-endpoint="POSTapi-update-password"
+               value="application/json;utf-8"
                data-component="header">
     <br>
-<p>Example: <code>Bearer AUTH_TOKEN</code></p>
+<p>Example: <code>application/json;utf-8</code></p>
             </div>
-                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
-                                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>NULL</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-update-password"
+               value="* / *"
+               data-component="header">
+    <br>
+<p>Example: <code>* / *</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Connection</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Connection"                data-endpoint="POSTapi-update-password"
+               value="keep-alive"
+               data-component="header">
+    <br>
+<p>Example: <code>keep-alive</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
+<small>String</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="password"                data-endpoint="POSTapi-update-password"
+               value="johnreid"
+               data-component="body">
+    <br>
+<p>Example: <code>johnreid</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>password_confirmation</code></b>&nbsp;&nbsp;
+<small>required</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="NULL"                data-endpoint="GETapi-v1-get-all-contacts"
-               value="id"
-               data-component="query">
+                              name="password_confirmation"                data-endpoint="POSTapi-update-password"
+               value="johnreid"
+               data-component="body">
     <br>
-<p>Example: <code>id</code></p>
+<p>Example: <code>johnreid</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<small>String</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="email"                data-endpoint="POSTapi-update-password"
+               value="JoyKam"
+               data-component="body">
+    <br>
+<p>maximum of 15 characters of Example: <code>JoyKam</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-GETapi-confirm-otp-code">This function confirms otp code before navigation to the next screen to enter the new password</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-confirm-otp-code">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://gatewayblvd.net/app/en/api/api/confirm-otp-code" \
+    --header "Content-Type: application/json;utf-8" \
+    --header "Accept: * / *" \
+    --header "Connection: keep-alive" \
+    --data "{
+    \"String\": \"jro@gmail.co.uk\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://gatewayblvd.net/app/en/api/api/confirm-otp-code"
+);
+
+const headers = {
+    "Content-Type": "application/json;utf-8",
+    "Accept": "* / *",
+    "Connection": "keep-alive",
+};
+
+let body = {
+    "String": "jro@gmail.co.uk"
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://gatewayblvd.net/app/en/api/api/confirm-otp-code';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json;utf-8',
+            'Accept' =&gt; '* / *',
+            'Connection' =&gt; 'keep-alive',
+        ],
+        'json' =&gt; [
+            'String' =&gt; 'jro@gmail.co.uk',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-confirm-otp-code">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+&#039;data&#039;: boolean
+&#039;message&#039;: string
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-confirm-otp-code" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-confirm-otp-code"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-confirm-otp-code"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-confirm-otp-code" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-confirm-otp-code">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-confirm-otp-code" data-method="GET"
+      data-path="api/confirm-otp-code"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-confirm-otp-code', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-confirm-otp-code"
+                    onclick="tryItOut('GETapi-confirm-otp-code');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-confirm-otp-code"
+                    onclick="cancelTryOut('GETapi-confirm-otp-code');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-confirm-otp-code"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/confirm-otp-code</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-confirm-otp-code"
+               value="application/json;utf-8"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json;utf-8</code></p>
             </div>
-                </form>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-confirm-otp-code"
+               value="* / *"
+               data-component="header">
+    <br>
+<p>Example: <code>* / *</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Connection</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Connection"                data-endpoint="GETapi-confirm-otp-code"
+               value="keep-alive"
+               data-component="header">
+    <br>
+<p>Example: <code>keep-alive</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>String</code></b>&nbsp;&nbsp;
+<small>email</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="String"                data-endpoint="GETapi-confirm-otp-code"
+               value="jro@gmail.co.uk"
+               data-component="body">
+    <br>
+<p>Example: <code>jro@gmail.co.uk</code></p>
+        </div>
+        </form>
 
                     <h2 id="endpoints-POSTapi-v1-logout-user">This function logs out the currently authenticated user and clear the AUTH_TOKEN</h2>
 
@@ -830,13 +1289,13 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://gatewayblvd.net/app/en/api/api/v1/logout-user" \
+    "https://gatewayblvd.net/app/en/api/api/v1/logout-user?Request=culpa" \
     --header "Content-Type: application/json;utf-8" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
     --header "Authorization: Bearer AUTH_TOKEN" \
     --data "{
-    \"Request\": \"nemo\"
+    \"Request\": \"voluptatibus\"
 }"
 </code></pre></div>
 
@@ -846,6 +1305,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "https://gatewayblvd.net/app/en/api/api/v1/logout-user"
 );
 
+const params = {
+    "Request": "culpa",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
 const headers = {
     "Content-Type": "application/json;utf-8",
     "Accept": "* / *",
@@ -854,7 +1319,7 @@ const headers = {
 };
 
 let body = {
-    "Request": "nemo"
+    "Request": "voluptatibus"
 };
 
 fetch(url, {
@@ -876,8 +1341,11 @@ $response = $client-&gt;post(
             'Connection' =&gt; 'keep-alive',
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
+        'query' =&gt; [
+            'Request' =&gt; 'culpa',
+        ],
         'json' =&gt; [
-            'Request' =&gt; 'nemo',
+            'Request' =&gt; 'voluptatibus',
         ],
     ]
 );
@@ -893,8 +1361,8 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-&quot;data&quot;: $user information payload
-&quot;message&quot;: &#039;success&#039;or &#039;error&#039;
+&quot;data&quot;: []
+&quot;message&quot;: string
 }</code>
  </pre>
     </span>
@@ -989,17 +1457,29 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Example: <code>Bearer AUTH_TOKEN</code></p>
             </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Request</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="Request"                data-endpoint="POSTapi-v1-logout-user"
+               value="culpa"
+               data-component="query">
+    <br>
+<p>$request Example: <code>culpa</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>Request</code></b>&nbsp;&nbsp;
 <small>$request</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="Request"                data-endpoint="POSTapi-v1-logout-user"
-               value="nemo"
+               value="voluptatibus"
                data-component="body">
     <br>
-<p>object Example: <code>nemo</code></p>
+<p>object Example: <code>voluptatibus</code></p>
         </div>
         </form>
 
@@ -1016,7 +1496,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://gatewayblvd.net/app/en/api/api/v1/get-sim-details-by-port-port-number/debitis" \
+    --get "https://gatewayblvd.net/app/en/api/api/v1/get-sim-details-by-port-port-number/ea" \
     --header "Content-Type: application/octet-stream" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
@@ -1029,7 +1509,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/get-sim-details-by-port-port-number/debitis"
+    "https://gatewayblvd.net/app/en/api/api/v1/get-sim-details-by-port-port-number/ea"
 );
 
 const headers = {
@@ -1052,7 +1532,7 @@ fetch(url, {
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-sim-details-by-port-port-number/debitis';
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-sim-details-by-port-port-number/ea';
 $response = $client-&gt;get(
     $url,
     [
@@ -1182,10 +1662,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="port_id"                data-endpoint="GETapi-v1-get-sim-details-by-port-port-number--port_id-"
-               value="debitis"
+               value="ea"
                data-component="url">
     <br>
-<p>The ID of the port. Example: <code>debitis</code></p>
+<p>The ID of the port. Example: <code>ea</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -1214,7 +1694,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://gatewayblvd.net/app/en/api/api/v1/get-sims-by-simcard-number/minima" \
+    --get "https://gatewayblvd.net/app/en/api/api/v1/get-sims-by-simcard-number/consectetur" \
     --header "Content-Type: application/octet-stream" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
@@ -1227,7 +1707,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/get-sims-by-simcard-number/minima"
+    "https://gatewayblvd.net/app/en/api/api/v1/get-sims-by-simcard-number/consectetur"
 );
 
 const headers = {
@@ -1250,7 +1730,7 @@ fetch(url, {
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-sims-by-simcard-number/minima';
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-sims-by-simcard-number/consectetur';
 $response = $client-&gt;get(
     $url,
     [
@@ -1380,10 +1860,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="sim_number"                data-endpoint="GETapi-v1-get-sims-by-simcard-number--sim_number-"
-               value="minima"
+               value="consectetur"
                data-component="url">
     <br>
-<p>Example: <code>minima</code></p>
+<p>Example: <code>consectetur</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -1412,7 +1892,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://gatewayblvd.net/app/en/api/api/v1/update-user/nesciunt" \
+    "https://gatewayblvd.net/app/en/api/api/v1/update-user/debitis" \
     --header "Content-Type: application/json;utf-8" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
@@ -1426,7 +1906,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/update-user/nesciunt"
+    "https://gatewayblvd.net/app/en/api/api/v1/update-user/debitis"
 );
 
 const headers = {
@@ -1450,7 +1930,7 @@ fetch(url, {
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/update-user/nesciunt';
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/update-user/debitis';
 $response = $client-&gt;put(
     $url,
     [
@@ -1581,10 +2061,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="id"                data-endpoint="PUTapi-v1-update-user--id-"
-               value="nesciunt"
+               value="debitis"
                data-component="url">
     <br>
-<p>The ID of the update user. Example: <code>nesciunt</code></p>
+<p>The ID of the update user. Example: <code>debitis</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -1624,21 +2104,23 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://gatewayblvd.net/app/en/api/api/v1/get-contact/tenetur" \
+    --get "https://gatewayblvd.net/app/en/api/api/v1/get-contact/eaque?Integer=1" \
     --header "Content-Type: application/octet-stream" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
-    --header "Authorization: Bearer AUTH_TOKEN" \
-    --data "{
-    \"$id\": \"1\"
-}"
-</code></pre></div>
+    --header "Authorization: Bearer AUTH_TOKEN"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/get-contact/tenetur"
+    "https://gatewayblvd.net/app/en/api/api/v1/get-contact/eaque"
 );
+
+const params = {
+    "Integer": "1",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 const headers = {
     "Content-Type": "application/octet-stream",
@@ -1647,20 +2129,15 @@ const headers = {
     "Authorization": "Bearer AUTH_TOKEN",
 };
 
-let body = {
-    "$id": "1"
-};
-
 fetch(url, {
     method: "GET",
     headers,
-    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-contact/tenetur';
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-contact/eaque';
 $response = $client-&gt;get(
     $url,
     [
@@ -1670,8 +2147,8 @@ $response = $client-&gt;get(
             'Connection' =&gt; 'keep-alive',
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
-        'json' =&gt; [
-            '$id' =&gt; '1',
+        'query' =&gt; [
+            'Integer' =&gt; '1',
         ],
     ]
 );
@@ -1687,7 +2164,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
- &#039;data&#039;: \Illuminate\Http\Response $response,
+ &#039;data&#039;: [],
  &#039;message&#039;: &#039;success&#039; or &#039;error
 
 }</code>
@@ -1791,39 +2268,39 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="id"                data-endpoint="GETapi-v1-get-contact--id-"
-               value="tenetur"
+               value="eaque"
                data-component="url">
     <br>
-<p>The ID of the get contact. Example: <code>tenetur</code></p>
+<p>The ID of the get contact. Example: <code>eaque</code></p>
             </div>
-                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>$id</code></b>&nbsp;&nbsp;
-<small>Integer</small>&nbsp;
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Integer</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="$id"                data-endpoint="GETapi-v1-get-contact--id-"
+                              name="Integer"                data-endpoint="GETapi-v1-get-contact--id-"
                value="1"
-               data-component="body">
+               data-component="query">
     <br>
-<p>Example: <code>1</code></p>
-        </div>
-        </form>
+<p>$id Example: <code>1</code></p>
+            </div>
+                </form>
 
-                    <h2 id="endpoints-PUTapi-v1-update-sim-contact">Show the form for editing the specified resource.</h2>
+                    <h2 id="endpoints-PUTapi-v1-update-sim-contact--id-">This function modifies a contact</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-PUTapi-v1-update-sim-contact">
+<span id="example-requests-PUTapi-v1-update-sim-contact--id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://gatewayblvd.net/app/en/api/api/v1/update-sim-contact?%5CIlluminate%5CHttp%5CRequest=aut&amp;Integer=magnam" \
+    "https://gatewayblvd.net/app/en/api/api/v1/update-sim-contact/autem?%5CIlluminate%5CHttp%5CRequest=excepturi&amp;Integer=aperiam" \
     --header "Content-Type: application/octet-stream" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
@@ -1840,12 +2317,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/update-sim-contact"
+    "https://gatewayblvd.net/app/en/api/api/v1/update-sim-contact/autem"
 );
 
 const params = {
-    "\Illuminate\Http\Request": "aut",
-    "Integer": "magnam",
+    "\Illuminate\Http\Request": "excepturi",
+    "Integer": "aperiam",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1874,7 +2351,7 @@ fetch(url, {
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/update-sim-contact';
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/update-sim-contact/autem';
 $response = $client-&gt;put(
     $url,
     [
@@ -1885,8 +2362,8 @@ $response = $client-&gt;put(
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
         'query' =&gt; [
-            '\Illuminate\Http\Request' =&gt; 'aut',
-            'Integer' =&gt; 'magnam',
+            '\Illuminate\Http\Request' =&gt; 'excepturi',
+            'Integer' =&gt; 'aperiam',
         ],
         'json' =&gt; [
             '$contact_no' =&gt; '+102901990190',
@@ -1902,58 +2379,55 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 </span>
 
-<span id="example-responses-PUTapi-v1-update-sim-contact">
+<span id="example-responses-PUTapi-v1-update-sim-contact--id-">
             <blockquote>
             <p>Example response (200):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-&#039;data&#039;: \Illuminate\Http\Response $contactModel,
-&#039;message&#039;:&#039;success&#039; or &#039;error&#039;
-}
-
-request payload
-$request = [&#039;contact_no&#039;,&#039;contact_alt_number&#039;,&#039;contact_fname,&#039;contact_lname,sim_contact_saved_to]</code>
+&#039;data&#039;: [],
+&#039;message&#039;: string
+}</code>
  </pre>
     </span>
-<span id="execution-results-PUTapi-v1-update-sim-contact" hidden>
+<span id="execution-results-PUTapi-v1-update-sim-contact--id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-PUTapi-v1-update-sim-contact"></span>:
+                id="execution-response-status-PUTapi-v1-update-sim-contact--id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-PUTapi-v1-update-sim-contact"
+    <pre class="json"><code id="execution-response-content-PUTapi-v1-update-sim-contact--id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-PUTapi-v1-update-sim-contact" hidden>
+<span id="execution-error-PUTapi-v1-update-sim-contact--id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-PUTapi-v1-update-sim-contact">
+    <pre><code id="execution-error-message-PUTapi-v1-update-sim-contact--id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-PUTapi-v1-update-sim-contact" data-method="PUT"
-      data-path="api/v1/update-sim-contact"
+<form id="form-PUTapi-v1-update-sim-contact--id-" data-method="PUT"
+      data-path="api/v1/update-sim-contact/{id}"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('PUTapi-v1-update-sim-contact', this);">
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-v1-update-sim-contact--id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-PUTapi-v1-update-sim-contact"
-                    onclick="tryItOut('PUTapi-v1-update-sim-contact');">Try it out ⚡
+                    id="btn-tryout-PUTapi-v1-update-sim-contact--id-"
+                    onclick="tryItOut('PUTapi-v1-update-sim-contact--id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-PUTapi-v1-update-sim-contact"
-                    onclick="cancelTryOut('PUTapi-v1-update-sim-contact');" hidden>Cancel 🛑
+                    id="btn-canceltryout-PUTapi-v1-update-sim-contact--id-"
+                    onclick="cancelTryOut('PUTapi-v1-update-sim-contact--id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-PUTapi-v1-update-sim-contact"
+                    id="btn-executetryout-PUTapi-v1-update-sim-contact--id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -1961,7 +2435,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-darkblue">PUT</small>
-            <b><code>api/v1/update-sim-contact</code></b>
+            <b><code>api/v1/update-sim-contact/{id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -1969,7 +2443,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="PUTapi-v1-update-sim-contact"
+                              name="Content-Type"                data-endpoint="PUTapi-v1-update-sim-contact--id-"
                value="application/octet-stream"
                data-component="header">
     <br>
@@ -1980,7 +2454,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="PUTapi-v1-update-sim-contact"
+                              name="Accept"                data-endpoint="PUTapi-v1-update-sim-contact--id-"
                value="* / *"
                data-component="header">
     <br>
@@ -1991,7 +2465,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Connection"                data-endpoint="PUTapi-v1-update-sim-contact"
+                              name="Connection"                data-endpoint="PUTapi-v1-update-sim-contact--id-"
                value="keep-alive"
                data-component="header">
     <br>
@@ -2002,34 +2476,46 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization"                data-endpoint="PUTapi-v1-update-sim-contact"
+                              name="Authorization"                data-endpoint="PUTapi-v1-update-sim-contact--id-"
                value="Bearer AUTH_TOKEN"
                data-component="header">
     <br>
 <p>Example: <code>Bearer AUTH_TOKEN</code></p>
             </div>
-                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="id"                data-endpoint="PUTapi-v1-update-sim-contact--id-"
+               value="autem"
+               data-component="url">
+    <br>
+<p>The ID of the update sim contact. Example: <code>autem</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>\Illuminate\Http\Request</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="\Illuminate\Http\Request"                data-endpoint="PUTapi-v1-update-sim-contact"
-               value="aut"
+                              name="\Illuminate\Http\Request"                data-endpoint="PUTapi-v1-update-sim-contact--id-"
+               value="excepturi"
                data-component="query">
     <br>
-<p>$request Example: <code>aut</code></p>
+<p>$request Example: <code>excepturi</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Integer</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="Integer"                data-endpoint="PUTapi-v1-update-sim-contact"
-               value="magnam"
+                              name="Integer"                data-endpoint="PUTapi-v1-update-sim-contact--id-"
+               value="aperiam"
                data-component="query">
     <br>
-<p>$id Example: <code>magnam</code></p>
+<p>$id Example: <code>aperiam</code></p>
             </div>
                         <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -2037,7 +2523,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>String</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="$contact_no"                data-endpoint="PUTapi-v1-update-sim-contact"
+                              name="$contact_no"                data-endpoint="PUTapi-v1-update-sim-contact--id-"
                value="+102901990190"
                data-component="body">
     <br>
@@ -2048,7 +2534,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>String</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="$contact_alt_number"                data-endpoint="PUTapi-v1-update-sim-contact"
+                              name="$contact_alt_number"                data-endpoint="PUTapi-v1-update-sim-contact--id-"
                value="+1290091800029"
                data-component="body">
     <br>
@@ -2059,7 +2545,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>String</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="$contact_fname"                data-endpoint="PUTapi-v1-update-sim-contact"
+                              name="$contact_fname"                data-endpoint="PUTapi-v1-update-sim-contact--id-"
                value="John"
                data-component="body">
     <br>
@@ -2070,7 +2556,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>String</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="$contact_lname"                data-endpoint="PUTapi-v1-update-sim-contact"
+                              name="$contact_lname"                data-endpoint="PUTapi-v1-update-sim-contact--id-"
                value="Sean"
                data-component="body">
     <br>
@@ -2081,7 +2567,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>String</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="$sim_contact_saved_to"                data-endpoint="PUTapi-v1-update-sim-contact"
+                              name="$sim_contact_saved_to"                data-endpoint="PUTapi-v1-update-sim-contact--id-"
                value="+12390930944"
                data-component="body">
     <br>
@@ -2108,8 +2594,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Connection: keep-alive" \
     --header "Authorization: Bearer AUTH_TOKEN" \
     --data "{
-    \"$simModule\": \"est\",
-    \"$id\": \"voluptatem\"
+    \"$simModule\": \"commodi\",
+    \"$id\": \"laboriosam\"
 }"
 </code></pre></div>
 
@@ -2127,8 +2613,8 @@ const headers = {
 };
 
 let body = {
-    "$simModule": "est",
-    "$id": "voluptatem"
+    "$simModule": "commodi",
+    "$id": "laboriosam"
 };
 
 fetch(url, {
@@ -2151,8 +2637,8 @@ $response = $client-&gt;delete(
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
         'json' =&gt; [
-            '$simModule' =&gt; 'est',
-            '$id' =&gt; 'voluptatem',
+            '$simModule' =&gt; 'commodi',
+            '$id' =&gt; 'laboriosam',
         ],
     ]
 );
@@ -2283,10 +2769,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="$simModule"                data-endpoint="DELETEapi-v1-delete-sim-module--id-"
-               value="est"
+               value="commodi"
                data-component="body">
     <br>
-<p>a SimModule object Example: <code>est</code></p>
+<p>a SimModule object Example: <code>commodi</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>$id</code></b>&nbsp;&nbsp;
@@ -2294,10 +2780,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="$id"                data-endpoint="DELETEapi-v1-delete-sim-module--id-"
-               value="voluptatem"
+               value="laboriosam"
                data-component="body">
     <br>
-<p>Example: <code>voluptatem</code></p>
+<p>Example: <code>laboriosam</code></p>
         </div>
         </form>
 
@@ -2320,8 +2806,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Connection: keep-alive" \
     --header "Authorization: Bearer AUTH_TOKEN" \
     --data "{
-    \"\\\\Illuminate\\\\Http\\\\Request\": \"iste\",
-    \"\\\\App\\\\Models\\\\SimModule\": \"ab\"
+    \"\\\\Illuminate\\\\Http\\\\Request\": \"quas\",
+    \"\\\\App\\\\Models\\\\SimModule\": \"rem\"
 }"
 </code></pre></div>
 
@@ -2339,8 +2825,8 @@ const headers = {
 };
 
 let body = {
-    "\\Illuminate\\Http\\Request": "iste",
-    "\\App\\Models\\SimModule": "ab"
+    "\\Illuminate\\Http\\Request": "quas",
+    "\\App\\Models\\SimModule": "rem"
 };
 
 fetch(url, {
@@ -2363,8 +2849,8 @@ $response = $client-&gt;put(
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
         'json' =&gt; [
-            '\\Illuminate\\Http\\Request' =&gt; 'iste',
-            '\\App\\Models\\SimModule' =&gt; 'ab',
+            '\\Illuminate\\Http\\Request' =&gt; 'quas',
+            '\\App\\Models\\SimModule' =&gt; 'rem',
         ],
     ]
 );
@@ -2497,10 +2983,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="\Illuminate\Http\Request"                data-endpoint="PUTapi-v1-update-sim-module--id-"
-               value="iste"
+               value="quas"
                data-component="body">
     <br>
-<p>Example: <code>iste</code></p>
+<p>Example: <code>quas</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>\App\Models\SimModule</code></b>&nbsp;&nbsp;
@@ -2508,10 +2994,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="\App\Models\SimModule"                data-endpoint="PUTapi-v1-update-sim-module--id-"
-               value="ab"
+               value="rem"
                data-component="body">
     <br>
-<p>Example: <code>ab</code></p>
+<p>Example: <code>rem</code></p>
         </div>
         </form>
 
@@ -2534,7 +3020,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Connection: keep-alive" \
     --header "Authorization: Bearer AUTH_TOKEN" \
     --data "{
-    \"\\\\Illuminate\\\\Http\\\\Request\": \"earum\"
+    \"contact_no\": \"+12901009100\",
+    \"contact_fname\": \"John\",
+    \"contact_lname\": \"Reid\",
+    \"sim_contact_saved_to\": \"+12410209102 - \\/\\/you can make this a drop-down selection to pick the sim number from the list of all sim cards\' numbers stored initially instead of making the user enter it manually\"
 }"
 </code></pre></div>
 
@@ -2552,7 +3041,10 @@ const headers = {
 };
 
 let body = {
-    "\\Illuminate\\Http\\Request": "earum"
+    "contact_no": "+12901009100",
+    "contact_fname": "John",
+    "contact_lname": "Reid",
+    "sim_contact_saved_to": "+12410209102 - \/\/you can make this a drop-down selection to pick the sim number from the list of all sim cards' numbers stored initially instead of making the user enter it manually"
 };
 
 fetch(url, {
@@ -2575,7 +3067,10 @@ $response = $client-&gt;post(
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
         'json' =&gt; [
-            '\\Illuminate\\Http\\Request' =&gt; 'earum',
+            'contact_no' =&gt; '+12901009100',
+            'contact_fname' =&gt; 'John',
+            'contact_lname' =&gt; 'Reid',
+            'sim_contact_saved_to' =&gt; '+12410209102 - //you can make this a drop-down selection to pick the sim number from the list of all sim cards\' numbers stored initially instead of making the user enter it manually',
         ],
     ]
 );
@@ -2586,15 +3081,31 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <span id="example-responses-POSTapi-v1-save-new-contact">
             <blockquote>
-            <p>Example response (200):</p>
+            <p>Example response (302):</p>
         </blockquote>
-                <pre>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+location: http://gatewayblvd.net/app/en/api/login
+content-type: text/html; charset=UTF-8
+access-control-allow-origin: http://localhost:3000
+access-control-allow-credentials: true
+ </code></pre></details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
-&#039;data&#039;: \Illuminate\Http\Response $newcontact,
-&#039;message&#039;:&#039;success&#039; or &#039;error&#039;,
+<code class="language-json" style="max-height: 300px;">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;http://gatewayblvd.net/app/en/api/login&#039;&quot; /&gt;
 
-}</code>
+        &lt;title&gt;Redirecting to http://gatewayblvd.net/app/en/api/login&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;http://gatewayblvd.net/app/en/api/login&quot;&gt;http://gatewayblvd.net/app/en/api/login&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-POSTapi-v1-save-new-contact" hidden>
@@ -2690,15 +3201,48 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                                 <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>\Illuminate\Http\Request</code></b>&nbsp;&nbsp;
-<small>$request</small>&nbsp;
+            <b style="line-height: 2;"><code>contact_no</code></b>&nbsp;&nbsp;
+<small>String</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="\Illuminate\Http\Request"                data-endpoint="POSTapi-v1-save-new-contact"
-               value="earum"
+                              name="contact_no"                data-endpoint="POSTapi-v1-save-new-contact"
+               value="+12901009100"
                data-component="body">
     <br>
-<p>Request Object Example: <code>earum</code></p>
+<p>Example: <code>+12901009100</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>contact_fname</code></b>&nbsp;&nbsp;
+<small>String</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="contact_fname"                data-endpoint="POSTapi-v1-save-new-contact"
+               value="John"
+               data-component="body">
+    <br>
+<p>Example: <code>John</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>contact_lname</code></b>&nbsp;&nbsp;
+<small>String</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="contact_lname"                data-endpoint="POSTapi-v1-save-new-contact"
+               value="Reid"
+               data-component="body">
+    <br>
+<p>Example: <code>Reid</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>sim_contact_saved_to</code></b>&nbsp;&nbsp;
+<small>String</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="sim_contact_saved_to"                data-endpoint="POSTapi-v1-save-new-contact"
+               value="+12410209102 - //you can make this a drop-down selection to pick the sim number from the list of all sim cards' numbers stored initially instead of making the user enter it manually"
+               data-component="body">
+    <br>
+<p>Example: <code>+12410209102 - //you can make this a drop-down selection to pick the sim number from the list of all sim cards' numbers stored initially instead of making the user enter it manually</code></p>
         </div>
         </form>
 
@@ -2715,7 +3259,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://gatewayblvd.net/app/en/api/api/v1/add-new-sim-configuration?%5CIlluminate%5CHttp%5CRequest=fugit" \
+    "https://gatewayblvd.net/app/en/api/api/v1/add-new-sim-configuration?%5CIlluminate%5CHttp%5CRequest=molestias" \
     --header "Content-Type: application/json;utf-8" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
@@ -2723,7 +3267,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --data "{
     \"sim_number\": \"+16302901990\",
     \"sim_port_number\": \"1,2\",
-    \"current_port_state\": \"repellat\"
+    \"current_port_state\": \"unde\"
 }"
 </code></pre></div>
 
@@ -2734,7 +3278,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 );
 
 const params = {
-    "\Illuminate\Http\Request": "fugit",
+    "\Illuminate\Http\Request": "molestias",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -2749,7 +3293,7 @@ const headers = {
 let body = {
     "sim_number": "+16302901990",
     "sim_port_number": "1,2",
-    "current_port_state": "repellat"
+    "current_port_state": "unde"
 };
 
 fetch(url, {
@@ -2772,12 +3316,12 @@ $response = $client-&gt;post(
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
         'query' =&gt; [
-            '\Illuminate\Http\Request' =&gt; 'fugit',
+            '\Illuminate\Http\Request' =&gt; 'molestias',
         ],
         'json' =&gt; [
             'sim_number' =&gt; '+16302901990',
             'sim_port_number' =&gt; '1,2',
-            'current_port_state' =&gt; 'repellat',
+            'current_port_state' =&gt; 'unde',
         ],
     ]
 );
@@ -2898,10 +3442,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="\Illuminate\Http\Request"                data-endpoint="POSTapi-v1-add-new-sim-configuration"
-               value="fugit"
+               value="molestias"
                data-component="query">
     <br>
-<p>$request Example: <code>fugit</code></p>
+<p>$request Example: <code>molestias</code></p>
             </div>
                         <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -2932,10 +3476,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="current_port_state"                data-endpoint="POSTapi-v1-add-new-sim-configuration"
-               value="repellat"
+               value="unde"
                data-component="body">
     <br>
-<p>Default: 1 Example: <code>repellat</code></p>
+<p>Default: 1 Example: <code>unde</code></p>
         </div>
         </form>
 
@@ -2952,18 +3496,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://gatewayblvd.net/app/en/api/api/v1/get_contact_by_fname/aliquam?%24f_name=voluptates" \
+    --get "https://gatewayblvd.net/app/en/api/api/v1/get_contact_by_fname/voluptatem?%24f_name=john" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json;UTF-8"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/get_contact_by_fname/aliquam"
+    "https://gatewayblvd.net/app/en/api/api/v1/get_contact_by_fname/voluptatem"
 );
 
 const params = {
-    "$f_name": "voluptates",
+    "$f_name": "john",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -2981,7 +3525,7 @@ fetch(url, {
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/get_contact_by_fname/aliquam';
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/get_contact_by_fname/voluptatem';
 $response = $client-&gt;get(
     $url,
     [
@@ -2990,7 +3534,7 @@ $response = $client-&gt;get(
             'Accept' =&gt; 'application/json;UTF-8',
         ],
         'query' =&gt; [
-            '$f_name' =&gt; 'voluptates',
+            '$f_name' =&gt; 'john',
         ],
     ]
 );
@@ -3087,10 +3631,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name=""                data-endpoint="GETapi-v1-get_contact_by_fname---"
-               value="aliquam"
+               value="voluptatem"
                data-component="url">
     <br>
-<p>Example: <code>aliquam</code></p>
+<p>Example: <code>voluptatem</code></p>
             </div>
                         <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
                                     <div style="padding-left: 28px; clear: unset;">
@@ -3099,10 +3643,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="$f_name"                data-endpoint="GETapi-v1-get_contact_by_fname---"
-               value="voluptates"
+               value="john"
                data-component="query">
     <br>
-<p>String Example: <code>voluptates</code></p>
+<p>String Example: <code>john</code></p>
             </div>
                 </form>
 
@@ -3120,7 +3664,7 @@ by calling API /update-sim-module endpoint</h2>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://gatewayblvd.net/app/en/api/api/v1/get-sim-port-state/aut?%24port_id=1%2C2%2C3-8" \
+    --get "https://gatewayblvd.net/app/en/api/api/v1/get-sim-port-state/quibusdam?%24port_id=1%2C2%2C3-8" \
     --header "Content-Type: application/octet-stream" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
@@ -3130,7 +3674,7 @@ by calling API /update-sim-module endpoint</h2>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/get-sim-port-state/aut"
+    "https://gatewayblvd.net/app/en/api/api/v1/get-sim-port-state/quibusdam"
 );
 
 const params = {
@@ -3155,7 +3699,7 @@ fetch(url, {
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-sim-port-state/aut';
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-sim-port-state/quibusdam';
 $response = $client-&gt;get(
     $url,
     [
@@ -3298,10 +3842,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="port_id"                data-endpoint="GETapi-v1-get-sim-port-state--port_id-"
-               value="aut"
+               value="quibusdam"
                data-component="url">
     <br>
-<p>The ID of the port. Example: <code>aut</code></p>
+<p>The ID of the port. Example: <code>quibusdam</code></p>
             </div>
                         <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
                                     <div style="padding-left: 28px; clear: unset;">
@@ -3330,15 +3874,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://gatewayblvd.net/app/en/api/api/v1/get-contact-by-number?String=17" \
+    --get "https://gatewayblvd.net/app/en/api/api/v1/get-contact-by-number?%24contact_number=%2B1289309200019" \
     --header "Content-Type: application/octet-stream" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
-    --header "Authorization: Bearer AUTH_TOKEN" \
-    --data "{
-    \"$contact_number\": \"+1239028800\"
-}"
-</code></pre></div>
+    --header "Authorization: Bearer AUTH_TOKEN"</code></pre></div>
 
 
 <div class="javascript-example">
@@ -3347,7 +3887,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 );
 
 const params = {
-    "String": "17",
+    "$contact_number": "+1289309200019",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -3359,14 +3899,9 @@ const headers = {
     "Authorization": "Bearer AUTH_TOKEN",
 };
 
-let body = {
-    "$contact_number": "+1239028800"
-};
-
 fetch(url, {
     method: "GET",
     headers,
-    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 
@@ -3383,10 +3918,7 @@ $response = $client-&gt;get(
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
         'query' =&gt; [
-            'String' =&gt; '17',
-        ],
-        'json' =&gt; [
-            '$contact_number' =&gt; '+1239028800',
+            '$contact_number' =&gt; '+1289309200019',
         ],
     ]
 );
@@ -3402,7 +3934,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-&#039;data&#039;: \Illuminate\Http\Response $contact,
+&#039;data&#039;: []
 &#039;message&#039;:&#039;success&#039;
 }</code>
  </pre>
@@ -3500,44 +4032,32 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                             <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
                                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>String</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="String"                data-endpoint="GETapi-v1-get-contact-by-number"
-               value="17"
-               data-component="query">
-    <br>
-<p>$contact_number Example: <code>17</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>$contact_number</code></b>&nbsp;&nbsp;
-<small>String</small>&nbsp;
+                <b style="line-height: 2;"><code>$contact_number</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="$contact_number"                data-endpoint="GETapi-v1-get-contact-by-number"
-               value="+1239028800"
-               data-component="body">
+               value="+1289309200019"
+               data-component="query">
     <br>
-<p>Example: <code>+1239028800</code></p>
-        </div>
-        </form>
+<p>String Example: <code>+1289309200019</code></p>
+            </div>
+                </form>
 
-                    <h2 id="endpoints-GETapi-v1-get-contact-by-host">this function gets all contacts on a particular sim card by its number</h2>
+                    <h2 id="endpoints-GETapi-v1-get-contact-by-host--sim_number-">this function gets all contacts on a particular sim card by its number</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-GETapi-v1-get-contact-by-host">
+<span id="example-requests-GETapi-v1-get-contact-by-host--sim_number-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://gatewayblvd.net/app/en/api/api/v1/get-contact-by-host?%24sim_number=ut" \
+    --get "https://gatewayblvd.net/app/en/api/api/v1/get-contact-by-host/adipisci?%24sim_number=qui" \
     --header "Content-Type: application/octet-stream" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
@@ -3546,11 +4066,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/get-contact-by-host"
+    "https://gatewayblvd.net/app/en/api/api/v1/get-contact-by-host/adipisci"
 );
 
 const params = {
-    "$sim_number": "ut",
+    "$sim_number": "qui",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -3570,7 +4090,7 @@ fetch(url, {
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-contact-by-host';
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-contact-by-host/adipisci';
 $response = $client-&gt;get(
     $url,
     [
@@ -3581,7 +4101,7 @@ $response = $client-&gt;get(
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
         'query' =&gt; [
-            '$sim_number' =&gt; 'ut',
+            '$sim_number' =&gt; 'qui',
         ],
     ]
 );
@@ -3590,7 +4110,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 </span>
 
-<span id="example-responses-GETapi-v1-get-contact-by-host">
+<span id="example-responses-GETapi-v1-get-contact-by-host--sim_number-">
             <blockquote>
             <p>Example response (200):</p>
         </blockquote>
@@ -3602,43 +4122,43 @@ print_r(json_decode((string) $body));</code></pre></div>
 }</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-v1-get-contact-by-host" hidden>
+<span id="execution-results-GETapi-v1-get-contact-by-host--sim_number-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-get-contact-by-host"></span>:
+                id="execution-response-status-GETapi-v1-get-contact-by-host--sim_number-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-get-contact-by-host"
+    <pre class="json"><code id="execution-response-content-GETapi-v1-get-contact-by-host--sim_number-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-v1-get-contact-by-host" hidden>
+<span id="execution-error-GETapi-v1-get-contact-by-host--sim_number-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-get-contact-by-host">
+    <pre><code id="execution-error-message-GETapi-v1-get-contact-by-host--sim_number-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-GETapi-v1-get-contact-by-host" data-method="GET"
-      data-path="api/v1/get-contact-by-host"
+<form id="form-GETapi-v1-get-contact-by-host--sim_number-" data-method="GET"
+      data-path="api/v1/get-contact-by-host/{sim_number}"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-get-contact-by-host', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-get-contact-by-host--sim_number-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-v1-get-contact-by-host"
-                    onclick="tryItOut('GETapi-v1-get-contact-by-host');">Try it out ⚡
+                    id="btn-tryout-GETapi-v1-get-contact-by-host--sim_number-"
+                    onclick="tryItOut('GETapi-v1-get-contact-by-host--sim_number-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-v1-get-contact-by-host"
-                    onclick="cancelTryOut('GETapi-v1-get-contact-by-host');" hidden>Cancel 🛑
+                    id="btn-canceltryout-GETapi-v1-get-contact-by-host--sim_number-"
+                    onclick="cancelTryOut('GETapi-v1-get-contact-by-host--sim_number-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-v1-get-contact-by-host"
+                    id="btn-executetryout-GETapi-v1-get-contact-by-host--sim_number-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -3646,7 +4166,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/v1/get-contact-by-host</code></b>
+            <b><code>api/v1/get-contact-by-host/{sim_number}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -3654,7 +4174,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-v1-get-contact-by-host"
+                              name="Content-Type"                data-endpoint="GETapi-v1-get-contact-by-host--sim_number-"
                value="application/octet-stream"
                data-component="header">
     <br>
@@ -3665,7 +4185,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-v1-get-contact-by-host"
+                              name="Accept"                data-endpoint="GETapi-v1-get-contact-by-host--sim_number-"
                value="* / *"
                data-component="header">
     <br>
@@ -3676,7 +4196,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Connection"                data-endpoint="GETapi-v1-get-contact-by-host"
+                              name="Connection"                data-endpoint="GETapi-v1-get-contact-by-host--sim_number-"
                value="keep-alive"
                data-component="header">
     <br>
@@ -3687,23 +4207,230 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization"                data-endpoint="GETapi-v1-get-contact-by-host"
+                              name="Authorization"                data-endpoint="GETapi-v1-get-contact-by-host--sim_number-"
                value="Bearer AUTH_TOKEN"
                data-component="header">
     <br>
 <p>Example: <code>Bearer AUTH_TOKEN</code></p>
             </div>
-                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>sim_number</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="sim_number"                data-endpoint="GETapi-v1-get-contact-by-host--sim_number-"
+               value="adipisci"
+               data-component="url">
+    <br>
+<p>Example: <code>adipisci</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>$sim_number</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="$sim_number"                data-endpoint="GETapi-v1-get-contact-by-host"
-               value="ut"
+                              name="$sim_number"                data-endpoint="GETapi-v1-get-contact-by-host--sim_number-"
+               value="qui"
                data-component="query">
     <br>
-<p>String Example: <code>ut</code></p>
+<p>String Example: <code>qui</code></p>
+            </div>
+                </form>
+
+                    <h2 id="endpoints-GETapi-v1-get-contact-by-port-num--port_number-">this function gets all contacts on a particular sim card by its number</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-get-contact-by-port-num--port_number-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://gatewayblvd.net/app/en/api/api/v1/get-contact-by-port-num/aut?%24port_number=dignissimos" \
+    --header "Content-Type: application/octet-stream" \
+    --header "Accept: * / *" \
+    --header "Connection: keep-alive" \
+    --header "Authorization: Bearer AUTH_TOKEN"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://gatewayblvd.net/app/en/api/api/v1/get-contact-by-port-num/aut"
+);
+
+const params = {
+    "$port_number": "dignissimos",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/octet-stream",
+    "Accept": "* / *",
+    "Connection": "keep-alive",
+    "Authorization": "Bearer AUTH_TOKEN",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-contact-by-port-num/aut';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/octet-stream',
+            'Accept' =&gt; '* / *',
+            'Connection' =&gt; 'keep-alive',
+            'Authorization' =&gt; 'Bearer AUTH_TOKEN',
+        ],
+        'query' =&gt; [
+            '$port_number' =&gt; 'dignissimos',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-get-contact-by-port-num--port_number-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+&#039;data&#039;: \Illuminate\Http\Response $response $allContacts,
+&#039;message&#039;: &#039;success&#039; or &#039;error&#039;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-get-contact-by-port-num--port_number-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-get-contact-by-port-num--port_number-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-get-contact-by-port-num--port_number-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-get-contact-by-port-num--port_number-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-get-contact-by-port-num--port_number-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-get-contact-by-port-num--port_number-" data-method="GET"
+      data-path="api/v1/get-contact-by-port-num/{port_number}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-get-contact-by-port-num--port_number-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-get-contact-by-port-num--port_number-"
+                    onclick="tryItOut('GETapi-v1-get-contact-by-port-num--port_number-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-get-contact-by-port-num--port_number-"
+                    onclick="cancelTryOut('GETapi-v1-get-contact-by-port-num--port_number-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-get-contact-by-port-num--port_number-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/get-contact-by-port-num/{port_number}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-get-contact-by-port-num--port_number-"
+               value="application/octet-stream"
+               data-component="header">
+    <br>
+<p>Example: <code>application/octet-stream</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-get-contact-by-port-num--port_number-"
+               value="* / *"
+               data-component="header">
+    <br>
+<p>Example: <code>* / *</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Connection</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Connection"                data-endpoint="GETapi-v1-get-contact-by-port-num--port_number-"
+               value="keep-alive"
+               data-component="header">
+    <br>
+<p>Example: <code>keep-alive</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization"                data-endpoint="GETapi-v1-get-contact-by-port-num--port_number-"
+               value="Bearer AUTH_TOKEN"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer AUTH_TOKEN</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>port_number</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="port_number"                data-endpoint="GETapi-v1-get-contact-by-port-num--port_number-"
+               value="aut"
+               data-component="url">
+    <br>
+<p>Example: <code>aut</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>$port_number</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="$port_number"                data-endpoint="GETapi-v1-get-contact-by-port-num--port_number-"
+               value="dignissimos"
+               data-component="query">
+    <br>
+<p>String Example: <code>dignissimos</code></p>
             </div>
                 </form>
 
@@ -3720,24 +4447,24 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://gatewayblvd.net/app/en/api/api/v1/change-contact-number-state/unde?Request=commodi&amp;%24contact_id=1%2C2%2C3+etc" \
+    "https://gatewayblvd.net/app/en/api/api/v1/change-contact-number-state/dolores?Request=impedit&amp;%24contact_id=1%2C2%2C3+etc" \
     --header "Content-Type: application/json;utf-8" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
     --header "Authorization: Bearer AUTH_TOKEN" \
     --data "{
-    \"$contact_state\": \"voluptas\"
+    \"$contact_state\": \"natus\"
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/change-contact-number-state/unde"
+    "https://gatewayblvd.net/app/en/api/api/v1/change-contact-number-state/dolores"
 );
 
 const params = {
-    "Request": "commodi",
+    "Request": "impedit",
     "$contact_id": "1,2,3 etc",
 };
 Object.keys(params)
@@ -3751,7 +4478,7 @@ const headers = {
 };
 
 let body = {
-    "$contact_state": "voluptas"
+    "$contact_state": "natus"
 };
 
 fetch(url, {
@@ -3763,7 +4490,7 @@ fetch(url, {
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/change-contact-number-state/unde';
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/change-contact-number-state/dolores';
 $response = $client-&gt;put(
     $url,
     [
@@ -3774,11 +4501,11 @@ $response = $client-&gt;put(
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
         'query' =&gt; [
-            'Request' =&gt; 'commodi',
+            'Request' =&gt; 'impedit',
             '$contact_id' =&gt; '1,2,3 etc',
         ],
         'json' =&gt; [
-            '$contact_state' =&gt; 'voluptas',
+            '$contact_state' =&gt; 'natus',
         ],
     ]
 );
@@ -3897,10 +4624,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="contact_id"                data-endpoint="PUTapi-v1-change-contact-number-state--contact_id-"
-               value="unde"
+               value="dolores"
                data-component="url">
     <br>
-<p>The ID of the contact. Example: <code>unde</code></p>
+<p>The ID of the contact. Example: <code>dolores</code></p>
             </div>
                         <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
                                     <div style="padding-left: 28px; clear: unset;">
@@ -3909,10 +4636,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="Request"                data-endpoint="PUTapi-v1-change-contact-number-state--contact_id-"
-               value="commodi"
+               value="impedit"
                data-component="query">
     <br>
-<p>$request Example: <code>commodi</code></p>
+<p>$request Example: <code>impedit</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>$contact_id</code></b>&nbsp;&nbsp;
@@ -3932,10 +4659,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="$contact_state"                data-endpoint="PUTapi-v1-change-contact-number-state--contact_id-"
-               value="voluptas"
+               value="natus"
                data-component="body">
     <br>
-<p>true/false Example: <code>voluptas</code></p>
+<p>true/false Example: <code>natus</code></p>
         </div>
         </form>
 
@@ -3952,14 +4679,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://gatewayblvd.net/app/en/api/api/v1/get-sms-messages-by-portnum/soluta" \
+    --get "https://gatewayblvd.net/app/en/api/api/v1/get-sms-messages-by-portnum/impedit" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json;UTF-8"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/get-sms-messages-by-portnum/soluta"
+    "https://gatewayblvd.net/app/en/api/api/v1/get-sms-messages-by-portnum/impedit"
 );
 
 const headers = {
@@ -3975,7 +4702,7 @@ fetch(url, {
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-sms-messages-by-portnum/soluta';
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-sms-messages-by-portnum/impedit';
 $response = $client-&gt;get(
     $url,
     [
@@ -4085,10 +4812,163 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="sim_num"                data-endpoint="GETapi-v1-get-sms-messages-by-portnum--sim_num-"
-               value="soluta"
+               value="impedit"
                data-component="url">
     <br>
-<p>Example: <code>soluta</code></p>
+<p>Example: <code>impedit</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="endpoints-GETapi-v1-get-sms-messages-by-port--port_num-">GET api/v1/get-sms-messages-by-port/{port_num}</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-get-sms-messages-by-port--port_num-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://gatewayblvd.net/app/en/api/api/v1/get-sms-messages-by-port/sit" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json;UTF-8"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://gatewayblvd.net/app/en/api/api/v1/get-sms-messages-by-port/sit"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json;UTF-8",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-sms-messages-by-port/sit';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json;UTF-8',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-get-sms-messages-by-port--port_num-">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: http://localhost:3000
+access-control-allow-credentials: true
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-get-sms-messages-by-port--port_num-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-get-sms-messages-by-port--port_num-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-get-sms-messages-by-port--port_num-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-get-sms-messages-by-port--port_num-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-get-sms-messages-by-port--port_num-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-get-sms-messages-by-port--port_num-" data-method="GET"
+      data-path="api/v1/get-sms-messages-by-port/{port_num}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-get-sms-messages-by-port--port_num-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-get-sms-messages-by-port--port_num-"
+                    onclick="tryItOut('GETapi-v1-get-sms-messages-by-port--port_num-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-get-sms-messages-by-port--port_num-"
+                    onclick="cancelTryOut('GETapi-v1-get-sms-messages-by-port--port_num-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-get-sms-messages-by-port--port_num-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/get-sms-messages-by-port/{port_num}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-get-sms-messages-by-port--port_num-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-get-sms-messages-by-port--port_num-"
+               value="application/json;UTF-8"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json;UTF-8</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>port_num</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="port_num"                data-endpoint="GETapi-v1-get-sms-messages-by-port--port_num-"
+               value="sit"
+               data-component="url">
+    <br>
+<p>Example: <code>sit</code></p>
             </div>
                     </form>
 
@@ -4105,7 +4985,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://gatewayblvd.net/app/en/api/api/v1/delete-sms-resource/doloremque?Integer=in" \
+    "https://gatewayblvd.net/app/en/api/api/v1/delete-sms-resource/sed?%24id=est" \
     --header "Content-Type: application/json;utf-8" \
     --header "Accept: * / *" \
     --header "Connection: close" \
@@ -4114,11 +4994,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/delete-sms-resource/doloremque"
+    "https://gatewayblvd.net/app/en/api/api/v1/delete-sms-resource/sed"
 );
 
 const params = {
-    "Integer": "in",
+    "$id": "est",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4138,7 +5018,7 @@ fetch(url, {
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/delete-sms-resource/doloremque';
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/delete-sms-resource/sed';
 $response = $client-&gt;delete(
     $url,
     [
@@ -4149,7 +5029,7 @@ $response = $client-&gt;delete(
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
         'query' =&gt; [
-            'Integer' =&gt; 'in',
+            '$id' =&gt; 'est',
         ],
     ]
 );
@@ -4267,22 +5147,22 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="id"                data-endpoint="DELETEapi-v1-delete-sms-resource--id-"
-               value="doloremque"
+               value="sed"
                data-component="url">
     <br>
-<p>The ID of the delete sms resource. Example: <code>doloremque</code></p>
+<p>The ID of the delete sms resource. Example: <code>sed</code></p>
             </div>
                         <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
                                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Integer</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>$id</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="Integer"                data-endpoint="DELETEapi-v1-delete-sms-resource--id-"
-               value="in"
+                              name="$id"                data-endpoint="DELETEapi-v1-delete-sms-resource--id-"
+               value="est"
                data-component="query">
     <br>
-<p>$id Sms id in the database table Example: <code>in</code></p>
+<p>Integer Sms id in the database table Example: <code>est</code></p>
             </div>
                 </form>
 
@@ -4305,7 +5185,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Connection: keep-alive" \
     --header "Authorization: Bearer AUTH_TOKEN" \
     --data "{
-    \"NULL\": \"quam\"
+    \"NULL\": \"accusantium\"
 }"
 </code></pre></div>
 
@@ -4323,7 +5203,7 @@ const headers = {
 };
 
 let body = {
-    "NULL": "quam"
+    "NULL": "accusantium"
 };
 
 fetch(url, {
@@ -4346,7 +5226,7 @@ $response = $client-&gt;get(
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
         'json' =&gt; [
-            'NULL' =&gt; 'quam',
+            'NULL' =&gt; 'accusantium',
         ],
     ]
 );
@@ -4482,10 +5362,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="NULL"                data-endpoint="GETapi-v1-get-all-sms-on-modem"
-               value="quam"
+               value="accusantium"
                data-component="body">
     <br>
-<p>function retrieves all the sms sent to the sim cards on all used ports on modem Example: <code>quam</code></p>
+<p>function retrieves all the sms sent to the sim cards on all used ports on modem Example: <code>accusantium</code></p>
         </div>
         </form>
 
@@ -4502,7 +5382,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://gatewayblvd.net/app/en/api/api/v1/get-sms-stats/eos/est/deserunt?Integer=1&amp;String=0%2C1%2C2%2C3+or+all" \
+    --get "https://gatewayblvd.net/app/en/api/api/v1/get-sms-stats/inventore/maxime/debitis?%24port_id=1%2C2%2C3-8&amp;%24id=1&amp;%24type=0%2C1%2C2%2C3+or+all" \
     --header "Content-Type: application/json;utf-8" \
     --header "Accept: * / *" \
     --header "Connection: close" \
@@ -4512,12 +5392,13 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/get-sms-stats/eos/est/deserunt"
+    "https://gatewayblvd.net/app/en/api/api/v1/get-sms-stats/inventore/maxime/debitis"
 );
 
 const params = {
-    "Integer": "1",
-    "String": "0,1,2,3 or all",
+    "$port_id": "1,2,3-8",
+    "$id": "1",
+    "$type": "0,1,2,3 or all",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4538,7 +5419,7 @@ fetch(url, {
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-sms-stats/eos/est/deserunt';
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/get-sms-stats/inventore/maxime/debitis';
 $response = $client-&gt;get(
     $url,
     [
@@ -4550,8 +5431,9 @@ $response = $client-&gt;get(
             'Host' =&gt; '54.179.122.227:52538',
         ],
         'query' =&gt; [
-            'Integer' =&gt; '1',
-            'String' =&gt; '0,1,2,3 or all',
+            '$port_id' =&gt; '1,2,3-8',
+            '$id' =&gt; '1',
+            '$type' =&gt; '0,1,2,3 or all',
         ],
     ]
 );
@@ -4680,10 +5562,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="port_id"                data-endpoint="GETapi-v1-get-sms-stats--port_id---slots---type-"
-               value="eos"
+               value="inventore"
                data-component="url">
     <br>
-<p>The ID of the port. Example: <code>eos</code></p>
+<p>The ID of the port. Example: <code>inventore</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>slots</code></b>&nbsp;&nbsp;
@@ -4691,10 +5573,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="slots"                data-endpoint="GETapi-v1-get-sms-stats--port_id---slots---type-"
-               value="est"
+               value="maxime"
                data-component="url">
     <br>
-<p>Example: <code>est</code></p>
+<p>Example: <code>maxime</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>type</code></b>&nbsp;&nbsp;
@@ -4702,33 +5584,44 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="GETapi-v1-get-sms-stats--port_id---slots---type-"
-               value="deserunt"
+               value="debitis"
                data-component="url">
     <br>
-<p>Example: <code>deserunt</code></p>
+<p>Example: <code>debitis</code></p>
             </div>
                         <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
                                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Integer</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>$port_id</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="Integer"                data-endpoint="GETapi-v1-get-sms-stats--port_id---slots---type-"
+                              name="$port_id"                data-endpoint="GETapi-v1-get-sms-stats--port_id---slots---type-"
+               value="1,2,3-8"
+               data-component="query">
+    <br>
+<p>Integer Example: <code>1,2,3-8</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>$id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="$id"                data-endpoint="GETapi-v1-get-sms-stats--port_id---slots---type-"
                value="1"
                data-component="query">
     <br>
-<p>$id $slots Example: <code>1</code></p>
+<p>Integer $slots Example: <code>1</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>String</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>$type</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="String"                data-endpoint="GETapi-v1-get-sms-stats--port_id---slots---type-"
+                              name="$type"                data-endpoint="GETapi-v1-get-sms-stats--port_id---slots---type-"
                value="0,1,2,3 or all"
                data-component="query">
     <br>
-<p>$type Example: <code>0,1,2,3 or all</code></p>
+<p>String Example: <code>0,1,2,3 or all</code></p>
             </div>
                 </form>
 
@@ -4745,16 +5638,16 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://gatewayblvd.net/app/en/api/api/v1/send-single-sms?%5Cilluminate%5CHttp%5CRequest=beatae" \
+    "https://gatewayblvd.net/app/en/api/api/v1/send-single-sms?%5Cilluminate%5CHttp%5CRequest=magni" \
     --header "Content-Type: application/json;utf-8" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
     --header "Authorization: Bearer AUTH_TOKEN" \
     --header "Host: 54.179.122.227:52538" \
     --data "{
-    \"recipient\": \"occaecati\",
-    \"_msg\": \"et\",
-    \"sim_port_number\": \"et\"
+    \"recipient\": \"+1234567788\",
+    \"_msg\": \"hello how are you doing today?\",
+    \"sim_port_number\": \"1-8\"
 }"
 </code></pre></div>
 
@@ -4765,7 +5658,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 );
 
 const params = {
-    "\illuminate\Http\Request": "beatae",
+    "\illuminate\Http\Request": "magni",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4779,9 +5672,9 @@ const headers = {
 };
 
 let body = {
-    "recipient": "occaecati",
-    "_msg": "et",
-    "sim_port_number": "et"
+    "recipient": "+1234567788",
+    "_msg": "hello how are you doing today?",
+    "sim_port_number": "1-8"
 };
 
 fetch(url, {
@@ -4805,12 +5698,12 @@ $response = $client-&gt;post(
             'Host' =&gt; '54.179.122.227:52538',
         ],
         'query' =&gt; [
-            '\illuminate\Http\Request' =&gt; 'beatae',
+            '\illuminate\Http\Request' =&gt; 'magni',
         ],
         'json' =&gt; [
-            'recipient' =&gt; 'occaecati',
-            '_msg' =&gt; 'et',
-            'sim_port_number' =&gt; 'et',
+            'recipient' =&gt; '+1234567788',
+            '_msg' =&gt; 'hello how are you doing today?',
+            'sim_port_number' =&gt; '1-8',
         ],
     ]
 );
@@ -4940,44 +5833,44 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="\illuminate\Http\Request"                data-endpoint="POSTapi-v1-send-single-sms"
-               value="beatae"
+               value="magni"
                data-component="query">
     <br>
-<p>$request Example: <code>beatae</code></p>
+<p>$request Example: <code>magni</code></p>
             </div>
                         <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>recipient</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
+<small>String</small>&nbsp;
+<i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="recipient"                data-endpoint="POSTapi-v1-send-single-sms"
-               value="occaecati"
+               value="+1234567788"
                data-component="body">
     <br>
-<p>Example: <code>occaecati</code></p>
+<p>Example: <code>+1234567788</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>_msg</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
+<small>String</small>&nbsp;
+<i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="_msg"                data-endpoint="POSTapi-v1-send-single-sms"
-               value="et"
+               value="hello how are you doing today?"
                data-component="body">
     <br>
-<p>Example: <code>et</code></p>
+<p>Example: <code>hello how are you doing today?</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>sim_port_number</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
+<small>Integer</small>&nbsp;
+<i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="sim_port_number"                data-endpoint="POSTapi-v1-send-single-sms"
-               value="et"
+               value="1-8"
                data-component="body">
     <br>
-<p>Example: <code>et</code></p>
+<p>Example: <code>1-8</code></p>
         </div>
         </form>
 
@@ -4994,16 +5887,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://gatewayblvd.net/app/en/api/api/v1/send-bulk-sms?%5Cilluminate%5CHttp%5CRequest=ex" \
+    "https://gatewayblvd.net/app/en/api/api/v1/send-bulk-sms?%5Cilluminate%5CHttp%5CRequest=esse" \
     --header "Content-Type: application/octet-stream" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
     --header "Authorization: Bearer AUTH_TOKEN" \
     --header "Host: 54.179.122.227:52538" \
     --data "{
-    \"_msg\": \"kodydnehbuxgmydalkxgbgvwcalsbnrqyfoyhgkwzmdnimekcltvbeepuspfeyhzzuzrmsroslcosdncxqiqm\",
-    \"sim_port_number\": 10,
-    \"recipient\": []
+    \"_msg\": \"hello how are you doing today?\",
+    \"sim_port_number\": \"1-8\",
+    \"recipient\": [
+        \"cumque\"
+    ]
 }"
 </code></pre></div>
 
@@ -5014,7 +5909,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 );
 
 const params = {
-    "\illuminate\Http\Request": "ex",
+    "\illuminate\Http\Request": "esse",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -5028,9 +5923,11 @@ const headers = {
 };
 
 let body = {
-    "_msg": "kodydnehbuxgmydalkxgbgvwcalsbnrqyfoyhgkwzmdnimekcltvbeepuspfeyhzzuzrmsroslcosdncxqiqm",
-    "sim_port_number": 10,
-    "recipient": []
+    "_msg": "hello how are you doing today?",
+    "sim_port_number": "1-8",
+    "recipient": [
+        "cumque"
+    ]
 };
 
 fetch(url, {
@@ -5054,12 +5951,14 @@ $response = $client-&gt;post(
             'Host' =&gt; '54.179.122.227:52538',
         ],
         'query' =&gt; [
-            '\illuminate\Http\Request' =&gt; 'ex',
+            '\illuminate\Http\Request' =&gt; 'esse',
         ],
         'json' =&gt; [
-            '_msg' =&gt; 'kodydnehbuxgmydalkxgbgvwcalsbnrqyfoyhgkwzmdnimekcltvbeepuspfeyhzzuzrmsroslcosdncxqiqm',
-            'sim_port_number' =&gt; 10,
-            'recipient' =&gt; [],
+            '_msg' =&gt; 'hello how are you doing today?',
+            'sim_port_number' =&gt; '1-8',
+            'recipient' =&gt; [
+                'cumque',
+            ],
         ],
     ]
 );
@@ -5075,8 +5974,8 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-&#039;data&#039;:&#039;message&#039;,
-&#039;status&#039;: Response $response
+&#039;data&#039;: String
+&#039;status&#039;: Response $res
 }</code>
  </pre>
     </span>
@@ -5189,41 +6088,43 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="\illuminate\Http\Request"                data-endpoint="POSTapi-v1-send-bulk-sms"
-               value="ex"
+               value="esse"
                data-component="query">
     <br>
-<p>$request Example: <code>ex</code></p>
+<p>$request Example: <code>esse</code></p>
             </div>
                         <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>_msg</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
+<small>String</small>&nbsp;
+<i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="_msg"                data-endpoint="POSTapi-v1-send-bulk-sms"
-               value="kodydnehbuxgmydalkxgbgvwcalsbnrqyfoyhgkwzmdnimekcltvbeepuspfeyhzzuzrmsroslcosdncxqiqm"
+               value="hello how are you doing today?"
                data-component="body">
     <br>
-<p>Must not be greater than 255 characters. Must be at least 1 character. Example: <code>kodydnehbuxgmydalkxgbgvwcalsbnrqyfoyhgkwzmdnimekcltvbeepuspfeyhzzuzrmsroslcosdncxqiqm</code></p>
+<p>Example: <code>hello how are you doing today?</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>sim_port_number</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="sim_port_number"                data-endpoint="POSTapi-v1-send-bulk-sms"
-               value="10"
+<small>Integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="sim_port_number"                data-endpoint="POSTapi-v1-send-bulk-sms"
+               value="1-8"
                data-component="body">
     <br>
-<p>Example: <code>10</code></p>
+<p>Example: <code>1-8</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>recipient</code></b>&nbsp;&nbsp;
-<small>object</small>&nbsp;
- &nbsp;
+<small>String[]</small>&nbsp;
+<i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="recipient"                data-endpoint="POSTapi-v1-send-bulk-sms"
-               value=""
+                              name="recipient[0]"                data-endpoint="POSTapi-v1-send-bulk-sms"
+               data-component="body">
+        <input type="text" style="display: none"
+               name="recipient[1]"                data-endpoint="POSTapi-v1-send-bulk-sms"
                data-component="body">
     <br>
 
@@ -5243,7 +6144,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://gatewayblvd.net/app/en/api/api/v1/change-sms-state/ut?Integer=voluptatem&amp;%5CIlluminate%5CHttp%5CRequest=dolorem" \
+    "https://gatewayblvd.net/app/en/api/api/v1/change-sms-state/hic?Integer=excepturi&amp;%5CIlluminate%5CHttp%5CRequest=enim" \
     --header "Content-Type: application/octet-stream" \
     --header "Accept: * / *" \
     --header "Connection: keep-alive" \
@@ -5256,12 +6157,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://gatewayblvd.net/app/en/api/api/v1/change-sms-state/ut"
+    "https://gatewayblvd.net/app/en/api/api/v1/change-sms-state/hic"
 );
 
 const params = {
-    "Integer": "voluptatem",
-    "\Illuminate\Http\Request": "dolorem",
+    "Integer": "excepturi",
+    "\Illuminate\Http\Request": "enim",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -5286,7 +6187,7 @@ fetch(url, {
 
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$url = 'https://gatewayblvd.net/app/en/api/api/v1/change-sms-state/ut';
+$url = 'https://gatewayblvd.net/app/en/api/api/v1/change-sms-state/hic';
 $response = $client-&gt;put(
     $url,
     [
@@ -5297,8 +6198,8 @@ $response = $client-&gt;put(
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
         'query' =&gt; [
-            'Integer' =&gt; 'voluptatem',
-            '\Illuminate\Http\Request' =&gt; 'dolorem',
+            'Integer' =&gt; 'excepturi',
+            '\Illuminate\Http\Request' =&gt; 'enim',
         ],
         'json' =&gt; [
             'new_state' =&gt; '1, or 2 or 3',
@@ -5421,10 +6322,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="sms_id"                data-endpoint="PUTapi-v1-change-sms-state--sms_id-"
-               value="ut"
+               value="hic"
                data-component="url">
     <br>
-<p>The ID of the sms. Example: <code>ut</code></p>
+<p>The ID of the sms. Example: <code>hic</code></p>
             </div>
                         <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
                                     <div style="padding-left: 28px; clear: unset;">
@@ -5433,10 +6334,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="Integer"                data-endpoint="PUTapi-v1-change-sms-state--sms_id-"
-               value="voluptatem"
+               value="excepturi"
                data-component="query">
     <br>
-<p>$sms_id Example: <code>voluptatem</code></p>
+<p>$sms_id Example: <code>excepturi</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>\Illuminate\Http\Request</code></b>&nbsp;&nbsp;
@@ -5444,10 +6345,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="\Illuminate\Http\Request"                data-endpoint="PUTapi-v1-change-sms-state--sms_id-"
-               value="dolorem"
+               value="enim"
                data-component="query">
     <br>
-<p>$request Example: <code>dolorem</code></p>
+<p>$request Example: <code>enim</code></p>
             </div>
                         <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -5476,7 +6377,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://gatewayblvd.net/app/en/api/api/v1/parse-sms?%2FIlluminate%2FHttp%2FRequest=laudantium" \
+    "https://gatewayblvd.net/app/en/api/api/v1/parse-sms?%2FIlluminate%2FHttp%2FRequest=sunt" \
     --header "Content-Type: application/octet-stream" \
     --header "Accept: * / *" \
     --header "Authorization: Bearer AUTH_TOKEN"</code></pre></div>
@@ -5488,7 +6389,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 );
 
 const params = {
-    "/Illuminate/Http/Request": "laudantium",
+    "/Illuminate/Http/Request": "sunt",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -5517,7 +6418,7 @@ $response = $client-&gt;post(
             'Authorization' =&gt; 'Bearer AUTH_TOKEN',
         ],
         'query' =&gt; [
-            '/Illuminate/Http/Request' =&gt; 'laudantium',
+            '/Illuminate/Http/Request' =&gt; 'sunt',
         ],
     ]
 );
@@ -5625,12 +6526,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="/Illuminate/Http/Request"                data-endpoint="POSTapi-v1-parse-sms"
-               value="laudantium"
+               value="sunt"
                data-component="query">
     <br>
 <p>&lt;$request&gt;</p>
 <ul>
-<li>@header Connection keep-alive Example: <code>laudantium</code></li>
+<li>@header Connection keep-alive Example: <code>sunt</code></li>
 </ul>
             </div>
                 </form>

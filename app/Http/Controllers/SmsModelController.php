@@ -369,11 +369,12 @@ public function send_bulk_sms(Request $request){
 
 
 /**
- * This function sends single sms
- * @queryParam \illuminate\Http\Request $request
- * @bodyParam _msg String Example: hello how are you doing today?
- * @bodyParam sim_port_number Integer Example: 1-8
- * @bodyParam recipient String Example: +1234567788
+
+* This function sends single sms
+*
+* @bodyParam _msg String Example: hello how are you doing today?
+* @bodyParam sim_port_number Integer Example: 1-8
+* @bodyParam recipient String Example: +1234567788
 
 * @header Connection keep-alive
 * @header Accept * / *
@@ -388,11 +389,12 @@ public function send_bulk_sms(Request $request){
  * }
  *
  * @response{
- * 'data':'message',
+ * 'data': string,
  * 'status': Response $response
  * }
  *
  */
+
 public function send_single_sms(\App\Http\Requests\SmsRequest $request){
 
     //validating the requests sent from the mobile front_end
@@ -445,13 +447,13 @@ public function send_single_sms(\App\Http\Requests\SmsRequest $request){
 }
 
     /**
+
+     * This function retrieves all the sms sent to the sim cards on all used ports on modem
      * @header Connection keep-alive
      * @header Accept * / *
      * @header Content-Type application/octet-stream
      * @header Authorization Bearer AUTH_TOKEN
-
-    * @bodyParam NULL
-    * This function retrieves all the sms sent to the sim cards on all used ports on modem
+    *
     */
 
     public function get_all_sms(){

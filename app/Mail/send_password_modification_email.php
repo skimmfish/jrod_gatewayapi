@@ -40,10 +40,10 @@ class send_password_modification_email extends Mailable
         return new Envelope(
             subject: 'Password Modification Request Email',
 
-            from: new Address('no-reply@gatewayblvd.net',config('app.name')),
+            from: new Address("noreply@gatewayblvd.net",config('app.name')),
 
             replyTo: [
-                new Address('no-reply@gatewayblvd..net', config('app.name')),
+                new Address("noreply@gatewayblvd.net", config('app.name')),
             ],
         );
     }

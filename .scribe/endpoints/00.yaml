@@ -22,14 +22,41 @@ endpoints:
       'Connection:': keep-alive
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      username:
-        name: username
-        description: 'The username of the  user.'
+    queryParameters:
+      \Illuminate\Http\Request:
+        name: \Illuminate\Http\Request
+        description: $request
+        required: false
+        example: maxime
+        type: string
+        enumValues: []
+        custom: []
+      email_or_phone_number:
+        name: email_or_phone_number
+        description: 'The email/phone number of the  user.'
         required: true
-        example: jayden
+        example: 'jayden@gm.co.uk / +1240291092'
+        type: string
+        enumValues: []
+        custom: []
+      password:
+        name: password
+        description: 'The password of the  user.'
+        required: true
+        example: Rock1234@
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      \Illuminate\Http\Request: maxime
+      email_or_phone_number: 'jayden@gm.co.uk / +1240291092'
+      password: Rock1234@
+    bodyParameters:
+      email_or_phone_number:
+        name: email_or_phone_number
+        description: 'The email/phone number of the  user.'
+        required: true
+        example: 'jayden@gm.co.uk / +1240291092'
         type: string
         enumValues: []
         custom: []
@@ -42,7 +69,7 @@ endpoints:
         enumValues: []
         custom: []
     cleanBodyParameters:
-      username: jayden
+      email_or_phone_number: 'jayden@gm.co.uk / +1240291092'
       password: Rock1234@
     fileParameters: []
     responses:
@@ -50,8 +77,8 @@ endpoints:
         status: 200
         content: |-
           {
-          "data": $user information payload
-          "message": 'success' or 'error'
+          "data": []
+          "message": string
           "auth_token": "Bearer 3|7dUd16GpVXPwy530oqndmGXNDCShwYaQd2cXcp..........." for this only extract the token excluding the 'Bearer' string, pass this in the header to see sample response payload that is returned
           }
         headers: []
@@ -80,11 +107,19 @@ endpoints:
       Content-Type: application/json;utf-8
       Accept: '* / *'
       Connection: keep-alive
-      Authorization: 'Bearer AUTH_TOKEN'
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
+    queryParameters:
+      \Illuminate\Http\Request:
+        name: \Illuminate\Http\Request
+        description: $request
+        required: false
+        example: eos
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      \Illuminate\Http\Request: eos
     bodyParameters:
       name:
         name: name
@@ -102,14 +137,6 @@ endpoints:
         type: string
         enumValues: []
         custom: []
-      password:
-        name: password
-        description: 'The password of the  user, required to be confirmed.'
-        required: true
-        example: Rock1234@
-        type: string
-        enumValues: []
-        custom: []
       email:
         name: email
         description: 'The email'
@@ -118,11 +145,37 @@ endpoints:
         type: string
         enumValues: []
         custom: []
+      password:
+        name: password
+        description: 'The password of the  user, required to be confirmed.'
+        required: true
+        example: Rock1234@
+        type: string
+        enumValues: []
+        custom: []
+      password_confirmation:
+        name: password_confirmation
+        description: 'The password confirmation of the user registering or being registered'
+        required: true
+        example: Rock1234@
+        type: string
+        enumValues: []
+        custom: []
+      phone_number:
+        name: phone_number
+        description: 'the phone number of the user example: +1239028109211'
+        required: true
+        example: molestiae
+        type: string
+        enumValues: []
+        custom: []
     cleanBodyParameters:
       name: solay
       username: jayden
-      password: Rock1234@
       email: Rock1234@gmail.com
+      password: Rock1234@
+      password_confirmation: Rock1234@
+      phone_number: molestiae
     fileParameters: []
     responses:
       -
@@ -144,45 +197,166 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - GET
-    uri: api/v1/get-all-contacts
+      - POST
+    uri: api/forgot-password
     metadata:
       groupName: Endpoints
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display a listing of the resource.'
+      title: 'This function finds a user and return the user to move to another page to enter the new password and confirm it'
       description: ''
       authenticated: false
       custom: []
     headers:
-      Content-Type: application/octet-stream
+      Content-Type: application/json;utf-8
       Accept: '* / *'
       Connection: keep-alive
-      Authorization: 'Bearer AUTH_TOKEN'
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters:
-      'NULL':
-        name: 'NULL'
-        description: ''
-        required: false
-        example: id
-        type: string
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      String:
+        name: String
+        description: 'maximum of 15 characters of'
+        required: true
+        example: JoyKam
+        type: email
         enumValues: []
         custom: []
-    cleanQueryParameters:
-      'NULL': id
-    bodyParameters: []
-    cleanBodyParameters: []
+    cleanBodyParameters:
+      String: JoyKam
     fileParameters: []
     responses:
       -
         status: 200
         content: |-
           {
-          'data': ContactModel $allContact,
-          'message': 'success'
+          'data': [],
+          'message': String,
+          'status': boolean
+
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/update-password
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Update the user's password, this function doesn't require authentication token
+        The username and email field is non-updateable to avoid conflicts with other users
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json;utf-8
+      Accept: '* / *'
+      Connection: keep-alive
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      password:
+        name: password
+        description: ''
+        required: true
+        example: johnreid
+        type: String
+        enumValues: []
+        custom: []
+      password_confirmation:
+        name: password_confirmation
+        description: ''
+        required: false
+        example: johnreid
+        type: required
+        enumValues: []
+        custom: []
+      email:
+        name: email
+        description: 'maximum of 15 characters of'
+        required: true
+        example: JoyKam
+        type: String
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      password: johnreid
+      password_confirmation: johnreid
+      email: JoyKam
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': []
+          'message': String
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/confirm-otp-code
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'This function confirms otp code before navigation to the next screen to enter the new password'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json;utf-8
+      Accept: '* / *'
+      Connection: keep-alive
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      String:
+        name: String
+        description: ''
+        required: false
+        example: jro@gmail.co.uk
+        type: email
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      String: jro@gmail.co.uk
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': boolean
+          'message': string
           }
         headers: []
         description: ''
@@ -213,27 +387,36 @@ endpoints:
       Authorization: 'Bearer AUTH_TOKEN'
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
+    queryParameters:
+      Request:
+        name: Request
+        description: $request
+        required: false
+        example: culpa
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      Request: culpa
     bodyParameters:
       Request:
         name: Request
         description: object
         required: false
-        example: nemo
+        example: voluptatibus
         type: $request
         enumValues: []
         custom: []
     cleanBodyParameters:
-      Request: nemo
+      Request: voluptatibus
     fileParameters: []
     responses:
       -
         status: 200
         content: |-
           {
-          "data": $user information payload
-          "message": 'success'or 'error'
+          "data": []
+          "message": string
           }
         headers: []
         description: ''
@@ -267,12 +450,12 @@ endpoints:
         name: port_id
         description: 'The ID of the port.'
         required: true
-        example: debitis
+        example: ea
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      port_id: debitis
+      port_id: ea
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -327,12 +510,12 @@ endpoints:
         name: sim_number
         description: ''
         required: true
-        example: minima
+        example: consectetur
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      sim_number: minima
+      sim_number: consectetur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -387,12 +570,12 @@ endpoints:
         name: id
         description: 'The ID of the update user.'
         required: true
-        example: nesciunt
+        example: debitis
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: nesciunt
+      id: debitis
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -456,32 +639,32 @@ endpoints:
         name: id
         description: 'The ID of the get contact.'
         required: true
-        example: tenetur
+        example: eaque
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: tenetur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      $id:
-        name: $id
-        description: ''
+      id: eaque
+    queryParameters:
+      Integer:
+        name: Integer
+        description: $id
         required: false
         example: '1'
-        type: Integer
+        type: string
         enumValues: []
         custom: []
-    cleanBodyParameters:
-      $id: '1'
+    cleanQueryParameters:
+      Integer: '1'
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses:
       -
         status: 200
         content: |-
           {
-           'data': \Illuminate\Http\Response $response,
+           'data': [],
            'message': 'success' or 'error
 
           }
@@ -497,13 +680,13 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: api/v1/update-sim-contact
+    uri: 'api/v1/update-sim-contact/{id}'
     metadata:
       groupName: Endpoints
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Show the form for editing the specified resource.'
+      title: 'This function modifies a contact'
       description: ''
       authenticated: false
       custom: []
@@ -512,14 +695,23 @@ endpoints:
       Accept: '* / *'
       Connection: keep-alive
       Authorization: 'Bearer AUTH_TOKEN'
-    urlParameters: []
-    cleanUrlParameters: []
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the update sim contact.'
+        required: true
+        example: autem
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: autem
     queryParameters:
       \Illuminate\Http\Request:
         name: \Illuminate\Http\Request
         description: $request
         required: false
-        example: aut
+        example: excepturi
         type: string
         enumValues: []
         custom: []
@@ -527,13 +719,13 @@ endpoints:
         name: Integer
         description: $id
         required: false
-        example: magnam
+        example: aperiam
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
-      \Illuminate\Http\Request: aut
-      Integer: magnam
+      \Illuminate\Http\Request: excepturi
+      Integer: aperiam
     bodyParameters:
       $contact_no:
         name: $contact_no
@@ -587,12 +779,9 @@ endpoints:
         status: 200
         content: |-
           {
-          'data': \Illuminate\Http\Response $contactModel,
-          'message':'success' or 'error'
+          'data': [],
+          'message': string
           }
-
-          request payload
-          $request = ['contact_no','contact_alt_number','contact_fname,'contact_lname,sim_contact_saved_to]
         headers: []
         description: ''
         custom: []
@@ -638,7 +827,7 @@ endpoints:
         name: $simModule
         description: 'a SimModule object'
         required: false
-        example: est
+        example: commodi
         type: \App\Models\SimModule
         enumValues: []
         custom: []
@@ -646,13 +835,13 @@ endpoints:
         name: $id
         description: ''
         required: false
-        example: voluptatem
+        example: laboriosam
         type: Integer
         enumValues: []
         custom: []
     cleanBodyParameters:
-      $simModule: est
-      $id: voluptatem
+      $simModule: commodi
+      $id: laboriosam
     fileParameters: []
     responses:
       -
@@ -707,7 +896,7 @@ endpoints:
         name: \Illuminate\Http\Request
         description: ''
         required: false
-        example: iste
+        example: quas
         type: $request
         enumValues: []
         custom: []
@@ -715,13 +904,13 @@ endpoints:
         name: \App\Models\SimModule
         description: ''
         required: false
-        example: ab
+        example: rem
         type: $simModule
         enumValues: []
         custom: []
     cleanBodyParameters:
-      \Illuminate\Http\Request: iste
-      \App\Models\SimModule: ab
+      \Illuminate\Http\Request: quas
+      \App\Models\SimModule: rem
     fileParameters: []
     responses:
       -
@@ -765,28 +954,67 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      \Illuminate\Http\Request:
-        name: \Illuminate\Http\Request
-        description: 'Request Object'
+      contact_no:
+        name: contact_no
+        description: ''
         required: false
-        example: earum
-        type: $request
+        example: '+12901009100'
+        type: String
+        enumValues: []
+        custom: []
+      contact_fname:
+        name: contact_fname
+        description: ''
+        required: false
+        example: John
+        type: String
+        enumValues: []
+        custom: []
+      contact_lname:
+        name: contact_lname
+        description: ''
+        required: false
+        example: Reid
+        type: String
+        enumValues: []
+        custom: []
+      sim_contact_saved_to:
+        name: sim_contact_saved_to
+        description: ''
+        required: false
+        example: "+12410209102 - //you can make this a drop-down selection to pick the sim number from the list of all sim cards' numbers stored initially instead of making the user enter it manually"
+        type: String
         enumValues: []
         custom: []
     cleanBodyParameters:
-      \Illuminate\Http\Request: earum
+      contact_no: '+12901009100'
+      contact_fname: John
+      contact_lname: Reid
+      sim_contact_saved_to: "+12410209102 - //you can make this a drop-down selection to pick the sim number from the list of all sim cards' numbers stored initially instead of making the user enter it manually"
     fileParameters: []
     responses:
       -
-        status: 200
+        status: 302
         content: |-
-          {
-          'data': \Illuminate\Http\Response $newcontact,
-          'message':'success' or 'error',
+          <!DOCTYPE html>
+          <html>
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta http-equiv="refresh" content="0;url='http://gatewayblvd.net/app/en/api/login'" />
 
-          }
-        headers: []
-        description: ''
+                  <title>Redirecting to http://gatewayblvd.net/app/en/api/login</title>
+              </head>
+              <body>
+                  Redirecting to <a href="http://gatewayblvd.net/app/en/api/login">http://gatewayblvd.net/app/en/api/login</a>.
+              </body>
+          </html>
+        headers:
+          cache-control: 'no-cache, private'
+          location: 'http://gatewayblvd.net/app/en/api/login'
+          content-type: 'text/html; charset=UTF-8'
+          access-control-allow-origin: 'http://localhost:3000'
+          access-control-allow-credentials: 'true'
+        description: null
         custom: []
     responseFields: []
     auth: []
@@ -819,12 +1047,12 @@ endpoints:
         name: \Illuminate\Http\Request
         description: $request
         required: false
-        example: fugit
+        example: molestias
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
-      \Illuminate\Http\Request: fugit
+      \Illuminate\Http\Request: molestias
     bodyParameters:
       sim_number:
         name: sim_number
@@ -846,14 +1074,14 @@ endpoints:
         name: current_port_state
         description: 'Default: 1'
         required: true
-        example: repellat
+        example: unde
         type: Integer
         enumValues: []
         custom: []
     cleanBodyParameters:
       sim_number: '+16302901990'
       sim_port_number: '1,2'
-      current_port_state: repellat
+      current_port_state: unde
     fileParameters: []
     responses:
       -
@@ -895,23 +1123,23 @@ endpoints:
         name: ''
         description: ''
         required: true
-        example: aliquam
+        example: voluptatem
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      '': aliquam
+      '': voluptatem
     queryParameters:
       $f_name:
         name: $f_name
         description: String
         required: false
-        example: voluptates
+        example: john
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
-      $f_name: voluptates
+      $f_name: john
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -958,12 +1186,12 @@ endpoints:
         name: port_id
         description: 'The ID of the port.'
         required: true
-        example: aut
+        example: quibusdam
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      port_id: aut
+      port_id: quibusdam
     queryParameters:
       $port_id:
         name: $port_id
@@ -1017,34 +1245,25 @@ endpoints:
     urlParameters: []
     cleanUrlParameters: []
     queryParameters:
-      String:
-        name: String
-        description: $contact_number
+      $contact_number:
+        name: $contact_number
+        description: String
         required: false
-        example: 17
-        type: integer
+        example: '+1289309200019'
+        type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
-      String: 17
-    bodyParameters:
-      $contact_number:
-        name: $contact_number
-        description: ''
-        required: false
-        example: '+1239028800'
-        type: String
-        enumValues: []
-        custom: []
-    cleanBodyParameters:
-      $contact_number: '+1239028800'
+      $contact_number: '+1289309200019'
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses:
       -
         status: 200
         content: |-
           {
-          'data': \Illuminate\Http\Response $contact,
+          'data': []
           'message':'success'
           }
         headers: []
@@ -1059,7 +1278,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/get-contact-by-host
+    uri: 'api/v1/get-contact-by-host/{sim_number}'
     metadata:
       groupName: Endpoints
       groupDescription: ''
@@ -1074,19 +1293,88 @@ endpoints:
       Accept: '* / *'
       Connection: keep-alive
       Authorization: 'Bearer AUTH_TOKEN'
-    urlParameters: []
-    cleanUrlParameters: []
+    urlParameters:
+      sim_number:
+        name: sim_number
+        description: ''
+        required: true
+        example: adipisci
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      sim_number: adipisci
     queryParameters:
       $sim_number:
         name: $sim_number
         description: String
         required: false
-        example: ut
+        example: qui
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
-      $sim_number: ut
+      $sim_number: qui
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          'data': \Illuminate\Http\Response $response $allContacts,
+          'message': 'success' or 'error'
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/get-contact-by-port-num/{port_number}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'this function gets all contacts on a particular sim card by its number'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/octet-stream
+      Accept: '* / *'
+      Connection: keep-alive
+      Authorization: 'Bearer AUTH_TOKEN'
+    urlParameters:
+      port_number:
+        name: port_number
+        description: ''
+        required: true
+        example: aut
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      port_number: aut
+    queryParameters:
+      $port_number:
+        name: $port_number
+        description: String
+        required: false
+        example: dignissimos
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      $port_number: dignissimos
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -1130,18 +1418,18 @@ endpoints:
         name: contact_id
         description: 'The ID of the contact.'
         required: true
-        example: unde
+        example: dolores
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      contact_id: unde
+      contact_id: dolores
     queryParameters:
       Request:
         name: Request
         description: $request
         required: false
-        example: commodi
+        example: impedit
         type: string
         enumValues: []
         custom: []
@@ -1154,19 +1442,19 @@ endpoints:
         enumValues: []
         custom: []
     cleanQueryParameters:
-      Request: commodi
+      Request: impedit
       $contact_id: '1,2,3 etc'
     bodyParameters:
       $contact_state:
         name: $contact_state
         description: true/false
         required: false
-        example: voluptas
+        example: natus
         type: 'Example:'
         enumValues: []
         custom: []
     cleanBodyParameters:
-      $contact_state: voluptas
+      $contact_state: natus
     fileParameters: []
     responses:
       -
@@ -1206,12 +1494,61 @@ endpoints:
         name: sim_num
         description: ''
         required: true
-        example: soluta
+        example: impedit
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      sim_num: soluta
+      sim_num: impedit
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: 'http://localhost:3000'
+          access-control-allow-credentials: 'true'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/get-sms-messages-by-port/{port_num}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json;UTF-8
+    urlParameters:
+      port_num:
+        name: port_num
+        description: ''
+        required: true
+        example: sit
+        type: string
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      port_num: sit
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1257,23 +1594,23 @@ endpoints:
         name: id
         description: 'The ID of the delete sms resource.'
         required: true
-        example: doloremque
+        example: sed
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: doloremque
+      id: sed
     queryParameters:
-      Integer:
-        name: Integer
-        description: '$id Sms id in the database table'
+      $id:
+        name: $id
+        description: 'Integer Sms id in the database table'
         required: false
-        example: in
+        example: est
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
-      Integer: in
+      $id: est
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -1320,12 +1657,12 @@ endpoints:
         name: 'NULL'
         description: 'function retrieves all the sms sent to the sim cards on all used ports on modem'
         required: false
-        example: quam
+        example: accusantium
         type: This
         enumValues: []
         custom: []
     cleanBodyParameters:
-      'NULL': quam
+      'NULL': accusantium
     fileParameters: []
     responses:
       -
@@ -1381,7 +1718,7 @@ endpoints:
         name: port_id
         description: 'The ID of the port.'
         required: true
-        example: eos
+        example: inventore
         type: string
         enumValues: []
         custom: []
@@ -1389,7 +1726,7 @@ endpoints:
         name: slots
         description: ''
         required: true
-        example: est
+        example: maxime
         type: string
         enumValues: []
         custom: []
@@ -1397,34 +1734,43 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: deserunt
+        example: debitis
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      port_id: eos
-      slots: est
-      type: deserunt
+      port_id: inventore
+      slots: maxime
+      type: debitis
     queryParameters:
-      Integer:
-        name: Integer
-        description: '$id $slots'
+      $port_id:
+        name: $port_id
+        description: Integer
+        required: false
+        example: '1,2,3-8'
+        type: string
+        enumValues: []
+        custom: []
+      $id:
+        name: $id
+        description: 'Integer $slots'
         required: false
         example: '1'
         type: string
         enumValues: []
         custom: []
-      String:
-        name: String
-        description: $type
+      $type:
+        name: $type
+        description: String
         required: false
         example: '0,1,2,3 or all'
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
-      Integer: '1'
-      String: '0,1,2,3 or all'
+      $port_id: '1,2,3-8'
+      $id: '1'
+      $type: '0,1,2,3 or all'
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -1470,41 +1816,41 @@ endpoints:
         name: \illuminate\Http\Request
         description: $request
         required: false
-        example: beatae
+        example: magni
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
-      \illuminate\Http\Request: beatae
+      \illuminate\Http\Request: magni
     bodyParameters:
       recipient:
         name: recipient
         description: ''
-        required: true
-        example: occaecati
-        type: string
+        required: false
+        example: '+1234567788'
+        type: String
         enumValues: []
         custom: []
       _msg:
         name: _msg
         description: ''
-        required: true
-        example: et
-        type: string
+        required: false
+        example: 'hello how are you doing today?'
+        type: String
         enumValues: []
         custom: []
       sim_port_number:
         name: sim_port_number
         description: ''
-        required: true
-        example: et
-        type: string
+        required: false
+        example: 1-8
+        type: Integer
         enumValues: []
         custom: []
     cleanBodyParameters:
-      recipient: occaecati
-      _msg: et
-      sim_port_number: et
+      recipient: '+1234567788'
+      _msg: 'hello how are you doing today?'
+      sim_port_number: 1-8
     fileParameters: []
     responses:
       -
@@ -1549,49 +1895,51 @@ endpoints:
         name: \illuminate\Http\Request
         description: $request
         required: false
-        example: ex
+        example: esse
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
-      \illuminate\Http\Request: ex
+      \illuminate\Http\Request: esse
     bodyParameters:
       _msg:
         name: _msg
-        description: 'Must not be greater than 255 characters. Must be at least 1 character.'
-        required: true
-        example: kodydnehbuxgmydalkxgbgvwcalsbnrqyfoyhgkwzmdnimekcltvbeepuspfeyhzzuzrmsroslcosdncxqiqm
-        type: string
+        description: ''
+        required: false
+        example: 'hello how are you doing today?'
+        type: String
         enumValues: []
         custom: []
       sim_port_number:
         name: sim_port_number
         description: ''
-        required: true
-        example: 10
-        type: integer
+        required: false
+        example: 1-8
+        type: Integer
         enumValues: []
         custom: []
       recipient:
         name: recipient
         description: ''
-        required: true
-        example: []
-        type: object
+        required: false
+        example:
+          - cumque
+        type: 'String[]'
         enumValues: []
         custom: []
     cleanBodyParameters:
-      _msg: kodydnehbuxgmydalkxgbgvwcalsbnrqyfoyhgkwzmdnimekcltvbeepuspfeyhzzuzrmsroslcosdncxqiqm
-      sim_port_number: 10
-      recipient: []
+      _msg: 'hello how are you doing today?'
+      sim_port_number: 1-8
+      recipient:
+        - cumque
     fileParameters: []
     responses:
       -
         status: 200
         content: |-
           {
-          'data':'message',
-          'status': Response $response
+          'data': String
+          'status': Response $res
           }
         headers: []
         description: ''
@@ -1625,18 +1973,18 @@ endpoints:
         name: sms_id
         description: 'The ID of the sms.'
         required: true
-        example: ut
+        example: hic
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      sms_id: ut
+      sms_id: hic
     queryParameters:
       Integer:
         name: Integer
         description: $sms_id
         required: false
-        example: voluptatem
+        example: excepturi
         type: string
         enumValues: []
         custom: []
@@ -1644,13 +1992,13 @@ endpoints:
         name: \Illuminate\Http\Request
         description: $request
         required: false
-        example: dolorem
+        example: enim
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
-      Integer: voluptatem
-      \Illuminate\Http\Request: dolorem
+      Integer: excepturi
+      \Illuminate\Http\Request: enim
     bodyParameters:
       new_state:
         name: new_state
@@ -1708,12 +2056,12 @@ endpoints:
 
             * @header Connection keep-alive
         required: false
-        example: laudantium
+        example: sunt
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
-      /Illuminate/Http/Request: laudantium
+      /Illuminate/Http/Request: sunt
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []

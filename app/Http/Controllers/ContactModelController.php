@@ -16,11 +16,12 @@ class ContactModelController extends Controller
      * @header Accept * / *
      * @header Content-Type application/octet-stream
      * @header Authorization Bearer AUTH_TOKEN
-     * @bodyParam NULL
-     * @queryParam NULL
      *
      * @return \Illuminate\Http\Response
-     * @queryParam NULL
+     *
+     * @request{
+     *
+     * }
      * @response{
      * 'data': []
      * 'message': string
@@ -28,7 +29,9 @@ class ContactModelController extends Controller
      */
     public function index()
     {
+
     try{
+
     $allContact = \App\Models\ContactModel::all();
 
 
@@ -285,8 +288,6 @@ public function get_contact_by_port_number($port_number){
      * 'message': string
      * }
      *
-     * request payload
-     * $request = ['contact_no','contact_alt_number','contact_fname,'contact_lname,sim_contact_saved_to]
      *
      */
     public function update_contact(Request $request, $id){
@@ -367,7 +368,6 @@ public function get_contact_by_port_number($port_number){
      *
      * @bodyParam  NULL
      * @queryParam $id Integer Example: 1,2,3,4
-     * @queryParam \App\Models\ContactModels $contactModel
      *
      * @header Connection keep-alive
      * @header Accept * / *
@@ -377,9 +377,11 @@ public function get_contact_by_port_number($port_number){
      * 'message':'success' or 'error'
      * }
      */
-    public function destroy(ContactModel $contactModel,$id)
+    public function destroy($id)
     {
   try{
+
+        $contactModel = new ContactModel;
 
         $res =   $contactModel->find($id)->forceDelete();
 

@@ -313,15 +313,18 @@ public function show_sim_by_sim_number($sim_number){
 
 
     /**
-     * Update the specified resource in storage.
+     * Update the sim module or sim card information
      *
-     * @bodyParam  \Illuminate\Http\Request  $request
-     * @bodyParam  \App\Models\SimModule  $simModule
-     *
+     * @queryParam id Integer Example: 1,2,3,4
+
      * @header Connection keep-alive
      * @header Accept * / *
      * @header Content-Type application/octet-stream
      * @header Authorization Bearer AUTH_TOKEN
+     *
+     * @bodyParam sim_number string example: +12449080909
+     * @bodyParam sim_port_number string example: 1-8
+     * @bodyParam current_port_state integer example: 1 or 0
      *
      * @request{
      *'id',
@@ -339,9 +342,7 @@ public function show_sim_by_sim_number($sim_number){
      * }
      */
 
-    public function update(Request $request, SimModule $simMod)
-    {
-        $id = $request->id;
+    public function update(Request $request, SimModule $simMod, $id){
 
         try{
         $simModule = $simMod->findOrFail($id);
@@ -361,6 +362,34 @@ public function show_sim_by_sim_number($sim_number){
 
     }
     }
+
+    /**
+     * This function gets all sim card info
+     * @header Connection keep-alive
+     * @header Accept * / *
+     * @header Content-Type application/octet-stream
+     * @header Authorization Bearer AUTH_TOKEN
+
+     *
+     */
+    public function get_all_sims_info(){
+
+        try{
+
+            $allSims = \App\Models\SimModule::all();
+if(sizeof($allSims)>0){
+     return response()->json(['data'=>$allSims,'message'=>'success'],200);
+}else{
+    return response()->json(['data'=>NULL,'message'=>'success'],200);
+}
+
+
+        }catch(\Exception $e){
+            return response()->json(['data'=>NULL,'message'=>'error','error'=>$e->getMessage()],400);
+        }
+
+    }
+
 
     /**
      * Remove the specified resource from storage.

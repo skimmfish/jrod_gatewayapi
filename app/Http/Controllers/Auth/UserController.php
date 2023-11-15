@@ -33,11 +33,7 @@ class UserController extends Controller
      * @bodyParam   email_or_phone_number    string  required    The email/phone number of the  user.      Example: jayden@gm.co.uk / +1240291092
      * @bodyParam   password    string  required    The password of the  user.      Example: Rock1234@
 
-     * @queryParam   email_or_phone_number    string  required    The email/phone number of the  user.      Example: jayden@gm.co.uk / +1240291092
-     * @queryParam   password    string  required    The password of the  user.      Example: Rock1234@
-
      * @request{
-
      *  'email_or_phone_number':string,
      *  'pasword': string
      *
@@ -94,8 +90,6 @@ class UserController extends Controller
 
     /**
      * This function logs out the currently authenticated user and clear the AUTH_TOKEN
-     * @queryParam  Request $request
-     * @bodyParam   Request $request object
 
      * @header Connection keep-alive
      * @header Accept * / *
@@ -128,7 +122,7 @@ try{
      *
      * This function finds a user and return the user to move to another page to enter the new password and confirm it
      *
-     * @bodyParam String email required maximum of 15 characters of Example: JoyKam
+     * @bodyParam email string required maximum of 15 characters of Example: johnreid@gmail.com
      *
      * @header Connection keep-alive
      * @header Accept * / *
@@ -149,6 +143,7 @@ try{
 public function verify_usr_email(Request $request){
 
     try{
+//        echo $request->email;
    $user =  \App\Models\User::where('email',$request->email)->first();
 
    if(!is_null($user)){
@@ -159,7 +154,7 @@ public function verify_usr_email(Request $request){
     //update the user's record with this code, after modification, reset the code back to 4 zeros
     \DB::update("UPDATE users SET otp_code=? WHERE email=?",[$code,$request->email]);
 
-    \Mail::to($request->email)->send(new \App\Mail\send_password_modification_email($user->username,$code));
+   \Mail::to($request->email)->send(new \App\Mail\send_password_modification_email($user->username,$code));
 
     return response()->json(['data'=>$user,'message'=>'user found, code sent to user','status'=>true],200);
 
@@ -275,7 +270,7 @@ public function verify_usr_email(Request $request){
         $rules = [
             'email'=>['required','email','max:255',],
             'password'=>['required','string','min:6','max:15','confirmed'],
-            'password_confirmation' => ['required','string','min:6','max:15','confirmed']
+            'password_confirmation' => ['required','string','min:6','max:15']
         ];
 
         try{
@@ -292,7 +287,7 @@ public function verify_usr_email(Request $request){
         $nwpassword = bcrypt($request->password);
 
         //otp_last used...
-        $lastUsed = date('Y-m-d h:i:s A',time());
+        $lastUsed = date('Y-m-d h:i:s');
 
         \DB::update("UPDATE users SET password=?, otp_code=?, code_last_used=? WHERE email=?",[$nwpassword,NULL,$lastUsed,$email]);
 
@@ -313,8 +308,8 @@ public function verify_usr_email(Request $request){
   /**
    * This function confirms otp code before navigation to the next screen to enter the new password
    *
-   * @bodyParam String $otp_code Example: 1234
-   * @bodyParam String email Example: jro@gmail.co.uk
+   * @bodyParam otp_code String  Example: 1234
+   * @bodyParam email String  Example: jro@gmail.co.uk
 
    * @header Connection keep-alive
    * @header Accept * / *
@@ -351,11 +346,10 @@ public function verify_usr_email(Request $request){
    'email'=>$email])->first();
    if(!is_null($confirmValidOtp)){
     return response()->json([
-        'data'=>true
-    ],200);
+        'data'=>true,"message"=>'otp_is_valid'],200);
    }
     return response()->json([
-        'data'=>false
+        'data'=>false,'message'=>'otp_is_invalid'
     ],200);
 
     }catch(\Exception $e){
@@ -366,32 +360,33 @@ public function verify_usr_email(Request $request){
 
     /**
      * This function gets user profile
-     * @queryParam Integer $id User id Example: 1
      *
-     * @bodyParam NULL
      *
      * @header Connection keep-alive
      * @header Accept * / *
      * @header Content-Type application/json;utf-8
      *
      * @response{
-     * 'data': user_data [],
-     * 'message': 'success' or eloquent exception/error
+     * 'data': [],
+     * 'message': string
      * }
 
      */
 
-    public function get_user_profile($id){
+    public function get_user_profile(){
 
         try{
 
-            $user = \App\Models\User::where('id',$id)->first();
+            if(\Auth::check()){
+            $user = \App\Models\User::where('id',\Auth::user()->id)->first();
+
             if(!is_null($user)){
                 return response()->json(['data'=>$user,'message'=>'success'],200);
             }else{
 
                 return response()->json(['data'=>null,'message'=>'User not found'],200);
             }
+        }
 
         }catch(\Exception $e){
             return response()->json(['data'=>null,'message'=>'error','error'=>$e->getMessage()],500);
