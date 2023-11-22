@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 
 //LOGIN AND AUTHENTICATION ROUTES
 //This route doesn't require the Host header, only Accept-Language. Accept Headers are needed
-Route::post('/login',[\App\Http\Controllers\Auth\UserController::class,'login_to_authenticate'])->name('login_to_authenticate');
+Route::post('/login',[\App\Http\Controllers\Auth\UserController::class,'login_to_authenticate']);
 
 //confirm OTP code for new password modification for the user
 Route::post('/confirm-otp-code',[\App\Http\Controllers\Auth\UserController::class,'confirm_otp_code'])->name('confirm_otp_code');
@@ -43,7 +43,7 @@ Route::post('/update-password',[\App\Http\Controllers\Auth\UserController::class
 
 
 //====================GROUP OF AUTHENTICATED ROUTES====================
-Route::group(['prefix' => 'v1','middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum']], function () {
 
 //FETCH ALL CONTACTS
 Route::get('/get-all-contacts',[\App\Http\Controllers\ContactModelController::class,'index'])->name('get_all_contact');
@@ -84,7 +84,6 @@ Route::put('/update-sim-contact/{id}',[\App\Http\Controllers\ContactModelControl
 //deleting a sim module configuration on app
 Route::delete('/delete-sim-module/{id}',[\App\Http\Controllers\SimModuleController::class,'destroy'])->name('delete_sim_module');
 
-
 //updating a sim module config
 Route::put('/update-sim-module/{id}',[\App\Http\Controllers\SimModuleController::class,'update'])->name('update_sim_module');
 
@@ -99,15 +98,7 @@ Route::post('/add-new-sim-configuration',[\App\Http\Controllers\SimModuleControl
 
 
 //get contact by arbitrary name
-Route::get('/get_contact_by_fname/{}',[\App\Http\Controllers\ContactModelController::class,'get_contact_by_fname']);
-
-
-//to get sim card port state
-Route::get('/get-sim-port-state/{port_id}',[\App\Http\Controllers\SimModuleController::class,'get_port_state'])->name('get_sim_port_state');
-
-
-//to get all the ports and their availablility
-Route::get('/get-all-port-state',[\App\Http\Controllers\SimModuleController::class,'get_all_port_state'])->name('get_all_port_state');
+Route::get('/get-contact-by-fname/{f_name}',[\App\Http\Controllers\ContactModelController::class,'get_contact_by_fname']);
 
 
 //get sim by port number
@@ -130,7 +121,7 @@ Route::get('/get-contact-by-port-num/{port_number}',[\App\Http\Controllers\Conta
 
 
 //this post CALL changes the state of a contact number - 1=active, 2=archived, 3-blocked (2 & 3 are state of inactivity)
-Route::put('/change-contact-number-state/{contact_id}',[\App\Http\Controllers\ContactModelController::class,'change_state_of_contact'])->name('change_state_of_contact');
+Route::put('/change-contact-number-state/{contact_id}/{contact_state}',[\App\Http\Controllers\ContactModelController::class,'change_state_of_contact'])->name('change_state_of_contact');
 
 
 //get sms messages by sim_number
@@ -149,30 +140,61 @@ Route::delete('/delete-sms-resource/{id}',[\App\Http\Controllers\SmsModelControl
 Route::get('/read-sms/{id}',[\App\Http\Controllers\SmsModelController::class,'show-sms']);
 
 
-//FETCH ALL SMS FROM MODEM
-Route::get('/get-all-sms-on-modem',[\App\Http\Controllers\SmsModelController::class,'get_all_sms'])->name('get_all_sms');
-
-
-//This route fetches SMS statistics across the port/slots/date duration type specified
-Route::get('/get-sms-stats/{port_id}/{slots}/{type}',[\App\Http\Controllers\SmsModelController::class,'get_sms_stat'])->name('get_all_sms_statistics');
-
-
-//REBOOT MODEM - for rebooting/reseting the modem remotely via app/mobile app
-Route::post('/reboot-modem',[\App\Http\Controllers\SimModuleController::class,'reboot_modem']);
-
-
 //===============THIS SECTION FOR SENDING SMS & ADMINISTERING SMS=========================
 //send sms by sim_at_a_port
-Route::post('/send-single-sms',[\App\Http\Controllers\SmsModelController::class,'send_single_sms'])->name('send_single_sms');
+Route::get('send-single-sms',[\App\Http\Controllers\SmsModelController::class,'send_single_sms']);
+
+//this is the get version of the single sms sending
+Route::get('/send-single-sms-v2',[\App\Http\Controllers\SmsModelController::class,'send_single_sms_v2']);
 
 //this route sends bulk sms to multiple recipients @ once
-Route::post('/send-bulk-sms',[\App\Http\Controllers\SmsModelController::class,'send_bulk_sms'])->name('send_bulk_sms');
+Route::post('/send-bulk-sms',[\App\Http\Controllers\SmsModelController::class,'send_bulk_sms']);
 
 //FOR CHANGING THE STATE OF AN SMS
 Route::put('/change-sms-state/{sms_id}',[\App\Http\Controllers\SmsModelController::class,'change_sms_state'])->name('change_received_sms_state');
 
 //parse sms sent with base64 encoding
 Route::post('/parse-sms',[\App\Http\Controllers\SmsModelController::class,'parse_sms']);
+
+//FETCH ALL SMS FROM MODEM
+Route::get('/get-all-sms-on-modem',[\App\Http\Controllers\SmsModelController::class,'get_all_sms'])->name('get_all_sms');
+
+//This route fetches SMS statistics across the port/slots/date duration type specified
+Route::get('/get-sms-stats/{port_id}/{slots}/{type}',[\App\Http\Controllers\SmsModelController::class,'get_sms_stat'])->name('get_all_sms_statistics');
+
+
+//OTHER MODEM BASED ENDPOINTS
+//REBOOT MODEM - for rebooting/reseting the modem remotely via app/mobile app
+Route::post('/reboot-modem',[\App\Http\Controllers\SimModuleController::class,'reboot_modem']);
+
+
+//to get sim card port state
+Route::get('/get-sim-port-state/{port_id}',[\App\Http\Controllers\SimModuleController::class,'get_port_state'])->name('get_sim_port_state');
+
+
+//to get all the ports and their availablility
+Route::get('/get-all-port-state',[\App\Http\Controllers\SimModuleController::class,'get_all_port_state'])->name('get_all_port_state');
+
+//TEST ENDPOINTS
+Route::post('/get-issues-done/{port_id}',[\App\Http\Controllers\SimModuleController::class,'get_port_state']);
+
+
+//for viewing all archived sms
+//Route::get('/view-archived-sms');
+
+//for viewing archived contacts
+Route::get('/get-all-archived-contacts/2',[\App\Http\Controllers\ContactModelController::class,'fetch_contacts_by_state']);
+
+
+//for viewing blacklisted contacts
+Route::get('/get-all-blacklisted-contacts/3',[\App\Http\Controllers\ContactModelController::class,'fetch_contacts_by_state']);
+
+//for deleting account, the currently logged in account
+Route::delete('/delete-user-account',[\App\Http\Controllers\Auth\UserController::class,'delete_logged_user']);
+
+//for deleting all contacts at once
+Route::delete('/delete-all-contacts',[\App\Http\Controllers\ContactModelController::class,'delete_all_contact']);
+
 
 });
 

@@ -35,7 +35,7 @@ class UserController extends Controller
 
      * @request{
      *  'email_or_phone_number':string,
-     *  'pasword': string
+     *  'password': string
      *
      *  }
      * @response{
@@ -106,7 +106,7 @@ public function logout(Request $request){
 try{
 
     Session::flush();
-    $request->user()->token()->revoke();
+    //$request->user()->token()->revoke();
     \Auth::guard('web')->logout();
 
 
@@ -365,6 +365,7 @@ public function verify_usr_email(Request $request){
      * @header Connection keep-alive
      * @header Accept * / *
      * @header Content-Type application/json;utf-8
+     * @header Authorization Bearer AUTH_TOKEN
      *
      * @response{
      * 'data': [],
@@ -395,7 +396,28 @@ public function verify_usr_email(Request $request){
 
     }
 
+/**
+ *This function deletes the logged in user
+ *
+ *  @header Connection keep-alive
+ *  @header Accept * / *
+ *  @header Content-Type application/json;utf-8
+ *  @header Authorization Bearer AUTH_TOKEN
+ *
+ */
 
+public function delete_logged_user(){
+
+    try{
+
+    $id = \Auth::user()->id;
+    $s = \DB::delete("DELETE FROM where id=?",[$id]);
+    return response()->json(['status'=>true,'message'=>'success'],200);
+
+    }catch(\Exception $e){
+        return response()->json(['data'=>NULL,'error'=>$e->getMessage()],500);
+    }
+}
     /**
      * Update the specified resource in storage.
      * The username and email field is non-updateable to avoid conflicts with other users

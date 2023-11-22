@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SimModule;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class SimModuleController extends Controller
 {
@@ -46,6 +47,21 @@ class SimModuleController extends Controller
         //
     }
 
+    /**
+     * @queryParam id integer example: 1,2,3
+     */
+    public function show($id){
+
+        try{
+
+      $sim =  \App\Models\SimModule::where('id',$id)->first();
+
+      return response()->json(['data'=>$sim,'message'=>'success'],200);
+
+     }catch(\Exception $e){
+            return response()->json(['data'=>NULL,'error'=>$e->getMessage(),'message'=>'error'],500);
+        }
+    }
 
     /**
      * This function reboots the modem remotely
@@ -152,8 +168,12 @@ class SimModuleController extends Controller
         $url = $this->ip_port_only.'/goip_send_ussd.html?username='.$this->api_username.'&password='.$this->api_password;
         $body = [];
 
+
     try{
+
         $response = \App\Models\ConfigModel::callAPI('GET',$url,$body);
+
+//        \Log::info($response);
 
         return response()->json(['data'=>json_decode($response),'message'=>'success'],200);
 
@@ -167,13 +187,12 @@ class SimModuleController extends Controller
      * This function retrieves the port state of a modem port that has a sim on it, if the reason token is 'OK', modify the state of the sim
      * by calling API /update-sim-module endpoint
      *
-     * @queryParam $port_id Integer Example: 1,2,3-8
+     * @queryParam port_id Integer Example: 1,2,3-8
      *
      * @header Connection keep-alive
      * @header Accept * / *
      * @header Content-Type application/octet-stream
      * @header Authorization Bearer AUTH_TOKEN
-     * @header Host 54.179.122.227:52538
      *
      * @response{
      * 'data':json_decode(\Illuminate\Http\Response $response),
@@ -189,15 +208,29 @@ class SimModuleController extends Controller
 
         try{
 
-        $this->api_ip_address_at = $this->api_ip_address_at.'&port='.$port_id.'&at=ati';
+    $this->api_ip_address_at = $this->api_ip_address_at.'&port='.$port_id.'&at=ati';
 
-        $response = \App\Models\ConfigModel::callAPI('GET',$this->api_ip_address_at,$body);
+
+  $response = \App\Models\ConfigModel::callAPI('GET',$this->api_ip_address_at,$body);
+
+
+        /*$datar = Http::withHeaders([
+
+            'Content-Type' => 'application/json',
+            'Host' => '54.179.122.227:52538',
+            'Connection' => 'close',*/
+/*            //'Accept' => "*"
+
+            ])->get($this->api_ip_address_at);
+*/
 
       $getSim =  \App\Models\SimModule::where('sim_port_number',$port_id)->first();
 
-    $data = json_decode($response);
+      $data = json_decode($response);
 
-    if($data->reason=='OK'){
+            \Log::info($response);
+
+  if($data->reason=='OK'){
     \DB::update("UPDATE sim_modules SET current_port_state=? WHERE sim_port_number=?",[true,$port_id]);
     }
 
@@ -325,12 +358,14 @@ public function show_sim_by_sim_number($sim_number){
      * @bodyParam sim_number string example: +12449080909
      * @bodyParam sim_port_number string example: 1-8
      * @bodyParam current_port_state integer example: 1 or 0
+     * $bodyParam sim_name string example: sim_2 or jrodil_2
      *
      * @request{
-     *'id',
-     * 'sim_number,
+     *  'id',
+     *  'sim_number,
      *  'sim_port_number',
      *  'current_port_state,
+     * 'sim_name',
      *  'updated_date'
      * }
      *
@@ -346,6 +381,7 @@ public function show_sim_by_sim_number($sim_number){
 
         try{
         $simModule = $simMod->findOrFail($id);
+        $simModule->sim_name = $request->sim_name;
         $simModule->sim_number = $request->sim_number;
         $simModule->sim_port_number = $request->sim_port_number;
         $simModule->current_port_state = 1;
@@ -416,6 +452,15 @@ if(sizeof($allSims)>0){
         }catch(\Exception $e){
             return response()->json(['data'=>null,'message'=>'error','error'=>$e->getMessage()],400);
         }
+
+    }
+
+/**
+ * send_single_sms for sending sms to only one recipient per time
+ */
+    public function send_single_sms(){
+
+        echo "Route found";
 
     }
 }

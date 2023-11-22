@@ -178,8 +178,13 @@ return response()->json(['data'=>$contact,'message'=>'success'],200);
 
 /**
  * This function retrieves a contact by searching with the first name
- * @queryParam $f_name String Example: john
+ * @queryParam f_name String Example: john
  *
+ * @header Connection keep-alive
+ * @header Accept * / *
+ * @header Content-Type application/octet-stream
+ * @header Authorization Bearer AUTH_TOKEN
+
  * @response{
  * 'data': \Illuminate\Http\Response $response $result,
  * 'message': 'success' or 'error'
@@ -188,10 +193,15 @@ return response()->json(['data'=>$contact,'message'=>'success'],200);
 public function get_contact_by_fname($f_name){
 
     try{
-   $result = \DB::SELECT("SELECT from contact_models WHERE contact_fname LIKE ? ORDER BY ? DESC",[$f_name,'ASC']);
+   $result = \DB::SELECT("SELECT *from contact_models WHERE contact_fname LIKE ? ORDER BY ? DESC ",[$f_name,'created_at']);
 
+   //$result = \App\Models\ContactModel::where(['contact_fname'=>$f_name])->orderBy('created_at','DESC')->get();
+
+   if(sizeof($result)>0){
    return response()->json(['data'=>$result,'message'=>'success'],200);
-
+   }else{
+    return response()->json(['data'=>null,'message'=>'no_record_found'],404);
+   }
     }catch(\Exception $e){
         return response()->json(['data'=>NULL,'message'=>'error','error'=>$e->getMessage()],404);
     }
@@ -316,57 +326,72 @@ public function get_contact_by_port_number($port_number){
     /**
      * This function alters the state of a sim contact
 
-     * @queryParam Request $request
-     * @queryParam $contact_id Integer Example: 1,2,3 etc
+     * @queryParam contact_id Integer Example: 1,2,3,4
+     * @queryParam contact_state integer example:  1 for default (if active),2 for Archive,3 for Blacklist etc.
 
      * @header Connection keep-alive
      * @header Accept * / *
      * @header Content-Type application/json;utf-8
      * @header Authorization Bearer AUTH_TOKEN
 
-     * @bodyParam $contact_state Example: true/false
-     * @response{
+    * @response{
     * 'data': \Illuminate\Http\Response $response $res,
     * 'message': 'success' or 'error'
     * }
 
      *
      */
-    public function change_state_of_contact(Request $request,$contact_id){
+    public function change_state_of_contact(Request $request,$contact_id,$contact_state){
 
     try{
         $contact = \App\Models\ContactModel::find($contact_id);
-        $contact->contact_state =  $request->contact_state;
+        $contact->contact_state =  $contact_state;
 
         $res = $contact->save();
 
         return response()->json(['data'=>$res,'message'=>'Success'],200);
+
     }catch(\Exception $e){
         return response()->json(['data'=>NULL,'message'=>'error','exception'=>$e->getMessage()],404);
     }
 
 }
     /**
-     * Update the specified resource in storage.
-     *
+     * this function fetches all contacts based on the supplied state parameter
+     * The contact_state param determines if the contacts you would retrieve is active (which is default), archived or blacklisted contacts
+     * @queryParam contact_state Integer Example: 1 = for all active contacts, 2 = for all archived contacts, 3 = for all blacklisted contacts
+
      * @header Connection keep-alive
      * @header Accept * / *
      * @header Content-Type application/json;utf-8
      * @header Authorization Bearer AUTH_TOKEN
 
-     * @queryParam  \Illuminate\Http\Request  $request
-     * @queryParam  \App\Models\ContactModel  $contactModel
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ContactModel $contactModel)
-    {
-        //
-    }
+
+     public function fetch_contacts_by_state($contact_state){
+
+    try{
+
+    $allSuch =  \App\Models\ContactModel::where('contact_state',$contact_state)->get();
+
+    if(sizeof($allSuch)>0){
+
+        return response()->json(['data'=>$allSuch,'status'=>true,'message'=>'success'],200);
+    }else{
+
+        return response()->json(['data'=>NULL,'status'=>false,'message'=>'No such contacts found'],404);
+
+        }
+        }catch(\Exception $e){
+
+            return response()->json(['data'=>NULL,'error'=>$e->getMessage()],500);
+        }
+
+}
 
     /**
      * Removes a contact from the contact database table
      *
-     * @bodyParam  NULL
      * @queryParam $id Integer Example: 1,2,3,4
      *
      * @header Connection keep-alive
@@ -392,5 +417,27 @@ public function get_contact_by_port_number($port_number){
   }catch(\Exception $e){
     return response()->json(['data'=>NULL,'error'=>$e->getMessage(),'message'=>'error'],500);
   }
+   }
+
+
+   /**
+    * This function deletes all contacts in the phone book
+    * @header Connection keep-alive
+    * @header Accept * / *
+    * @header Content-Type application/json;utf-8
+    * @header Authorization Bearer AUTH_TOKEN
+    */
+
+   public function delete_all_contact(){
+
+try{
+
+$res = \DB::delete("DELETE FROM contact_models");
+
+return response()->json(['data'=>'all_contacts_deleted_successfully','status'=>true],200);
+
+}catch(\Exception $e){
+    return response()->json(['data'=>'error','status'=>false,'error'=>$e->getMessage()],500);
+}
    }
 }
