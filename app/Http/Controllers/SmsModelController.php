@@ -315,7 +315,7 @@ public function send_bulk_sms(Request $request){
 
     //validating the requests sent from the mobile front_end
   $rules = [
-    "_msg"=>['required','max:255','min:1'],
+    "_msg"=>['required','string','max:255','min:3'],
     "sim_port_number" => ['required','integer'],
     "recipient" => ['required','Array']
   ];
@@ -325,67 +325,35 @@ public function send_bulk_sms(Request $request){
 
     $body = [];
     $sender = null;
-    //getting the feed from the front end form fields here
-    $sms = $request->sms_msg;
-    $sim_port_number = $request->sim_port_number;
 
-    //save recipients in an array and split them later
+    //getting the feed from the front end form fields here
+    $sms = $request->_msg;
+    $sim_port_number = $request->sim_port_number;
     $recipients = ($request->recipient);
+
+
+    //this is to hold all recipients
+    $allRecipients = NULL;
 
     //get the sim number that is sending the sms
     $sim = \App\Models\SimModule::where(['sim_port_number'=>$sim_port_number])->first();
 
     try{
 
-    for($i=0;$i<count($recipients);$i++){
-
-        //saving it in the database first of all
-        $saveToDb = \App\Models\SmsModel::create([
-        'sim_number_sent_to' => $recipients[$i],
-        '_msg'=> $sms,
-        'msg_sender_no'=> $sim->sim_number,
-        'msg_activity_state' => 1,
-        'msg_type'=>'outgoing',
-        'active_state'=>true,
-        'created_at'=>date('Y-m-d h:i:s',time()),
-        'updated_at'=>date('Y-m-d h:i:s',time())
-    ]);
+    $allRecipients = implode(",",$recipients);
 
     //forming the api call link with its parameters
-    $this->mergedURL = $this->api_ip_address.'&recipients='.$recipients[$i].'&port='.$sim_port_number.'&sms='.rawurlencode($sms);
+    $this->mergedURL = $this->api_ip_address.'&recipients='.$allRecipients.'&charset=Utf-8&port='.$sim_port_number.'&sms='.rawurlencode($sms);
 
-   $response = \App\Models\ConfigModel::callAPI('GET',$this->mergedURL,$body);
+    $response = \App\Models\ConfigModel::callAPI('GET',$this->mergedURL,$body);
 
-//$username = \Auth::user()->username;
-
-
-/*$response = Http::withHeaders([
-    'Content-Type' => 'application/json',
-    'Host' => '54.179.122.227:52538',
-    'Connection' => 'close',
-    'Accept' => "* / *"
-    'charset'=>'utf-8',
-    'Authorization'=> 'Bearer 27|kKNh2UsphOAWH6VGparu5YxWO6Qn1hSiP1XXK1crb5d43779'
-
-    ])->get($this->mergedURL);
-*/
-
-}
-
-    return response()->json(['data'=>$response,'message'=>'success'],200);
+    return response()->json(['data'=>json_decode($response),'message'=>'success'],200);
 
     }catch(\Exception $e){
-
-    return response()->json(
-    ['data'=>null,
-    'message'=>'error',
-    'error'=>$e->getMessage()
-    ],404);
-
-}
+    return response()->json(['data'=>null,'message'=>'error','error'=>$e->getMessage()],404);
 }
 
-
+}
 
 /**
 * This function sends single sms
@@ -467,6 +435,25 @@ public function send_single_sms(Request $request){
     }
 
 
+}
+
+
+/**
+ * This function sends sms to the phone number via the sim port number
+ * @param sim_port_number Integer Example: 1,2,3,4
+ * @param recipient String Example: +12490293092
+ * @param sms String Example: sms sent to the number
+ */
+public function send_sms($sim_port_number,$recipient,$sms){
+
+        //forming the api call link with its parameters
+        try{
+        $this->mergedURL = $this->api_ip_address.'&port='.$sim_port_number.'&charset=Utf-8&recipients='.$recipient.'&sms='.rawurlencode($sms);
+
+      return $response = \App\Models\ConfigModel::callAPI('get',$this->mergedURL,[]);
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
 }
 
 

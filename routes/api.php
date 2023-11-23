@@ -43,7 +43,7 @@ Route::post('/update-password',[\App\Http\Controllers\Auth\UserController::class
 
 
 //====================GROUP OF AUTHENTICATED ROUTES====================
-Route::group(['middleware' => ['auth:sanctum']], function () {
+//Route::group(['middleware' => ['auth:sanctum']], function () {
 
 //FETCH ALL CONTACTS
 Route::get('/get-all-contacts',[\App\Http\Controllers\ContactModelController::class,'index'])->name('get_all_contact');
@@ -144,11 +144,19 @@ Route::get('/read-sms/{id}',[\App\Http\Controllers\SmsModelController::class,'sh
 //send sms by sim_at_a_port
 Route::get('send-single-sms',[\App\Http\Controllers\SmsModelController::class,'send_single_sms']);
 
+//Route::post('/send-sms-single',[\App\Http\Controllers\SmsModelController::class,'send_sms_single']);
+
+/*Route::get('/send-sm',function(){
+
+return redirect()->'http://')
+
+})*/
+
 //this is the get version of the single sms sending
 Route::get('/send-single-sms-v2',[\App\Http\Controllers\SmsModelController::class,'send_single_sms_v2']);
 
 //this route sends bulk sms to multiple recipients @ once
-Route::post('/send-bulk-sms',[\App\Http\Controllers\SmsModelController::class,'send_bulk_sms']);
+Route::get('/send-bulk-sms',[\App\Http\Controllers\SmsModelController::class,'send_bulk_sms']);
 
 //FOR CHANGING THE STATE OF AN SMS
 Route::put('/change-sms-state/{sms_id}',[\App\Http\Controllers\SmsModelController::class,'change_sms_state'])->name('change_received_sms_state');
@@ -196,5 +204,5 @@ Route::delete('/delete-user-account',[\App\Http\Controllers\Auth\UserController:
 Route::delete('/delete-all-contacts',[\App\Http\Controllers\ContactModelController::class,'delete_all_contact']);
 
 
-});
+//});
 
