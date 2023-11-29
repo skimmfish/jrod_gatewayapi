@@ -376,20 +376,22 @@ public function verify_usr_email(Request $request){
 
     public function get_user_profile(){
 
+        $user = NULL;
+
         try{
 
-            if(\Auth::check()){
-            $user = \App\Models\User::where('id',\Auth::user()->id)->first();
+            $user = \App\Models\User::where('id',\Auth::user()->id)->first(); //this shows that the user is currently logged in
 
             if(!is_null($user)){
-                return response()->json(['data'=>$user,'message'=>'success'],200);
+                return response()->json(['data'=>$user,'message'=>'success','status'=>true],200);
+
             }else{
 
-                return response()->json(['data'=>null,'message'=>'User not found'],200);
+                return response()->json(['data'=>null,'message'=>'fail', 'status'=>false],200);
             }
-        }
 
         }catch(\Exception $e){
+
             return response()->json(['data'=>null,'message'=>'error','error'=>$e->getMessage()],500);
         }
 

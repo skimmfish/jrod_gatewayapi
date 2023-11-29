@@ -335,13 +335,38 @@ public function show_sim_by_sim_number($sim_number){
 
         $simData = \App\Models\SimModule::where(['sim_port_number'=>$port_id])->first();
 
-        return response()->json(['data'=>$simData,'message'=>'success'],200);
+        return response()->json(['data'=>json_decode($simData),'message'=>'success'],200);
 
     }catch(\Exception $e){
 
         return response()->json(['data'=>NULL,'error'=>$e->getMessage()],404);
 
     }
+    }
+
+
+    /**this function retrieves the sim card number using the port id
+     * @param port_id Integer
+     *
+    */
+    public function get_simnumber_by_port_id($port_id){
+
+        try{
+        $simNo = null;
+
+        $simDet =  \App\Models\SimModule::where(['sim_port_number'=>$port_id])->first();
+
+        if(!is_null($simDet)){
+            $simNo = $simDet->sim_number;
+        }else{
+            return NULL;
+        }
+
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
+
+    return $simNo;
     }
 
 

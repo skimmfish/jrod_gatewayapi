@@ -62,7 +62,7 @@ by short numbers, specifying multiple ports, where "-" indicates a continuous po
 */
 
 
-    /*statistic $type. The values are as
+    /*static $type. The values are as
     follows:
     1) 0: The last hour;
     2) 1: The last two hours;
@@ -159,17 +159,122 @@ try{
 public function get_sms_by_port_num($port_num){
 
     try{
-        $msgs = \App\Models\SmsModel::where(['port_sent_from'=>$port_num])->get();
+        $msgs = \App\Models\SmsModel::where(['port_sent_from'=>$port_num])->orWhere('port_received_at',$port_num)->get();
+
         return response()->json(['data'=>$msgs,'status'=>'success'],200);
-        }catch(\Exception $e){
+
+    }catch(\Exception $e){
+
         return response()->json(['data'=>NULL,'status'=>'fail','exception'=>$e->getMessage()],404);
+
+    }
+}
+
+
+/**
+ * This function fetches all sms from modem gateway
+ */
+public function fetch_sms_from_gateway(){
+
+    //forming the api call link with its parameters
+    //declaring the body
+    $body = [];
+            //fetching the simNumber
+            $simNumber = new \App\Http\Controllers\SimModuleController;
+
+    try{
+
+        $response = \App\Models\ConfigModel::callAPI('GET',$this->sms_fetch_ip,$body);
+
+        $res = json_decode($response);
+        $sizeofSMS = sizeof($res->data);
+
+        $reformedArr = array();
+        for($i=0;$i< $sizeofSMS;$i++){
+
+           $portNum = explode(".",$res->data[$i][1])[0];
+
+        //retrieving the sim number msg was sent to
+           $simNo = $simNumber->get_simnumber_by_port_id($portNum);
+
+            $smsMessage = $res->data[$i][5];
+
+            //decoding the timestamp the sms was sent
+           $timeStamp = $res->data[$i][2];
+
+           //retrieving the sender
+           $sender = $res->data[$i][3];
+
+           //searching if this message has been saved previously
+           $search  = \App\Models\SmsModel::where(['incoming_timestamp'=>$timeStamp,'port_received_at'=>$portNum,'sim_number_sent_to'=>$simNo])->first();
+
+           if(is_null($search)){
+           //setup message saving in the DB
+            $cr = \App\Models\SmsModel::create([
+                'port_received_at' => $portNum,
+                'sim_number_sent_to'=>$simNo,
+                '_msg' => $smsMessage,
+                'msg_type'=>'incoming',
+                'msg_activity_state '=>1,
+                'active_state' => true,
+                'msg_sender_no'=> $sender,
+                'created_at' => date('Y-m-d h:i:s',time()),
+                'incoming_timestamp' =>$timeStamp
+            ]);
+
+        }
+        }
+
+    }catch(\Exception $e){
+
+    return response()->json(['data'=>null,'message'=>'error', 'error'=>$e->getMessage()],404);
 
     }
 
 
-
 }
 
+/**
+ * This function fetches messages by proding the skyline modem at every 50ms
+ *
+ * @header Content-Type text/event-stream
+ * @header Connection close
+ * @header Accept * / *
+ * @header Authorization Bearer AUTH_TOKEN
+ *
+ */
+public function stream(){
+
+    $latestSms = NULL;
+
+    return response()->stream(function(){
+
+        while(true){
+           // $curDate = date('Y-m-d h:i:s',time());
+
+            //latest sms on the gateway modem
+            $this->fetch_sms_from_gateway();
+            $latestSms = \App\Models\SmsModel::latest()->get();
+
+            if($latestSms){
+
+            echo 'data: {"most_recent_sms":"' . base64_decode($latestSms->_msg) . '"sent_to":"'. $latestSms->sim_number_sent_to.'}' . "\n\n";
+
+        }
+
+                ob_flush();
+                flush();
+
+                // Break the loop if the client aborted the connection (closed the page)
+                if (connection_aborted()) {break;}
+                usleep(50000); // 50ms
+            }
+        }, 200, [
+            'Cache-Control' => 'no-cache',
+            'Content-Type' => 'text/event-stream',
+        ]);
+
+}
 
 /**
  * @queryParam SimModuleRequest $request
@@ -551,21 +656,64 @@ public function send_sms($sim_port_number,$recipient,$sms){
     *
     */
 
-    public function get_all_sms(){
+    public function get_all_sms(Request $request){
 
     //forming the api call link with its parameters
     //declaring the body
     $body = [];
+            //fetching the simNumber
+            $simNumber = new \App\Http\Controllers\SimModuleController;
 
     try{
 
-    $response = \App\Models\ConfigModel::callAPI('GET',$this->sms_fetch_ip,$body);
+        $response = \App\Models\ConfigModel::callAPI('GET',$this->sms_fetch_ip,$body);
 
-    return response()->json(['data'=>json_decode($response),'message'=>'Success'],200);
+        $res = json_decode($response);
+        $sizeofSMS = sizeof($res->data);
+
+        $reformedArr = array();
+        for($i=0;$i< $sizeofSMS;$i++){
+
+           $portNum = explode(".",$res->data[$i][1])[0];
+
+        //retrieving the sim number msg was sent to
+           $simNo = $simNumber->get_simnumber_by_port_id($portNum);
+
+            $smsMessage = $res->data[$i][5];
+
+           $timeStamp = $res->data[$i][2];
+
+           //retrieving the sender
+            $sender = $res->data[$i][3];
+
+           //searching if this message has been saved previously
+           $search  = \App\Models\SmsModel::where(['incoming_timestamp'=>$timeStamp,'port_received_at'=>$portNum,'sim_number_sent_to'=>$simNo])->first();
+
+           if(is_null($search)){
+           //setup message saving in the DB
+            $cr = \App\Models\SmsModel::create([
+                'port_received_at' => $portNum,
+                'sim_number_sent_to'=>$simNo,
+                '_msg' => $smsMessage,
+                'msg_type'=>'incoming',
+                'msg_activity_state '=>1,
+                'msg_sender_no' => $sender,
+                'active_state' => true,
+                'created_at' => date('Y-m-d h:i:s',time()),
+                'incoming_timestamp' =>$timeStamp
+            ]);
+
+        }
+        }
+
+//        print_r($res->data[4][1]);
+
+
+   return response()->json(['data'=>json_decode($response),'message'=>'Success'],200);
 
     }catch(\Exception $e){
 
-    return response()->json(['data'=>null,'message'=>'error'],404);
+    return response()->json(['data'=>null,'message'=>'error', 'error'=>$e->getMessage()],404);
 
     }
 
