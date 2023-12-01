@@ -43,7 +43,7 @@ Route::post('/update-password',[\App\Http\Controllers\Auth\UserController::class
 
 
 //====================GROUP OF AUTHENTICATED ROUTES====================
-Route::group(['middleware' => ['auth:sanctum']], function () {
+//Route::group(['middleware' => ['auth:sanctum']], function () {
 
 //FETCH ALL CONTACTS
 Route::get('/get-all-contacts',[\App\Http\Controllers\ContactModelController::class,'index'])->name('get_all_contact');
@@ -196,5 +196,5 @@ Route::delete('/delete-user-account',[\App\Http\Controllers\Auth\UserController:
 Route::delete('/delete-all-contacts',[\App\Http\Controllers\ContactModelController::class,'delete_all_contact']);
 
 
-});
+//});
 

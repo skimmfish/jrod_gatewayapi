@@ -213,12 +213,12 @@ public function fetch_sms_from_gateway(){
             $cr = \App\Models\SmsModel::create([
                 'port_received_at' => $portNum,
                 'sim_number_sent_to'=>$simNo,
-                '_msg' => $smsMessage,
+                '_msg' => base64_decode($smsMessage),
                 'msg_type'=>'incoming',
                 'msg_activity_state '=>1,
                 'active_state' => true,
                 'msg_sender_no'=> $sender,
-                'created_at' => date('Y-m-d h:i:s',time()),
+                'created_at' => date('Y-m-d h:i:s',$timeStamp),
                 'incoming_timestamp' =>$timeStamp
             ]);
 
@@ -254,7 +254,7 @@ public function stream(){
 
             //latest sms on the gateway modem
             $this->fetch_sms_from_gateway();
-            $latestSms = \App\Models\SmsModel::latest()->get();
+            $latestSms = \App\Models\SmsModel::get()->last();
 
             if($latestSms){
 
@@ -699,7 +699,7 @@ public function send_sms($sim_port_number,$recipient,$sms){
                 'msg_activity_state '=>1,
                 'msg_sender_no' => $sender,
                 'active_state' => true,
-                'created_at' => date('Y-m-d h:i:s',time()),
+                'created_at' => date('Y-m-d h:i:s',$timeStamp),
                 'incoming_timestamp' =>$timeStamp
             ]);
 
