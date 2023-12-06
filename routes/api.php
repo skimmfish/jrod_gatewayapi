@@ -128,18 +128,24 @@ Route::put('/change-contact-number-state/{contact_id}/{contact_state}',[\App\Htt
 Route::get('/get-sms-messages-by-simnum/{sim_num}',[\App\Http\Controllers\SmsModelController::class,'get_sms_by_sim_num'])->name('get_sms_portnum');
 
 
+//this route fetches all sms for a particular thread
+Route::get('/view-sms-thread-by-num/{recipient}',[\App\Http\Controllers\SmsModelController::class,'view_sms_thread']);
+
 //get sms messages by port_number
 Route::get('/get-sms-messages-by-port/{port_num}',[\App\Http\Controllers\SmsModelController::class,'get_sms_by_port_num'])->name('get_sms_port_num');
 
 //this is the server event stream that would be triggered to start the background event
 Route::get('/get-stream',[\App\Http\Controllers\SmsModelController::class,'stream']);
 
+//for sending Push Notification to app user
+Route::post('/push-sms-notification',[\App\Http\Controllers\SmsModelController::class,'sendPushNotification']);
+
 //this for deleting sms
 Route::delete('/delete-sms-resource/{id}',[\App\Http\Controllers\SmsModelController::class,'deleteResource']);
 
 
 //show a single sms
-Route::get('/read-sms/{id}',[\App\Http\Controllers\SmsModelController::class,'show-sms']);
+Route::get('/read-sms/{id}',[\App\Http\Controllers\SmsModelController::class,'show_sms']);
 
 
 //===============THIS SECTION FOR SENDING SMS & ADMINISTERING SMS=========================

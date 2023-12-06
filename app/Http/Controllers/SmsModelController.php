@@ -111,9 +111,35 @@ try{
     }
 
 
+    /**
+     * This function fetches sms for each phone number in a thread of sms sent/or received  to that particular number
+     * @queryParam recipient String Example: +123920190929
+     * @header Connection keep-alive
+     * @header Accept * / *
+     * @header Content-Type application/json;utf-8
+     * @header Authorization Bearer AUTH_TOKEN
+
+     *
+     */
+    public function view_sms_thread($recipient){
+
+        try{
+
+            $msgThread = \App\Models\SmsModel::where(['sim_number_sent_to'=>$recipient])->whereNotNull('_msg')->get();
+            if(sizeof($msgThread)>0){
+            return response()->json(['data'=>$msgThread,'status'=>'success','message'=>'sms_thread_retrieved'],200);
+            }else{
+                return response()->json(['data'=>NULL,'status'=>'success','message'=>'no_thread_for_recipient'],200);
+            }
+
+        }catch(\Exception $e){
+            return response()->json(['data'=>null,'status'=>'fail','message'=>'error: '.$e->getMessage()],400);
+        }
+    }
+
     /***
      * Function retrieves messages by a particular sim card as saved in the database
-     * @bodyParam $sim_num String Example: +125902920998
+     * @bodyParam sim_num String Example: +125902920998
      *
      * @response{
      * 'data': []
@@ -258,7 +284,9 @@ public function stream(){
 
             if($latestSms){
 
-            echo 'data: {"most_recent_sms":"' . base64_decode($latestSms->_msg) . '"sent_to":"'. $latestSms->sim_number_sent_to.'}' . "\n\n";
+            $data = ['most_recent_sms' =>$latestSms->_msg, 'sent_to' => $latestSms->sim_number_sent_to];
+
+            echo $data;
 
         }
 
@@ -275,6 +303,59 @@ public function stream(){
         ]);
 
 }
+
+
+    /**
+     * This function sends push notification to the app each time there is a new sms
+     *
+     */
+    public function sendPushNotification(Request $request){
+
+        $fcmToken = \App\Models\User::where(['id'=>1])->pluck('fcm_token')->first();
+
+        $SERVER_KEY = env('FCM_SERVER_KEY');
+
+try{
+        //get the last sms from the DB for incoming SMS
+        $latestSms = \App\Models\SmsModel::get()->last();
+
+        if($latestSms){
+
+            $data = [
+                "registration_ids" => $fcmToken,
+                "notification" => [
+                    "title" => "New SMS Notification",
+                    "body" => $latestSms->_msg,
+                ]
+            ];
+
+            $res = json_encode($data);
+
+            $headers = [
+                'Authorization: key=' . $SERVER_KEY,
+                'Content-Type: application/json',
+            ];
+
+            $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $res);
+
+            $response = curl_exec($ch);
+
+            return response()->json(['data'=>$response,'status'=>'success'],200);
+        }
+
+
+    }catch(\Exception $e){
+    return response()->json(['data'=>NULL,'status'=>'fail','error'=>$e->getMessage()],500);
+    }
+
+    }
 
 /**
  * @queryParam SimModuleRequest $request
@@ -437,6 +518,8 @@ public function send_bulk_sms(Request $request){
     $recipients = ($request->recipient);
 
 
+    $response = array();
+
     //this is to hold all recipients
     $allRecipients = NULL;
 
@@ -450,9 +533,41 @@ public function send_bulk_sms(Request $request){
     //forming the api call link with its parameters
     $this->mergedURL = $this->api_ip_address.'&recipients='.$allRecipients.'&charset=Utf-8&port='.$sim_port_number.'&sms='.rawurlencode($sms);
 
+    $sender = \App\Models\SimModule::where(['sim_port_number'=>$sim_port_number])->pluck('sim_number')->first();
+
+    //sending the sms here
     $response = \App\Models\ConfigModel::callAPI('GET',$this->mergedURL,$body);
 
-    return response()->json(['data'=>json_decode($response),'message'=>'success'],200);
+   for($i=0;$i<sizeof($recipients);$i++){
+
+        //saving it in the database first of all
+        $saveToDb = \App\Models\SmsModel::create([
+            'sim_number_sent_to'=>$recipients[$i],
+            '_msg'=> $sms,
+            'group_status'=>'bulk',
+            'msg_activity_state' => 1,
+            'msg_sender_no'=>$sender,
+            'msg_type'=>'outgoing',
+            'active_state'=>true,
+            'port_sent_from'=>$sim_port_number,
+            'created_at'=>date('Y-m-d h:i:s',time()),
+            'updated_at'=>date('Y-m-d h:i:s',time())
+        ]);
+
+        }
+
+        //decoding the response payload into a string
+       $dat = json_decode($response);
+
+if($response=='connection_failure'){
+    return response()->json(['data'=>null,'message'=>'fail_on_connection_failure'],500);
+    }elseif($dat->message=='Not Registered'){
+        return response()->json(['data'=>null,'message'=>'sim_not_registered'],500);
+    }elseif($dat->code==5){
+        return response()->json(['data'=>[],'message'=>'msg_not_sent'],500);
+    }
+
+    return response()->json(['data'=>$dat,'message'=>'success'],200);
 
     }catch(\Exception $e){
     return response()->json(['data'=>null,'message'=>'error','error'=>$e->getMessage()],404);
@@ -487,6 +602,8 @@ public function send_bulk_sms(Request $request){
 
 public function send_single_sms(Request $request){
 
+    $response = array();
+
     $rule =  [
     'recipient'=>['required',"string"],
     '_msg'=>['required',"string"],
@@ -519,6 +636,8 @@ public function send_single_sms(Request $request){
         'msg_sender_no'=>$sender,
         'msg_type'=>'outgoing',
         'active_state'=>true,
+        'port_sent_from'=>$sim_port_number,
+        'group_status'=>'single',
         'created_at'=>date('Y-m-d h:i:s',time()),
         'updated_at'=>date('Y-m-d h:i:s',time())
     ]);
@@ -531,14 +650,23 @@ public function send_single_sms(Request $request){
 
     $response = \App\Models\ConfigModel::callAPI('get',$this->mergedURL,$body);
 
-    return response()->json(['data'=>json_decode($response),'message'=>'Success'],200);
+        //decoding the response payload into a string
+        $dat = json_decode($response);
 
-    }catch(\Exception $e){
 
-    return response()->json(['data'=>null,'message'=>'error'],404);
+        if($response=='connection_failure'){
+            return response()->json(['data'=>null,'message'=>'fail_on_connection_failure'],500);
+            }elseif($dat->message=='Not Registered'){
+                return response()->json(['data'=>null,'message'=>'sim_not_registered'],500);
+            }elseif($dat->code==5){
+                return response()->json(['data'=>[],'message'=>'msg_not_sent'],500);
+            }
 
-    }
+            return response()->json(['data'=>$dat,'message'=>'success'],200);
 
+            }catch(\Exception $e){
+            return response()->json(['data'=>null,'message'=>'error','error'=>$e->getMessage()],404);
+        }
 
 }
 
@@ -801,6 +929,7 @@ public function parse_sms(Request $request){
         return response()->json(['data'=>NULL,'message'=>'error'],404);
     }
     }
+
 
 } //end of class
 

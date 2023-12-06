@@ -77,7 +77,7 @@ public static function callAPI($method, $url, $data){
     curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     // EXECUTE:
     $result = curl_exec($curl);
-    if(!$result){die("Connection Failure");}
+    if(!$result){return 'connection_failure';}
     curl_close($curl);
     return $result;
  }

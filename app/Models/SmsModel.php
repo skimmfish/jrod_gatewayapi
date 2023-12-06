@@ -21,7 +21,9 @@ class SmsModel extends Model
         'active_state',
         'transfer_status',
         'port_received_at',
+        'group_status',
         'incoming_timestamp'
+
     ];
 
     protected $dates = ['updated_at','deleted_at','created_at'];

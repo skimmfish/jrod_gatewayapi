@@ -85,9 +85,14 @@ class SimModuleController extends Controller
         $this->mergedURL = $this->modem_reboot_ip.'&op=reset&ports=all,*';
         $body = [];
         try{
-        $response = \App\Models\ConfigModel::callAPI('POST',$this->mergedURL,$body);
-        return response()->json(['data'=>json_decode($response),'status'=>'success','message'=>'Modem rebooted successfully'],200);
 
+            $response = \App\Models\ConfigModel::callAPI('POST',$this->mergedURL,$body);
+
+if($response!='connection_failure'){
+        return response()->json(['data'=>json_decode($response),'status'=>'success','message'=>'Modem rebooted successfully'],200);
+}else{
+    return response()->json(['data'=>json_decode($response),'status'=>'failed','message'=>'connection_failure'],500);
+}
         }catch(\Exception $e){
             return response()->json(['data'=>NULL,'message'=>'error','error'=>$e->getMessage()],500);
         }
@@ -175,8 +180,11 @@ class SimModuleController extends Controller
 
 //        \Log::info($response);
 
-        return response()->json(['data'=>json_decode($response),'message'=>'success'],200);
-
+if($response!='connection_failure'){
+        return response()->json(['data'=>json_decode($response),'message'=>'success','status'=>true],200);
+}else{
+    return response()->json(['data'=>NULL,'message'=>'connection_failure','status'=>false],500);
+}
     }catch(Exception $e){
         return response()->json(['data'=>NULL,'message'=>'error','error'=>$e->getMessage()],200);
     }
@@ -213,22 +221,11 @@ class SimModuleController extends Controller
 
   $response = \App\Models\ConfigModel::callAPI('GET',$this->api_ip_address_at,$body);
 
-
-        /*$datar = Http::withHeaders([
-
-            'Content-Type' => 'application/json',
-            'Host' => '54.179.122.227:52538',
-            'Connection' => 'close',*/
-/*            //'Accept' => "*"
-
-            ])->get($this->api_ip_address_at);
-*/
-
       $getSim =  \App\Models\SimModule::where('sim_port_number',$port_id)->first();
 
       $data = json_decode($response);
 
-            \Log::info($response);
+            //\Log::info($response);
 
   if($data->reason=='OK'){
     \DB::update("UPDATE sim_modules SET current_port_state=? WHERE sim_port_number=?",[true,$port_id]);
