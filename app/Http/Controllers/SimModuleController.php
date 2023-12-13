@@ -225,11 +225,19 @@ if($response!='connection_failure'){
 
       $data = json_decode($response);
 
-            //\Log::info($response);
+        
+    if($response=='connection_failure'){
+        return response()->json(['data'=>NULL,'message'=>'connection_failure', 'status'=>'failed'],500);
+    }else{
 
-  if($data->reason=='OK'){
+  if(!is_null($data)){
+    if($data->reason=='OK'){
     \DB::update("UPDATE sim_modules SET current_port_state=? WHERE sim_port_number=?",[true,$port_id]);
     }
+  }
+
+}
+
 
 return response()->json(['data'=>json_decode($response),'id'=>$getSim->id,'message'=>'success'],200);
 
@@ -258,7 +266,9 @@ return response()->json(['data'=>json_decode($response),'id'=>$getSim->id,'messa
  *
  */
  public function get_all_sms_for_sim_by_number($sim_number){
+
  try{
+
    $resultSet = \App\Models\SmsModel::where(['msg_sender_no'=>$sim_number])->orWhere(['sim_number_sent_to'=>$sim_number])->orderBy('created_at','DESC')->get();
 
    if(sizeof($resultSet)>0){

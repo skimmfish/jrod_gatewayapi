@@ -19,16 +19,59 @@ class UserController extends Controller
         $this->rules = [];
     }
 
+    /**
+     * This function updates the device's fcm_token
+     * @bodyParam device_fcmtoken String Example: 004e1901922010302
+     * @bodyParam usr_id Integer Example: 1,2,3,4,5,6
+     * @bodyParam device_id String Example: 002930aa1...........
+     *
+     * @header Accept-Language: en,
+     * @header Accept:  application/json;utf-8,
+     * @header Connection: keep-alive
+     * @header Authorization Bearer AUTH_TOKEN
+
+     *
+     */
+    public function update_device_fcmtoken(Request $request){
+
+        $rules = [
+            'device_fcmtoken'=>['required','string','max:255'],
+            'usr_id'=>['required','integer'],
+            'device_id'=>['required','string']
+        ];
+
+        try{
+            $request->validate($rules);
+
+            $token = $request->device_fcmtoken;
+            $usr_id = $request->usr_id;
+            $device_id = $request->device_id;
+
+            //updating the fcm_token now
+            $usr = \App\Models\User::findOrFail($usr_id);
+
+            $usr->fcm_token = $token;
+            $usr->device_id = $device_id;
+
+            //saving the updated column
+            $usr->save();
+
+            return response()->json(['data'=>$usr,'status'=>'success','message'=>'device_fcm_token updated successfully'],200);
+
+        }catch(\Exception $e){
+            return response()->json(['data'=>null,'status'=>'failed'],400);
+        }
+
+    }
+
 
     /**
      * This function logs in a user that has been verified previously
      * @queryParam \Illuminate\Http\Request $request
      *
-     *
      * @header Accept-Language: en,
      * @header Accept:  application/json;utf-8,
      * @header Connection: keep-alive
-
 
      * @bodyParam   email_or_phone_number    string  required    The email/phone number of the  user.      Example: jayden@gm.co.uk / +1240291092
      * @bodyParam   password    string  required    The password of the  user.      Example: Rock1234@
@@ -68,11 +111,15 @@ class UserController extends Controller
     $user = \Auth::user();
 
    // \Auth::loginUsingId($user->id);
+    $token = $user->createToken('Login API token on '.date('Y-m-d h:i:s',time()).' '.$user->email,$abilities = ['*'])->plainTextToken;
+    //updating the user's token
 
-    return response()->json(["data"=>$user,
-    'auth_token'=>'Bearer '.$user->createToken('Login API token on '.date('Y-m-d h:i:s',time()).' '.$user->email,
-    $abilities = ['*'])->plainTextToken,
-    'message'=>'success'],200);
+    $id = auth()->user()->id;
+    $usr = \App\Models\User::findOrFail($id);
+        $usr->fcm_token = $token;
+        $usr->save();
+
+    return response()->json(["data"=>$user,  'auth_token'=>'Bearer '.$token,  'message'=>'success'],200);
     }
 
 }else{

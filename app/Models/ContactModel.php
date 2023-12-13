@@ -18,6 +18,7 @@ class ContactModel extends Model
         'contact_lname',
         'contact_state',
         'sim_contact_saved_to',
+        'port_number'
     ];
 
     protected $dates = ['created_at','updated_at','deleted_at'];

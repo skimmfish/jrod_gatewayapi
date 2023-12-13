@@ -6,6 +6,9 @@ use App\Models\SmsModel;
 use Illuminate\Http\Request;
 use App\Http\Requests\SimModuleRequest;
 use Illuminate\Support\Facades\Http;
+use App\Events\NewSms;
+use Laravel\Sanctum\PersonalAccessToken;
+
 
 class SmsModelController extends Controller
 {
@@ -28,6 +31,7 @@ public function __construct(){
  $this->sms_fetch_ip = \App\Models\ConfigModel::get_conn_param('api_port_ip')['value'].'/goip_get_sms.html?username='.$this->api_username.'&password='.$this->api_password.'&sms_num=0';
 
  $this->sms_stats =  \App\Models\ConfigModel::get_conn_param('api_port_ip')['value'].'/goip_get_sms_stat.html?username='.$this->api_username.'&password='.$this->api_password;
+
 }
 
 
@@ -155,16 +159,18 @@ try{
     public function get_sms_by_sim_num($sim_num){
     try{
 
-        $msgs = \App\Models\SmsModel::where(['msg_sender_no'=>$sim_num])->get();
-
-    return response()->json(['data'=>$msgs],200);
+        $msgThread = \App\Models\SmsModel::where(['sim_number_sent_to'=>$sim_num])->whereNotNull('_msg')->get();
+        if(sizeof($msgThread)>0){
+        return response()->json(['data'=>$msgThread,'status'=>'success','message'=>'sms_thread_retrieved'],200);
+        }else{
+            return response()->json(['data'=>NULL,'status'=>'success','message'=>'no_thread_for_recipient'],200);
+        }
 
 }catch(\Exception $e){
     return response()->json(['data'=>NULL,'exception'=>$e->getMessage()],404);
 
 }
 }
-
 
 
     /***
@@ -185,9 +191,20 @@ try{
 public function get_sms_by_port_num($port_num){
 
     try{
-        $msgs = \App\Models\SmsModel::where(['port_sent_from'=>$port_num])->orWhere('port_received_at',$port_num)->get();
 
-        return response()->json(['data'=>$msgs,'status'=>'success'],200);
+        //fire the NewSmsMessage Dispatch
+//        NewSms::dispatch();
+
+      $msgs = \App\Models\SmsModel::distinct()->select('sim_number_sent_to','port_sent_from','read_status','_msg','created_at')->where(['port_sent_from'=>$port_num])->whereNotNull('_msg')->orderBy('created_at','DESC')->get();
+
+      $msg = \App\Models\SmsModel::distinct()->select('sim_number_sent_to','port_sent_from','read_status','_msg','created_at')->where(['port_sent_from'=>$port_num])->whereNotNull('_msg')->orderBy('created_at','DESC')->get();
+
+
+            //converting the messages into a unique associative array
+          $msg = collect($msgs)->unique('sim_number_sent_to')->toArray();
+        //$msg = $msg.toArray();
+
+        return response()->json(['data'=> array_values($msg),'status'=>'success'],200);
 
     }catch(\Exception $e){
 
@@ -261,6 +278,17 @@ public function fetch_sms_from_gateway(){
 }
 
 /**
+ * This function tests if the broadcast is sent successfully
+ *
+ */
+public function get_broadcast(){
+
+return event(new \App\Events\NewSms('Hello broadcasting now!'));
+
+}
+
+
+/**
  * This function fetches messages by proding the skyline modem at every 50ms
  *
  * @header Content-Type text/event-stream
@@ -280,15 +308,26 @@ public function stream(){
 
             //latest sms on the gateway modem
             $this->fetch_sms_from_gateway();
-            $latestSms = \App\Models\SmsModel::get()->last();
+            $latestSms = \App\Models\SmsModel::where(['push_status'=>false,'read_status'=>false])->get()->last();
 
             if($latestSms){
 
-            $data = ['most_recent_sms' =>$latestSms->_msg, 'sent_to' => $latestSms->sim_number_sent_to];
+            //echo 'data: {"New Sms from "' .$latestSms->msg_sender_no. '":"' . $latestSms->_msg . '", "sent_to":"' . $latestSms->sim_number_sent_to . '"}"' . "\n\n";
 
-            echo $data;
+            //call the pushnotification function from here
+            $this->sendPushNotification($latestSms);
 
         }
+
+               //we break out of the current thread to proceed
+                break;
+
+                //update the push status for the message
+                $sms = \App\Models\SmsModel::findOrFail($latestSms->id);
+                $sms->push_status = true;
+                $sms->save();
+
+                continue;
 
                 ob_flush();
                 flush();
@@ -296,10 +335,10 @@ public function stream(){
                 // Break the loop if the client aborted the connection (closed the page)
                 if (connection_aborted()) {break;}
                 usleep(50000); // 50ms
-            }
+                }
         }, 200, [
             'Cache-Control' => 'no-cache',
-            'Content-Type' => 'text/event-stream',
+            'Content-Type' => 'text/event-stream'
         ]);
 
 }
@@ -309,20 +348,20 @@ public function stream(){
      * This function sends push notification to the app each time there is a new sms
      *
      */
-    public function sendPushNotification(Request $request){
+    public function sendPushNotification($latestSms){
 
         $fcmToken = \App\Models\User::where(['id'=>1])->pluck('fcm_token')->first();
+        // $token = (PersonalAccessToken::findToken($fcmToken))['fcm_token'];
 
         $SERVER_KEY = env('FCM_SERVER_KEY');
 
-try{
+        try{
         //get the last sms from the DB for incoming SMS
-        $latestSms = \App\Models\SmsModel::get()->last();
+       // $latestSms = \App\Models\SmsModel::where(['push_status'=>false,'read_status'=>false])->get()->last();
 
         if($latestSms){
-
             $data = [
-                "registration_ids" => $fcmToken,
+                "registration_ids" => array($fcmToken),
                 "notification" => [
                     "title" => "New SMS Notification",
                     "body" => $latestSms->_msg,
@@ -347,14 +386,16 @@ try{
 
             $response = curl_exec($ch);
 
+            //update the sms's push_status
+            $latestSms->push_status = true;
+            $latestSms->save();
+
             return response()->json(['data'=>$response,'status'=>'success'],200);
         }
-
 
     }catch(\Exception $e){
     return response()->json(['data'=>NULL,'status'=>'fail','error'=>$e->getMessage()],500);
     }
-
     }
 
 /**
@@ -656,11 +697,13 @@ public function send_single_sms(Request $request){
 
         if($response=='connection_failure'){
             return response()->json(['data'=>null,'message'=>'fail_on_connection_failure'],500);
-            }elseif($dat->message=='Not Registered'){
-                return response()->json(['data'=>null,'message'=>'sim_not_registered'],500);
             }elseif($dat->code==5){
-                return response()->json(['data'=>[],'message'=>'msg_not_sent'],500);
+                if($dat->message){
+                if($dat->message=='Not Registered'){
+                return response()->json(['data'=>null,'message'=>'sim_not_registered_msg_not_sent'],500);
             }
+        }
+    }
 
             return response()->json(['data'=>$dat,'message'=>'success'],200);
 

@@ -389,7 +389,69 @@ public function get_contact_by_port_number($port_number){
 
 }
 
+
+   /**
+     * this function fetches all archived contacts
+     * @header Connection keep-alive
+     * @header Accept * / *
+     * @header Content-Type application/json;utf-8
+     * @header Authorization Bearer AUTH_TOKEN
+     */
+
+    public function fetch_archived_contacts(){
+
+        try{
+
+        $allSuch =  \App\Models\ContactModel::where('contact_state',2)->get();
+
+        if(sizeof($allSuch)>0){
+
+            return response()->json(['data'=>$allSuch,'status'=>true,'message'=>'success'],200);
+        }else{
+
+            return response()->json(['data'=>NULL,'status'=>false,'message'=>'No such contacts found'],404);
+
+            }
+            }catch(\Exception $e){
+
+                return response()->json(['data'=>NULL,'error'=>$e->getMessage()],500);
+            }
+
+
+}
     /**
+     * this function fetches all blacklisted contacts
+     * @header Connection keep-alive
+     * @header Accept * / *
+     * @header Content-Type application/json;utf-8
+     * @header Authorization Bearer AUTH_TOKEN
+
+     */
+
+     public function fetch_blacklisted_contacts(){
+
+        try{
+
+        $allSuch =  \App\Models\ContactModel::where('contact_state',3)->get();
+
+        if(sizeof($allSuch)>0){
+
+            return response()->json(['data'=>$allSuch,'status'=>true,'message'=>'success'],200);
+        }else{
+
+            return response()->json(['data'=>NULL,'status'=>false,'message'=>'No such contacts found'],404);
+
+            }
+            }catch(\Exception $e){
+
+                return response()->json(['data'=>NULL,'error'=>$e->getMessage()],500);
+            }
+
+    }
+
+
+
+/**
      * Removes a contact from the contact database table
      *
      * @queryParam $id Integer Example: 1,2,3,4

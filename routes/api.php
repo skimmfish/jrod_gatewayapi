@@ -41,9 +41,11 @@ Route::post('/forgot-password',[\App\Http\Controllers\Auth\UserController::class
 Route::post('/update-password',[\App\Http\Controllers\Auth\UserController::class,'update_usr_password'])->name('update_forgotten_password_ro');
 
 
-
 //====================GROUP OF AUTHENTICATED ROUTES====================
 //Route::group(['middleware' => ['auth:sanctum']], function () {
+
+//retrieve the device fcm_token
+Route::post('/update-devicefcm_token',[\App\Http\Controllers\Auth\UserController::class,'update_device_fcmtoken']);
 
 //FETCH ALL CONTACTS
 Route::get('/get-all-contacts',[\App\Http\Controllers\ContactModelController::class,'index'])->name('get_all_contact');
@@ -96,6 +98,8 @@ Route::post('/save-new-contact',[\App\Http\Controllers\ContactModelController::c
 //add new sim configuration to the database table - DONE
 Route::post('/add-new-sim-configuration',[\App\Http\Controllers\SimModuleController::class,'store']);
 
+//receive and test broadcast
+Route::get('/get-broadcast',[\App\Http\Controllers\SmsModelController::class,'get_broadcast']);
 
 //get contact by arbitrary name
 Route::get('/get-contact-by-fname/{f_name}',[\App\Http\Controllers\ContactModelController::class,'get_contact_by_fname']);
@@ -126,7 +130,6 @@ Route::put('/change-contact-number-state/{contact_id}/{contact_state}',[\App\Htt
 
 //get sms messages by sim_number
 Route::get('/get-sms-messages-by-simnum/{sim_num}',[\App\Http\Controllers\SmsModelController::class,'get_sms_by_sim_num'])->name('get_sms_portnum');
-
 
 //this route fetches all sms for a particular thread
 Route::get('/view-sms-thread-by-num/{recipient}',[\App\Http\Controllers\SmsModelController::class,'view_sms_thread']);
@@ -189,18 +192,17 @@ Route::post('/get-issues-done/{port_id}',[\App\Http\Controllers\SimModuleControl
 //Route::get('/view-archived-sms');
 
 //for viewing archived contacts
-Route::get('/get-all-archived-contacts/2',[\App\Http\Controllers\ContactModelController::class,'fetch_contacts_by_state']);
+Route::get('/get-all-archived-contacts',[\App\Http\Controllers\ContactModelController::class,'fetch_archived_contacts']);
 
 
 //for viewing blacklisted contacts
-Route::get('/get-all-blacklisted-contacts/3',[\App\Http\Controllers\ContactModelController::class,'fetch_contacts_by_state']);
+Route::get('/get-all-blacklisted-contacts',[\App\Http\Controllers\ContactModelController::class,'fetch_blacklisted_contacts']);
 
 //for deleting account, the currently logged in account
 Route::delete('/delete-user-account',[\App\Http\Controllers\Auth\UserController::class,'delete_logged_user']);
 
 //for deleting all contacts at once
 Route::delete('/delete-all-contacts',[\App\Http\Controllers\ContactModelController::class,'delete_all_contact']);
-
 
 //});
 

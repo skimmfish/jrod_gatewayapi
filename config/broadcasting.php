@@ -62,6 +62,14 @@ return [
             'driver' => 'null',
         ],
 
+        'options' => [
+            'cluster' => 'mt1',
+            'useTLS' => false,
+            'scheme'=>'http',
+            'host'=>'127.0.0.1',
+            'encrypted'=>false
+          ],
+
     ],
 
 ];
