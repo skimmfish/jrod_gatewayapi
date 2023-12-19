@@ -50,7 +50,7 @@ class UserController extends Controller
             //updating the fcm_token now
             $usr = \App\Models\User::findOrFail($usr_id);
 
-            $usr->fcm_token = $token;
+            $usr->fcm_token_key = $token;
             $usr->device_id = $device_id;
 
             //saving the updated column
@@ -116,7 +116,7 @@ class UserController extends Controller
 
     $id = auth()->user()->id;
     $usr = \App\Models\User::findOrFail($id);
-        $usr->fcm_token = $token;
+        $usr->fcm_token_key = $token;
         $usr->save();
 
     return response()->json(["data"=>$user,  'auth_token'=>'Bearer '.$token,  'message'=>'success'],200);

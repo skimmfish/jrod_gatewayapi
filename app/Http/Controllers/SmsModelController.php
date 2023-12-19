@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Models\SmsModel;
 use Illuminate\Http\Request;
 use App\Http\Requests\SimModuleRequest;
@@ -229,11 +227,14 @@ public function fetch_sms_from_gateway(){
 
         $response = \App\Models\ConfigModel::callAPI('GET',$this->sms_fetch_ip,$body);
 
+        //print_r($response);
+
         $res = json_decode($response);
         $sizeofSMS = sizeof($res->data);
 
         $reformedArr = array();
-        for($i=0;$i< $sizeofSMS;$i++){
+
+        for($i=0;$i<$sizeofSMS;$i++){
 
            $portNum = explode(".",$res->data[$i][1])[0];
 
@@ -243,10 +244,10 @@ public function fetch_sms_from_gateway(){
             $smsMessage = $res->data[$i][5];
 
             //decoding the timestamp the sms was sent
-           $timeStamp = $res->data[$i][2];
+            $timeStamp = $res->data[$i][2];
 
            //retrieving the sender
-           $sender = $res->data[$i][3];
+            $sender = $res->data[$i][3];
 
            //searching if this message has been saved previously
            $search  = \App\Models\SmsModel::where(['incoming_timestamp'=>$timeStamp,'port_received_at'=>$portNum,'sim_number_sent_to'=>$simNo])->first();
@@ -268,13 +269,13 @@ public function fetch_sms_from_gateway(){
         }
         }
 
+        return response()->json(['data'=>$res,'message'=>'sms_fetched_successfully','status'=>'success'],200);
+
     }catch(\Exception $e){
 
     return response()->json(['data'=>null,'message'=>'error', 'error'=>$e->getMessage()],404);
 
     }
-
-
 }
 
 /**
@@ -284,9 +285,14 @@ public function fetch_sms_from_gateway(){
 public function get_broadcast(){
 
 return event(new \App\Events\NewSms('Hello broadcasting now!'));
-
 }
 
+
+public function getsm(){
+
+return $latestSms = \App\Models\SmsModel::where(['push_status'=>false,'read_status'=>false,'msg_type'=>'incoming'])->get()->last();
+
+}
 
 /**
  * This function fetches messages by proding the skyline modem at every 50ms
@@ -297,37 +303,46 @@ return event(new \App\Events\NewSms('Hello broadcasting now!'));
  * @header Authorization Bearer AUTH_TOKEN
  *
  */
-public function stream(){
+public function gtstream(){
 
     $latestSms = NULL;
+    $fetchedSms = array();
 
     return response()->stream(function(){
 
         while(true){
-           // $curDate = date('Y-m-d h:i:s',time());
 
             //latest sms on the gateway modem
             $this->fetch_sms_from_gateway();
-            $latestSms = \App\Models\SmsModel::where(['push_status'=>false,'read_status'=>false])->get()->last();
 
-            if($latestSms){
+            $latestSms = \App\Models\SmsModel::where(['push_status'=>false,'read_status'=>false,'msg_type'=>'incoming'])->get();
 
-            //echo 'data: {"New Sms from "' .$latestSms->msg_sender_no. '":"' . $latestSms->_msg . '", "sent_to":"' . $latestSms->sim_number_sent_to . '"}"' . "\n\n";
+            if(sizeof($latestSms)>0){
+
+                foreach($latestSms as $x){
+
+              \Log::info('data: {"New Sms from "' .$x->msg_sender_no. '":"' . $x->_msg . '", "sent_to":"' . $x->sim_number_sent_to . '"}"');
 
             //call the pushnotification function from here
-            $this->sendPushNotification($latestSms);
+                $pushStatus = $this->sendPushNotification();
 
-        }
+               \Log::info($pushStatus);
 
                //we break out of the current thread to proceed
-                break;
+               break;
 
                 //update the push status for the message
-                $sms = \App\Models\SmsModel::findOrFail($latestSms->id);
+                $sms = \App\Models\SmsModel::findOrFail($x->id);
                 $sms->push_status = true;
+                $sms->updated_at = date('Y-m-d h:i:s',time());
                 $sms->save();
 
-                continue;
+            } //end of foreach loop
+
+            break;
+       }
+
+                    continue;
 
                 ob_flush();
                 flush();
@@ -335,7 +350,8 @@ public function stream(){
                 // Break the loop if the client aborted the connection (closed the page)
                 if (connection_aborted()) {break;}
                 usleep(50000); // 50ms
-                }
+                } //end of while loop
+
         }, 200, [
             'Cache-Control' => 'no-cache',
             'Content-Type' => 'text/event-stream'
@@ -348,19 +364,22 @@ public function stream(){
      * This function sends push notification to the app each time there is a new sms
      *
      */
-    public function sendPushNotification($latestSms){
+    public function sendPushNotification(){
 
-        $fcmToken = \App\Models\User::where(['id'=>1])->pluck('fcm_token')->first();
-        // $token = (PersonalAccessToken::findToken($fcmToken))['fcm_token'];
+        $fcmToken = \App\Models\User::where(['id'=>11])->pluck('fcm_token_key')->first();
 
         $SERVER_KEY = env('FCM_SERVER_KEY');
 
+//        \Log::info("fcm_token:".$fcmToken);
+  //      \Log::info("server_key: ".$SERVER_KEY);
+
         try{
         //get the last sms from the DB for incoming SMS
-       // $latestSms = \App\Models\SmsModel::where(['push_status'=>false,'read_status'=>false])->get()->last();
+       $latestSms = \App\Models\SmsModel::where(['push_status'=>false,'read_status'=>false,'msg_type'=>'incoming'])->get()->last();
 
         if($latestSms){
-            $data = [
+
+                $data = [
                 "registration_ids" => array($fcmToken),
                 "notification" => [
                     "title" => "New SMS Notification",
@@ -386,10 +405,13 @@ public function stream(){
 
             $response = curl_exec($ch);
 
+           // \Log::info($response);
+
             //update the sms's push_status
             $latestSms->push_status = true;
             $latestSms->save();
 
+            //print_r($response);
             return response()->json(['data'=>$response,'status'=>'success'],200);
         }
 
@@ -458,7 +480,12 @@ public function get_all_sms_for_sim_by_no_param(SimModuleRequest $request){
         try{
      $singleSms = \App\Models\SmsModel::findOrFail($id);
 
-    return response()->json(['data'=>$singleSms,'message'=>'success'],200);
+     //modifying the read_status of the sms after it has been read
+     $singleSms->read_status = true;
+
+     $singleSms->save();
+
+     return response()->json(['data'=>$singleSms,'message'=>'success'],200);
 
     }catch(\Exception $e){
         return response()->json(['data'=>NULL,'message'=>'error'],404);
@@ -579,7 +606,20 @@ public function send_bulk_sms(Request $request){
     //sending the sms here
     $response = \App\Models\ConfigModel::callAPI('GET',$this->mergedURL,$body);
 
-   for($i=0;$i<sizeof($recipients);$i++){
+        //decoding the response payload into a string
+$dat = json_decode($response);
+
+if($response=='connection_failure'){
+    return response()->json(['data'=>null,'message'=>'fail_on_connection_failure'],500);
+    }elseif($dat->message=='Not Registered'){
+        return response()->json(['data'=>null,'message'=>'sim_not_registered'],500);
+    }elseif($dat->code==5){
+        return response()->json(['data'=>[],'message'=>'msg_not_sent'],500);
+    }else if($dat->code==6){
+        return response()->json(['data'=>[],'message'=>'session_timed_out'],500);
+    }
+
+    for($i=0;$i<sizeof($recipients);$i++){
 
         //saving it in the database first of all
         $saveToDb = \App\Models\SmsModel::create([
@@ -596,17 +636,6 @@ public function send_bulk_sms(Request $request){
         ]);
 
         }
-
-        //decoding the response payload into a string
-       $dat = json_decode($response);
-
-if($response=='connection_failure'){
-    return response()->json(['data'=>null,'message'=>'fail_on_connection_failure'],500);
-    }elseif($dat->message=='Not Registered'){
-        return response()->json(['data'=>null,'message'=>'sim_not_registered'],500);
-    }elseif($dat->code==5){
-        return response()->json(['data'=>[],'message'=>'msg_not_sent'],500);
-    }
 
     return response()->json(['data'=>$dat,'message'=>'success'],200);
 
@@ -669,21 +698,6 @@ public function send_single_sms(Request $request){
         $sender = $sim->sim_number;
     }
 
-    //saving it in the database first of all
-    $saveToDb = \App\Models\SmsModel::create([
-        'sim_number_sent_to'=>$request->recipient,
-        '_msg'=> $sms,
-        'msg_activity_state' => 1,
-        'msg_sender_no'=>$sender,
-        'msg_type'=>'outgoing',
-        'active_state'=>true,
-        'port_sent_from'=>$sim_port_number,
-        'group_status'=>'single',
-        'created_at'=>date('Y-m-d h:i:s',time()),
-        'updated_at'=>date('Y-m-d h:i:s',time())
-    ]);
-
-
     //forming the api call link with its parameters
      $this->mergedURL = $this->api_ip_address.'&port='.$sim_port_number.'&charset=Utf-8&recipients='.$recipient.'&sms='.rawurlencode($sms);
 
@@ -703,7 +717,23 @@ public function send_single_sms(Request $request){
                 return response()->json(['data'=>null,'message'=>'sim_not_registered_msg_not_sent'],500);
             }
         }
+    }else if($dat->code==6){
+        return response()->json(['data'=>[],'message'=>'session_timed_out'],500);
     }
+
+        //saving it in the database first of all
+        $saveToDb = \App\Models\SmsModel::create([
+            'sim_number_sent_to'=>$request->recipient,
+            '_msg'=> $sms,
+            'msg_activity_state' => 1,
+            'msg_sender_no'=>$sender,
+            'msg_type'=>'outgoing',
+            'active_state'=>true,
+            'port_sent_from'=>$sim_port_number,
+            'group_status'=>'single',
+            'created_at'=>date('Y-m-d h:i:s',time()),
+            'updated_at'=>date('Y-m-d h:i:s',time())
+        ]);
 
             return response()->json(['data'=>$dat,'message'=>'success'],200);
 
@@ -791,19 +821,6 @@ public function send_sms($sim_port_number,$recipient,$sms){
         if(!is_null($sim)){
             $sender = $sim->sim_number;
         }
-/*
-        //saving it in the database first of all
-        $saveToDb = \App\Models\SmsModel::create([
-            'sim_number_sent_to'=>$request->recipient,
-            '_msg'=> $sms,
-            'msg_activity_state' => 1,
-            'msg_sender_no'=>$sender,
-            'msg_type'=>'outgoing',
-            'active_state'=>true,
-            'created_at'=>date('Y-m-d h:i:s',time()),
-            'updated_at'=>date('Y-m-d h:i:s',time())
-        ]);
-*/
 
     return response()->json(['data'=>json_decode($response),'message'=>'Success'],200);
 
@@ -829,6 +846,7 @@ public function send_sms($sim_port_number,$recipient,$sms){
 
     public function get_all_sms(Request $request){
 
+        $sizeofSMS = 0;
     //forming the api call link with its parameters
     //declaring the body
     $body = [];
@@ -840,8 +858,9 @@ public function send_sms($sim_port_number,$recipient,$sms){
         $response = \App\Models\ConfigModel::callAPI('GET',$this->sms_fetch_ip,$body);
 
         $res = json_decode($response);
+        if(!is_null($res)){
         $sizeofSMS = sizeof($res->data);
-
+        }
         $reformedArr = array();
         for($i=0;$i< $sizeofSMS;$i++){
 
@@ -879,8 +898,11 @@ public function send_sms($sim_port_number,$recipient,$sms){
 
 //        print_r($res->data[4][1]);
 
-
+if($sizeofSMS<=0){
+    return response()->json(['data'=>NULL,'message'=>'No_sms_retrieved','status'=>'success'],200);
+}else{
    return response()->json(['data'=>json_decode($response),'message'=>'Success'],200);
+}
 
     }catch(\Exception $e){
 

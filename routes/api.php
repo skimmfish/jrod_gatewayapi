@@ -138,7 +138,7 @@ Route::get('/view-sms-thread-by-num/{recipient}',[\App\Http\Controllers\SmsModel
 Route::get('/get-sms-messages-by-port/{port_num}',[\App\Http\Controllers\SmsModelController::class,'get_sms_by_port_num'])->name('get_sms_port_num');
 
 //this is the server event stream that would be triggered to start the background event
-Route::get('/get-stream',[\App\Http\Controllers\SmsModelController::class,'stream']);
+Route::get('/get-stream',[\App\Http\Controllers\SmsModelController::class,'gtstream']);
 
 //for sending Push Notification to app user
 Route::post('/push-sms-notification',[\App\Http\Controllers\SmsModelController::class,'sendPushNotification']);
