@@ -36,9 +36,9 @@ public function __construct(){
 /**
  * This function fetches all sms sent to the modem via the sim cards
  *
-     * @queryParam $port_id Integer Example: 1,2,3-8
-     * @queryParam $id Integer $slots Example: 1
-     * @queryParam $type String  Example: 0,1,2,3 or all
+     * @queryParam Integer port_id Example: 1,2,3-8
+     * @queryParam Integer id  $slots Example: 1
+     * @queryParam String type  Example: 0,1,2,3 or all
      *
      *
      * @response{
@@ -141,7 +141,7 @@ try{
 
     /***
      * Function retrieves messages by a particular sim card as saved in the database
-     * @bodyParam sim_num String Example: +125902920998
+     * @bodyParam String sim_num Example: +125902920998
      *
      * @response{
      * 'data': []
@@ -173,7 +173,7 @@ try{
 
     /***
      * Function retrieves messages by a particular sim card as saved in the database
-     * @bodyParam $port_number Integer Example: 1-8
+     * @bodyParam Integer port_number Example: 1-8
      * @response{
      * 'data': [],
      * 'status': string
@@ -430,7 +430,7 @@ public function gtstream(){
  *
  * form-data variable fetched via the Request object
  *
- * @bodyParam $sim_number String Example: 120390480
+ * @bodyParam String sim_number Example: 120390480
  *
  * @response{
  * 'data'=> [],
@@ -462,7 +462,7 @@ public function get_all_sms_for_sim_by_no_param(SimModuleRequest $request){
     /**
      * Display the sms referenced by the id.
      *
-     * @queryParam $id Integer Sms id in the database table
+     * @queryParam Integer id Sms id in the database table
      *
      * @header Connection close
      * @header Accept * / *
@@ -505,9 +505,39 @@ public function get_all_sms_for_sim_by_no_param(SimModuleRequest $request){
 
     }
 
+
+/**
+ * This function deletes all sms for this recipient
+ * @queryParam String recipient_num
+ *
+ *   * @header Connection close
+     * @header Accept * / *
+     * @header Content-Type application/json;utf-8
+     * @header Authorization Bearer AUTH_TOKEN
+
+ */
+public function delete_recipient_sms($recipient_num){
+
+    try{
+    $allRecipientSms = \App\Models\SmsModel::where(['sim_number_sent_to'=>$recipient_num])->get();
+
+    if(sizeof($allRecipientSms)>0){
+
+        foreach($allRecipientSms as $x){
+        $this->deleteResource($x->id);
+        }
+
+        return response()->json(['data'=>'sms_deleted','message'=>'All sms deleted successfully','status'=>'success'],200);
+    }
+}catch(\Exception $e){
+    return response()->json(['data'=>NULL,'error'=>$e->getMessage(),'message'=>'Error!'],500);
+}
+
+}
+
     /**
      * This function is to remove or change the state of an sms
-     * @queryParam $id Integer Sms id in the database table
+     * @queryParam Integer id Sms id in the database table
 
      * @header Connection close
      * @header Accept * / *

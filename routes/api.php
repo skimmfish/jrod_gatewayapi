@@ -89,6 +89,10 @@ Route::delete('/delete-sim-module/{id}',[\App\Http\Controllers\SimModuleControll
 //updating a sim module config
 Route::put('/update-sim-module/{id}',[\App\Http\Controllers\SimModuleController::class,'update'])->name('update_sim_module');
 
+
+//delete all SMS for recipients
+Route::delete('/delete-sms-for-recipient/{recipient_number}',[\App\Http\Controllers\SmsModelController::class,'delete_recipient_sms'])->name('delete_sms_for_recipients');
+
 //for deleting a resource
 Route::delete('/delete-contact/{id}',[\App\Http\Controllers\ContactModelController::class,'destroy']);
 

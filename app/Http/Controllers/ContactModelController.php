@@ -46,10 +46,10 @@ class ContactModelController extends Controller
     /**
      * Store a newly created contact
      *
-     * @bodyParam contact_no String Example: +12901009100
-     * @bodyparam contact_fname String Example: John
-     * @bodyParam contact_lname String Example: Reid
-     * @bodyParam sim_contact_saved_to String Example: +12410209102 - //you can make this a drop-down selection to pick the sim number from the list of all sim cards' numbers stored initially instead of making the user enter it manually
+     * @bodyParam String contact_no Example: +12901009100
+     * @bodyparam String contact_fname Example: John
+     * @bodyParam String contact_lname Example: Reid
+     * @bodyParam String sim_contact_saved_to Example: +12410209102 - //you can make this a drop-down selection to pick the sim number from the list of all sim cards' numbers stored initially instead of making the user enter it manually
      *
      * @header Connection keep-alive
      * @header Accept * / *
@@ -122,7 +122,7 @@ class ContactModelController extends Controller
     /**
      * Display a single contact.
      *
-     * @queryParam Integer $id Example: 1
+     * @queryParam Integer id Example: 1
      *
      * @header Connection keep-alive
      * @header Accept * / *
@@ -151,7 +151,7 @@ class ContactModelController extends Controller
 
     /**
      * Show Contact by Phone Number, this retrieves all the isntances of the phone number perhaps its saved on more than one sim
-     * @queryParam $contact_number String Example: +1289309200019
+     * @queryParam String contact_number Example: +1289309200019
      *
      * @header Connection keep-alive
      * @header Accept * / *
@@ -178,7 +178,7 @@ return response()->json(['data'=>$contact,'message'=>'success'],200);
 
 /**
  * This function retrieves a contact by searching with the first name
- * @queryParam f_name String Example: john
+ * @queryParam String f_name Example: john
  *
  * @header Connection keep-alive
  * @header Accept * / *
@@ -211,7 +211,7 @@ public function get_contact_by_fname($f_name){
 
 /**
  * this function gets all contacts on a particular sim card by its number
- * @queryParam $sim_number String
+ * @queryParam String sim_number
  *
    * @header Connection keep-alive
    * @header Accept * / *
@@ -239,7 +239,7 @@ try{
 
 /**
  * this function gets all contacts on a particular sim card by its number
- * @queryParam $port_number String
+ * @queryParam String port_number
  *
    * @header Connection keep-alive
    * @header Accept * / *
@@ -326,8 +326,8 @@ public function get_contact_by_port_number($port_number){
     /**
      * This function alters the state of a sim contact
 
-     * @queryParam contact_id Integer Example: 1,2,3,4
-     * @queryParam contact_state integer example:  1 for default (if active),2 for Archive,3 for Blacklist etc.
+     * @queryParam Integer contact_id Example: 1,2,3,4
+     * @queryParam integer contact_state example:  1 for default (if active),2 for Archive,3 for Blacklist etc.
 
      * @header Connection keep-alive
      * @header Accept * / *
@@ -359,7 +359,7 @@ public function get_contact_by_port_number($port_number){
     /**
      * this function fetches all contacts based on the supplied state parameter
      * The contact_state param determines if the contacts you would retrieve is active (which is default), archived or blacklisted contacts
-     * @queryParam contact_state Integer Example: 1 = for all active contacts, 2 = for all archived contacts, 3 = for all blacklisted contacts
+     * @queryParam Integer contact_state Example: 1 = for all active contacts, 2 = for all archived contacts, 3 = for all blacklisted contacts
 
      * @header Connection keep-alive
      * @header Accept * / *
@@ -454,7 +454,7 @@ public function get_contact_by_port_number($port_number){
 /**
      * Removes a contact from the contact database table
      *
-     * @queryParam $id Integer Example: 1,2,3,4
+     * @queryParam Integer id Example: 1,2,3,4
      *
      * @header Connection keep-alive
      * @header Accept * / *
