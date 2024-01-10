@@ -76,8 +76,13 @@ Route::get('/get-sims-by-simcard-number/{sim_number}',[\App\Http\Controllers\Sim
 //UPDATE LOGIN CREDENTIALS
 Route::put('/update-user/{id}',[\App\Http\Controllers\Auth\UserController::class,'updatepassword']);
 
+
 //getting a single contact using the resource mode
 Route::get('/get-contact/{id}',[\App\Http\Controllers\ContactModelController::class,'show']);
+
+
+//getting a single contact using the resource mode
+Route::get('/get-contact-by-type/{type_id}',[\App\Http\Controllers\ContactModelController::class,'show_by_type']);
 
 
 //update a contact number
@@ -129,7 +134,10 @@ Route::get('/get-contact-by-port-num/{port_number}',[\App\Http\Controllers\Conta
 
 
 //this post CALL changes the state of a contact number - 1=active, 2=archived, 3-blocked (2 & 3 are state of inactivity)
-Route::put('/change-contact-number-state/{contact_id}/{contact_state}',[\App\Http\Controllers\ContactModelController::class,'change_state_of_contact'])->name('change_state_of_contact');
+Route::put('/change-contact-number-state/{contact_id}',[\App\Http\Controllers\ContactModelController::class,'change_state_of_contact'])->name('change_state_of_contact');
+
+//this post CALL changes the state of a contact number - 1=active, 2=archived, 3-blocked (2 & 3 are state of inactivity)
+Route::put('/change-contact-multiplue-number-state',[\App\Http\Controllers\ContactModelController::class,'change_state_of_contact_multiple'])->name('change_state_of_contact');
 
 
 //get sms messages by sim_number
@@ -163,8 +171,14 @@ Route::post('send-single-sms',[\App\Http\Controllers\SmsModelController::class,'
 //this route sends bulk sms to multiple recipients @ once
 Route::post('/send-bulk-sms',[\App\Http\Controllers\SmsModelController::class,'send_bulk_sms']);
 
+
 //FOR CHANGING THE STATE OF AN SMS
 Route::put('/change-sms-state/{sms_id}',[\App\Http\Controllers\SmsModelController::class,'change_sms_state'])->name('change_received_sms_state');
+
+
+//FOR CHANGING THE STATE OF MULTIPLE SMS
+Route::put('/change-multiple-sms-state',[\App\Http\Controllers\SmsModelController::class,'change_multiple_sms_state'])->name('change_received_multiple_sms_state');
+
 
 //parse sms sent with base64 encoding
 Route::post('/parse-sms',[\App\Http\Controllers\SmsModelController::class,'parse_sms']);

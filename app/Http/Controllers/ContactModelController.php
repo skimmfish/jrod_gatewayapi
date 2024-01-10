@@ -80,7 +80,7 @@ class ContactModelController extends Controller
         try{
 
             $rules =  [
-            'contact_no'=>['required','string','max:14','min:14'],
+            'contact_no'=>['required','string','max:14','min:11'],
             'contact_fname'=>['required','string','max:50','min:3'],
             'contact_lname'=>['required','string','max:50','min:3'],
             'sim_contact_saved_to' => ['required','string']
@@ -141,13 +141,46 @@ class ContactModelController extends Controller
 
      $response =  \App\Models\ContactModel::findOrFail($id);
 
-     return response()->json(['data'=>$response,'message'=>'success'],200);
+     return response()->json(['data'=>json_encode($response),'message'=>'success'],200);
 
         }catch(\Exception $e){
             return response()->json(['data'=>NULL,'message'=>'error','error'=>$e->getMessage()],404);
         }
+
     }
 
+
+
+    /**
+     * Display only a category of contacts
+     *
+     * @header Connection keep-alive
+     * @header Accept * / *
+     * @header Content-Type application/octet-stream
+     * @header Authorization Bearer AUTH_TOKEN
+     *
+     * @queryParam Integer type_id Example: 1 or 2 or 3
+
+     * @response{
+     *  'data': [],
+     *  'message': 'success' or 'error
+     *
+     * }
+     */
+
+public function show_by_type($type_id){
+
+    try{
+
+        $response =  \App\Models\ContactModel::where(['contact_state'=>$type_id])->get();
+
+        return response()->json(['data'=>json_encode($response),'message'=>'all active numbers fetched','status'=>'success'],200);
+
+           }catch(\Exception $e){
+               return response()->json(['data'=>NULL,'message'=>'error','error'=>$e->getMessage()],404);
+           }
+
+}
 
     /**
      * Show Contact by Phone Number, this retrieves all the isntances of the phone number perhaps its saved on more than one sim
@@ -169,7 +202,7 @@ try{
 
     $contact = \App\Models\ContactModel::Where(['sim_number'=>$contact_number])->first();
 
-return response()->json(['data'=>$contact,'message'=>'success'],200);
+return response()->json(['data'=>json_encode($contact),'message'=>'success'],200);
 
     }catch(\Exception $e){
         return response()->json(['data'=>NULL,'error'=>$e->getMessage()],404);
@@ -198,7 +231,7 @@ public function get_contact_by_fname($f_name){
    //$result = \App\Models\ContactModel::where(['contact_fname'=>$f_name])->orderBy('created_at','DESC')->get();
 
    if(sizeof($result)>0){
-   return response()->json(['data'=>$result,'message'=>'success'],200);
+   return response()->json(['data'=>json_encode($result),'message'=>'success'],200);
    }else{
     return response()->json(['data'=>null,'message'=>'no_record_found'],404);
    }
@@ -228,7 +261,7 @@ public function get_contact_by_sim_number($sim_number){
 
 try{
     $allContacts = \App\Models\ContactModel::where('sim_contact_saved_to ',$sim_number)->get();
-    return response()->json(['data'=>$allContacts,'message'=>'success'],200);
+    return response()->json(['data'=>json_encode($allContacts),'message'=>'success'],200);
 }catch(\Exception $e){
 
     return response()->json(['data'=>NULL,'message'=>'Error'],404);
@@ -327,12 +360,16 @@ public function get_contact_by_port_number($port_number){
      * This function alters the state of a sim contact
 
      * @queryParam Integer contact_id Example: 1,2,3,4
-     * @queryParam integer contact_state example:  1 for default (if active),2 for Archive,3 for Blacklist etc.
+     * @bodyParam integer contact_state example:  1 for default (if active),2 for Archive,3 for Blacklist etc.
 
      * @header Connection keep-alive
      * @header Accept * / *
      * @header Content-Type application/json;utf-8
      * @header Authorization Bearer AUTH_TOKEN
+
+     * @request: {
+     *   'contact_state' : contact_state
+     * }
 
     * @response{
     * 'data': \Illuminate\Http\Response $response $res,
@@ -341,11 +378,18 @@ public function get_contact_by_port_number($port_number){
 
      *
      */
-    public function change_state_of_contact(Request $request,$contact_id,$contact_state){
+
+    public function change_state_of_contact(Request $request,$contact_id){
 
     try{
+        $rules = [
+            'contact_state'=>['required','integer']
+        ];
+
+        $request->validate($rules);
+
         $contact = \App\Models\ContactModel::find($contact_id);
-        $contact->contact_state =  $contact_state;
+        $contact->contact_state =  $request->contact_state;
 
         $res = $contact->save();
 
@@ -356,7 +400,62 @@ public function get_contact_by_port_number($port_number){
     }
 
 }
+
+
+
     /**
+     * This function alters the state of a sim contact
+
+     * @queryParam Integer contact_id Example: 1,2,3,4
+     * @bodyParam integer contact_state example:  1 for default (if active),2 for Archive,3 for Blacklist etc.
+
+     * @header Connection keep-alive
+     * @header Accept * / *
+     * @header Content-Type application/json;utf-8
+     * @header Authorization Bearer AUTH_TOKEN
+    *
+    *  @request:{
+    *   'contact_ids':[contact ids separated by ',']
+    * }
+    * @response{
+    * 'data': \Illuminate\Http\Response $response $res,
+    * 'message': 'success' or 'error'
+    * }
+
+     *
+     */
+
+public function change_state_of_contact_multiple(Request $request){
+
+    try{
+
+        $rules = [
+            'contact_state'=>['required','integer']
+        ];
+
+        //validating the rules
+        $request->validate($rules);
+
+        $contact_ids = ($request->contact_ids);
+
+    foreach($contact_ids as $i){
+    $contact = \App\Models\ContactModel::findOrFail($i);
+    $contact->contact_state =  $request->contact_state;
+    $res = $contact->save();
+    }
+
+    return response()->json(['status'=>'success','message'=>'All contacts state modified successfully'],200);
+
+
+}catch(\Exception $e){
+
+    return response()->json(['data'=>NULL,'message'=>'error','exception'=>$e->getMessage()],404);
+
+}
+
+
+}
+/**
      * this function fetches all contacts based on the supplied state parameter
      * The contact_state param determines if the contacts you would retrieve is active (which is default), archived or blacklisted contacts
      * @queryParam Integer contact_state Example: 1 = for all active contacts, 2 = for all archived contacts, 3 = for all blacklisted contacts

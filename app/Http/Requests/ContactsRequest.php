@@ -24,7 +24,7 @@ class ContactsRequest extends FormRequest
     public function rules()
     {
         return [
-            'contact_no'=>['required','string','max:14','min:14'],
+            'contact_no'=>['required','string','max:14','min:11'],
             'contact_fname'=>['required','string','max:50','min:3'],
             'contact_lname'=>['required','string','max:50','min:3'],
             'sim_contact_saved_to'=>['required','string']

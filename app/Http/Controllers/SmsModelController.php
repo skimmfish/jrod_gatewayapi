@@ -980,18 +980,19 @@ public function parse_sms(Request $request){
 
 /**
    * This function changes the state of the sms
+   *    * 1 = active, 2 = archived, 3=deleted
    * @header Connection keep-alive
    * @header Accept * / *
    * @header Content-Type application/octet-stream
    * @header Authorization Bearer AUTH_TOKEN
 
      *
-     * @queryParam Integer $sms_id
-     * @queryParam \Illuminate\Http\Request $request
-
+     * @queryParam Integer sms_id
+     *
      * @bodyParam new_state required Example: 1, or 2 or 3
      * @request{
-     * 'sms_id': Integer $request->new_state Integer 1 = active,2=archived,3=deleted
+     * 'sms_id': $sms_id,
+     * 'new_state': 1/2/3
      * }
      *
      * @response{
@@ -1000,7 +1001,13 @@ public function parse_sms(Request $request){
      * 'message': 'successful'
      * }
      */
+
     public function change_sms_state(Request $request,$sms_id){
+
+        $rules = [
+            'new_state'=>['required','integer'],
+            'sms_ids'=>['required','integer']
+        ];
 
        $state = $request->new_state; //1 = active, 2=archived, 3=deleted
 
@@ -1011,7 +1018,8 @@ public function parse_sms(Request $request){
                 //delete if the state selected is 3 on the front-end
                 $sms->delete();
             }else{
-            $sms->active_state = $state;
+
+                $sms->active_state = $state;
 
             //saving the database
             $res = $sms->save();
@@ -1024,6 +1032,79 @@ public function parse_sms(Request $request){
         return response()->json(['data'=>NULL,'message'=>'error'],404);
     }
     }
+
+
+/**
+   * This function changes the state of the multiple sms items
+   * 1 = active, 2 = archived, 3=deleted
+   * @header Connection keep-alive
+   * @header Accept * / *
+   * @header Content-Type application/octet-stream
+   * @header Authorization Bearer AUTH_TOKEN
+
+     *
+     *
+     * @bodyParam Integer new_state required Example: 1, or 2 or 3
+     * @bodyParam Integer[] sms_ids Example: 1,2,3,4,5...n
+     *
+     *  @request{
+     * 'sms_ids': [] Integer $request->sms_ids
+     * 'new_state': 1/2/3
+     * }
+     *
+     * @response{
+     * 'data': \Illuminate\Http\Response $response $res,
+     * 'id': $sms_id Integer,
+     * 'message': 'successful'
+     * }
+     */
+
+     public function change_multiple_sms_state(Request $request){
+
+        $rules = [
+            'new_state'=>['required','integer'],
+            'sms_ids'=>['required']
+        ];
+
+        //validating request body
+        $request->validate($rules);
+
+        $state = $request->new_state; //1 = active, 2=archived, 3=deleted
+
+        try{
+
+
+
+            $sms_ids = ($request->sms_ids);
+
+            foreach($sms_ids as $i){
+            $sms = \App\Models\SmsModel::findOrFail($i);
+            $state =  $request->new_state;
+
+            if(!is_null($sms)){
+
+                if($state==3){
+                 //delete if the state selected is 3 on the front-end
+                 $sms->delete();
+             }else{
+
+                 $sms->active_state = $state;
+
+             //saving the database
+             $res = $sms->save();
+
+         }
+     }
+ }
+
+
+     return response()->json(['message'=>'Sms state modified successfully','status'=>'success'],200);
+
+     }catch(\Exception $r){
+         return response()->json(['data'=>NULL,'message'=>'error'],404);
+     }
+     }
+
 
 
 } //end of class
