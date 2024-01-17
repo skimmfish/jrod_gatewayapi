@@ -415,6 +415,7 @@ public function get_contact_by_port_number($port_number){
      * @header Authorization Bearer AUTH_TOKEN
     *
     *  @request:{
+    *   'contact_state': 1/2/3
     *   'contact_ids':[contact ids separated by ',']
     * }
     * @response{
@@ -430,7 +431,8 @@ public function change_state_of_contact_multiple(Request $request){
     try{
 
         $rules = [
-            'contact_state'=>['required','integer']
+            'contact_state'=>['required','integer'],
+            'contact_ids'=>['required']
         ];
 
         //validating the rules
@@ -439,9 +441,19 @@ public function change_state_of_contact_multiple(Request $request){
         $contact_ids = ($request->contact_ids);
 
     foreach($contact_ids as $i){
-    $contact = \App\Models\ContactModel::findOrFail($i);
+        $contact = \App\Models\ContactModel::findOrFail($i);
+
+    if($request->contact_state!=3){
     $contact->contact_state =  $request->contact_state;
     $res = $contact->save();
+
+    }elseif($request->contact_state==3){
+
+    //FORCE DELETING CONTACTS
+    $contact->forceDelete();
+
+
+    }
     }
 
     return response()->json(['status'=>'success','message'=>'All contacts state modified successfully'],200);

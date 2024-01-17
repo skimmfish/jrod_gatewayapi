@@ -98,6 +98,10 @@ Route::put('/update-sim-module/{id}',[\App\Http\Controllers\SimModuleController:
 //delete all SMS for recipients
 Route::delete('/delete-sms-for-recipient/{recipient_number}',[\App\Http\Controllers\SmsModelController::class,'delete_recipient_sms'])->name('delete_sms_for_recipients');
 
+//delete all SMS for recipients
+Route::delete('/delete-sms-for-multiple-recipient',[\App\Http\Controllers\SmsModelController::class,'delete_multiple_recipient_sms'])->name('delete_sms_for_recipients');
+
+
 //for deleting a resource
 Route::delete('/delete-contact/{id}',[\App\Http\Controllers\ContactModelController::class,'destroy']);
 
@@ -137,7 +141,7 @@ Route::get('/get-contact-by-port-num/{port_number}',[\App\Http\Controllers\Conta
 Route::put('/change-contact-number-state/{contact_id}',[\App\Http\Controllers\ContactModelController::class,'change_state_of_contact'])->name('change_state_of_contact');
 
 //this post CALL changes the state of a contact number - 1=active, 2=archived, 3-blocked (2 & 3 are state of inactivity)
-Route::put('/change-contact-multiplue-number-state',[\App\Http\Controllers\ContactModelController::class,'change_state_of_contact_multiple'])->name('change_state_of_contact');
+Route::put('/change-contact-multiple-number-state',[\App\Http\Controllers\ContactModelController::class,'t'])->name('change_state_of_contact');
 
 
 //get sms messages by sim_number
@@ -179,6 +183,9 @@ Route::put('/change-sms-state/{sms_id}',[\App\Http\Controllers\SmsModelControlle
 //FOR CHANGING THE STATE OF MULTIPLE SMS
 Route::put('/change-multiple-sms-state',[\App\Http\Controllers\SmsModelController::class,'change_multiple_sms_state'])->name('change_received_multiple_sms_state');
 
+//FOR CHANGING THE STATE OF MULTIPLE SMS for a single recipient
+Route::put('/change-sms-status-for-recipient',[\App\Http\Controllers\SmsModelController::class,'change_sms_state_recipient'])->name('change_received_multiple_sms_state');
+
 
 //parse sms sent with base64 encoding
 Route::post('/parse-sms',[\App\Http\Controllers\SmsModelController::class,'parse_sms']);
@@ -211,6 +218,10 @@ Route::post('/get-issues-done/{port_id}',[\App\Http\Controllers\SimModuleControl
 
 //for viewing archived contacts
 Route::get('/get-all-archived-contacts',[\App\Http\Controllers\ContactModelController::class,'fetch_archived_contacts']);
+
+
+//for viewing archived chats
+Route::get('/get-all-archived-sms',[\App\Http\Controllers\SmsModelController::class,'fetch_archived_sms']);
 
 
 //for viewing blacklisted contacts

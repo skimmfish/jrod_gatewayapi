@@ -190,13 +190,7 @@ public function get_sms_by_port_num($port_num){
 
     try{
 
-        //fire the NewSmsMessage Dispatch
-//        NewSms::dispatch();
-
-      $msgs = \App\Models\SmsModel::distinct()->select('sim_number_sent_to','port_sent_from','read_status','_msg','created_at')->where(['port_sent_from'=>$port_num])->whereNotNull('_msg')->orderBy('created_at','DESC')->get();
-
-      $msg = \App\Models\SmsModel::distinct()->select('sim_number_sent_to','port_sent_from','read_status','_msg','created_at')->where(['port_sent_from'=>$port_num])->whereNotNull('_msg')->orderBy('created_at','DESC')->get();
-
+      $msgs = \App\Models\SmsModel::distinct()->select('sim_number_sent_to','port_sent_from','read_status','_msg','created_at')->where(['port_sent_from'=>$port_num,'active_state'=>true])->whereNotNull('_msg')->orderBy('created_at','DESC')->get();
 
             //converting the messages into a unique associative array
           $msg = collect($msgs)->unique('sim_number_sent_to')->toArray();
@@ -209,6 +203,33 @@ public function get_sms_by_port_num($port_num){
         return response()->json(['data'=>NULL,'status'=>'fail','exception'=>$e->getMessage()],404);
 
     }
+}
+
+
+    /***
+     * Function retrieves all archived sms
+
+     * @response{
+     * 'data': [],
+     * 'status': string
+     * }
+     *
+     * @header Connection close
+     * @header Accept * / *
+     * @header Content-Type application/json;utf-8
+     * @header Authorization Bearer AUTH_TOKEN
+     */
+
+public function fetch_archived_sms(){
+
+$msgs = \App\Models\SmsModel::distinct()->select('sim_number_sent_to','port_sent_from','read_status','_msg','created_at')->where(['active_state'=>2])->whereNotNull('_msg')->orderBy('created_at','DESC')->get();
+
+    //converting the messages into a unique associative array
+$msg = collect($msgs)->unique('sim_number_sent_to')->toArray();
+//$msg = $msg.toArray();
+
+return response()->json(['data'=> array_values($msg),'status'=>'success'],200);
+
 }
 
 
@@ -535,6 +556,47 @@ public function delete_recipient_sms($recipient_num){
 
 }
 
+
+/**
+ * This function deletes all sms for this recipient for multiple selections
+ * @bodyParam recipient_numbers String[]
+ *
+ *   * @header Connection close
+     * @header Accept * / *
+     * @header Content-Type application/json;utf-8
+     * @header Authorization Bearer AUTH_TOKEN
+
+ */
+
+public function delete_multiple_recipient_sms(Request $request){
+
+    $rules = [
+        'recipient_numbers'=>['required']
+    ];
+
+    try{
+        $request->validate($rules);
+        $allRecipients = $request->recipient_numbers;
+
+        foreach($allRecipients as $i){
+
+            $smsIt = \App\Models\SmsModel::where(['sim_number_sent_to'=>$i])->first();
+            if(!is_null($smsIt)){
+            //if(!is_null($smsIt)){
+            $smsItem = \App\Models\SmsModel::findOrFail($smsIt->id);
+            $smsItem->delete();
+            }
+        }
+
+
+            return response()->json(['data'=>'sms_deleted','message'=>'All sms deleted successfully','status'=>'success'],200);
+
+    }catch(\Exception $e){
+
+        return response()->json(['data'=>NULL,'error'=>$e->getMessage(),'message'=>'Error!'],500);
+
+    }
+}
     /**
      * This function is to remove or change the state of an sms
      * @queryParam Integer id Sms id in the database table
@@ -1035,6 +1097,75 @@ public function parse_sms(Request $request){
 
 
 /**
+   * This function changes the state of all sms in a single recipient conversation
+   * 1 = active, 2 = archived, 3=deleted
+   * @header Connection keep-alive
+   * @header Accept * / *
+   * @header Content-Type application/octet-stream
+   * @header Authorization Bearer AUTH_TOKEN
+
+     *
+     *
+     * @bodyParam Integer new_state required Example: 1, or 2 or 3
+     * @bodyParam String recipient_number Example: +1239029109
+     *
+     *  @request{
+     * 'recipient_number': 'number'
+     * 'new_state': 1
+     * }
+     *
+     * @response{
+     * 'data': \Illuminate\Http\Response $response $res,
+     * 'id': $sms_id Integer,
+     * 'message': 'successful'
+     * }
+     */
+
+
+    public function change_sms_state_recipient(Request $request){
+
+
+        $rules = [
+            'new_state'=>['required','integer'],
+            'recipient_number'=>['required']
+        ];
+
+        try{
+
+        //validating request body
+        $recipient_number = $request->recipient_number;
+        $nwstate = $request->new_state;
+
+        $request->validate($rules);
+            $singleConversation = \App\Models\SmsModel::where(['sim_number_sent_to'=>$recipient_number])->get();
+            if(sizeof($singleConversation)>0){
+
+                //loop through and archive all such SMSs
+                foreach($singleConversation as $e){
+
+                    $id = $e->id;
+                    $smsItem = \App\Models\SmsModel::findOrFail($id);
+                    $smsItem->active_state = $nwstate;
+                    $smsItem->save();
+                }
+            }
+            //archiving the recipient_number
+            $contact = new \App\Http\Controllers\ContactModelController;
+            $contact->change_state_of_contact($request,$recipient_number);
+
+
+            return response()->json(['message'=>'Chat archived successfully','status'=>'success'],500);
+
+
+        }catch(\Exeption $e){
+
+            return response()->json(['message'=>'error','error'=>$e->getMessage()],500);
+        }
+
+
+    }
+
+/**
    * This function changes the state of the multiple sms items
    * 1 = active, 2 = archived, 3=deleted
    * @header Connection keep-alive
@@ -1045,11 +1176,11 @@ public function parse_sms(Request $request){
      *
      *
      * @bodyParam Integer new_state required Example: 1, or 2 or 3
-     * @bodyParam Integer[] sms_ids Example: 1,2,3,4,5...n
+     * @bodyParam Integer sms_ids Example: 1,2,3,4,5...n
      *
      *  @request{
-     * 'sms_ids': [] Integer $request->sms_ids
-     * 'new_state': 1/2/3
+     * 'sms_ids': Integer[]
+     * 'new_state': 1
      * }
      *
      * @response{
