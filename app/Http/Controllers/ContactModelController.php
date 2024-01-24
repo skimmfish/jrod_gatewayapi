@@ -34,7 +34,6 @@ class ContactModelController extends Controller
 
     $allContact = \App\Models\ContactModel::all();
 
-
     return response()->json(['data'=>$allContact,'message'=>'success'],200);
 
 }catch(\Exception $e){
@@ -441,19 +440,11 @@ public function change_state_of_contact_multiple(Request $request){
         $contact_ids = ($request->contact_ids);
 
     foreach($contact_ids as $i){
+
         $contact = \App\Models\ContactModel::findOrFail($i);
+        $contact->contact_state =  $request->contact_state;
+        $res = $contact->save();
 
-    if($request->contact_state!=3){
-    $contact->contact_state =  $request->contact_state;
-    $res = $contact->save();
-
-    }elseif($request->contact_state==3){
-
-    //FORCE DELETING CONTACTS
-    $contact->forceDelete();
-
-
-    }
     }
 
     return response()->json(['status'=>'success','message'=>'All contacts state modified successfully'],200);
@@ -530,7 +521,8 @@ public function change_state_of_contact_multiple(Request $request){
 
 
 }
-    /**
+
+/**
      * this function fetches all blacklisted contacts
      * @header Connection keep-alive
      * @header Accept * / *
@@ -543,11 +535,11 @@ public function change_state_of_contact_multiple(Request $request){
 
         try{
 
-        $allSuch =  \App\Models\ContactModel::where('contact_state',3)->get();
+        $allSuch =  \App\Models\ContactModel::withTrashed()->get();
 
         if(sizeof($allSuch)>0){
 
-            return response()->json(['data'=>$allSuch,'status'=>true,'message'=>'success'],200);
+            return response()->json(['data'=>json_decode($allSuch),'status'=>true,'message'=>'success'],200);
         }else{
 
             return response()->json(['data'=>NULL,'status'=>false,'message'=>'No such contacts found'],404);
@@ -559,6 +551,53 @@ public function change_state_of_contact_multiple(Request $request){
             }
 
     }
+
+
+
+/**
+     * this function restores all the selected contacts
+     * @header Connection keep-alive
+     * @header Accept * / *
+     * @header Content-Type application/json;utf-8
+     * @header Authorization Bearer AUTH_TOKEN
+
+     * @request:{
+     * 'selected_contacts':[]
+     * }
+     *
+     * @response:{
+     *'data':string,
+     * 'status':string
+     * }
+     */
+
+     public function restore_blacklisted_contacts(Request $request){
+
+        try{
+
+           $contactsToRestore =  $request->selected_contacts;
+
+           $rule = [
+            'selected_contacts'=>['required']
+           ];
+
+           $request->validate($rule);
+
+            foreach($contactsToRestore as $i){
+
+                $allSuch =  \App\Models\ContactModel::withTrashed()->where('id',$i)->restore();
+            }
+
+            return response()->json(['status'=>true,'message'=>'Blacklisted contacts restored succesfully'],200);
+
+        }catch(\Exception $e){
+
+                return response()->json(['data'=>NULL,'error'=>$e->getMessage()],500);
+            }
+
+    }
+
+
 
 
 

@@ -1154,12 +1154,12 @@ public function parse_sms(Request $request){
             $contact->change_state_of_contact($request,$recipient_number);
 
 
-            return response()->json(['message'=>'Chat archived successfully','status'=>'success'],500);
+            return response()->json(['message'=>'Chat archived successfully','status'=>'success'],200);
 
 
         }catch(\Exeption $e){
 
-            return response()->json(['message'=>'error','error'=>$e->getMessage()],500);
+            return response()->json(['message'=>'error','status'=>'failed','error'=>$e->getMessage()],500);
         }
 
 
@@ -1219,10 +1219,8 @@ public function parse_sms(Request $request){
                  $sms->delete();
              }else{
 
-                 $sms->active_state = $state;
-
-             //saving the database
-             $res = $sms->save();
+                 $sms->active_state = $state; //saving the database
+                 $res = $sms->save();
 
          }
      }

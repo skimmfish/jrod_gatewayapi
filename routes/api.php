@@ -227,6 +227,11 @@ Route::get('/get-all-archived-sms',[\App\Http\Controllers\SmsModelController::cl
 //for viewing blacklisted contacts
 Route::get('/get-all-blacklisted-contacts',[\App\Http\Controllers\ContactModelController::class,'fetch_blacklisted_contacts']);
 
+
+//for viewing blacklisted contacts
+Route::post('/restore-blacklisted-contacts',[\App\Http\Controllers\ContactModelController::class,'restore_blacklisted_contacts']);
+
+
 //for deleting account, the currently logged in account
 Route::delete('/delete-user-account',[\App\Http\Controllers\Auth\UserController::class,'delete_logged_user']);
 
