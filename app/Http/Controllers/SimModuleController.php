@@ -72,7 +72,7 @@ class SimModuleController extends Controller
      * @header Accept * / *
      * @header Content-Type application/json;utf-8
      * @header Authorization Bearer AUTH_TOKEN
-     * @header Host 54.179.122.227:52538
+     * @header Host 54.179.122.227:53696
 
      * @response{
      *   'data'=>\Illuminate\Http\Response,
@@ -161,7 +161,7 @@ if($response!='connection_failure'){
      * @header Accept * / *
      * @header Content-Type application/octet-stream
      * @header Authorization Bearer AUTH_TOKEN
-     * @header Host 54.179.122.227:52538
+     * @header Host 54.179.122.227:53696
 
      * @response{
      * 'data': json_decode(\Illuminate\Http\Response $response),
@@ -170,24 +170,60 @@ if($response!='connection_failure'){
      */
     public function get_all_port_state(){
 
-        $url = $this->ip_port_only.'/goip_send_ussd.html?username='.$this->api_username.'&password='.$this->api_password;
-        $body = [];
+    $url = $this->ip_port_only.'/goip_send_ussd.html?username='.$this->api_username.'&password='.$this->api_password;
+    $body = [];
+    $no_of_ports = \App\Models\ConfigModel::get_conn_param('no_of_ports')['value'];
 
+    //initializing active_ports
+    $active_ports = [];
+    $inactive_ports = [];
 
     try{
 
-        $response = \App\Models\ConfigModel::callAPI('GET',$url,$body);
+    $no_of_ports = \App\Models\ConfigModel::get_conn_param('no_of_ports')['value'];
 
-//        \Log::info($response);
+   $response = \App\Models\ConfigModel::callAPI('GET',$url,$body);
 
-if($response!='connection_failure'){
-        return response()->json(['data'=>json_decode($response),'message'=>'success','status'=>true],200);
-}else{
-    return response()->json(['data'=>NULL,'message'=>'connection_failure','status'=>false],500);
+    for($i=1;$i<$no_of_ports+1;$i++){
+
+    $res = $this->get_port_state($i);
+
+     $sim =  \App\Models\SimModule::where(['current_port_state'=>true,'sim_port_number'=>$i])->first();
+
+     if(!is_null($sim)){
+        $active_ports[] = $i;
+     }else{
+        $inactive_ports[] = $i.'PORT_NOT_ADDED_IN_APP_SIM_NOT_FOUND';
+     }
+
 }
-    }catch(Exception $e){
-        return response()->json(['data'=>NULL,'message'=>'error','error'=>$e->getMessage()],200);
-    }
+
+    if($response!='connection_failure'){
+
+        $data = [
+           // 'response'=>json_decode($response),
+            'no_of_ports'=>$no_of_ports,
+            'active_ports'=>$active_ports,
+            'disabled_ports'=>$inactive_ports
+        ];
+
+if(sizeof($active_ports)>0){
+
+    return response()->json(['data'=>$data,'message'=>sizeof($active_ports).' Ports active','status'=>true],200);
+
+}else{
+
+    return response()->json(['data'=>NULL,'message'=>'modem_connected_all_ports_inactive','status'=>true],200);
+}
+}else{
+
+    return response()->json(['data'=>NULL,'message'=>'connection_failure','status'=>false],500);
+
+}
+
+}catch(Exception $e){
+        return response()->json(['data'=>NULL,'message'=>'error','error'=>$e->getMessage(),'errorLine'=>$e->getLine()],500);
+}
 
 }
 
@@ -214,36 +250,56 @@ if($response!='connection_failure'){
 
         $body = [];
 
+        $port_status = false;
         try{
 
-    $this->api_ip_address_at = $this->api_ip_address_at.'&port='.$port_id.'&at=ati';
+        $this->api_ip_address_at = $this->api_ip_address_at.'&port='.$port_id.'&at=ati';
 
 
-  $response = \App\Models\ConfigModel::callAPI('GET',$this->api_ip_address_at,$body);
+        $response = \App\Models\ConfigModel::callAPI('GET',$this->api_ip_address_at,$body);
 
-      $getSim =  \App\Models\SimModule::where('sim_port_number',$port_id)->first();
+        $getSim =  \App\Models\SimModule::where('sim_port_number',$port_id)->first();
 
-      $data = json_decode($response);
+        $data = json_decode($response);
 
-        
-    if($response=='connection_failure'){
+
+        if($response=='connection_failure'){
+
         return response()->json(['data'=>NULL,'message'=>'connection_failure', 'status'=>'failed'],500);
+
+    }else if($response!='connection_failure' && is_null($getSim)){
+
+        //register the sim
+
+    return response()->json(['data'=>json_decode($response),'port_status'=>$port_status,'port_id'=>$port_id,'message'=>'sim_not_registered_in_app'],200);
+
     }else{
 
-  if(!is_null($data)){
+  if(!is_null($data) && !is_null($getSim)){
+
     if($data->reason=='OK'){
+
+        $port_status = true;
+
     \DB::update("UPDATE sim_modules SET current_port_state=? WHERE sim_port_number=?",[true,$port_id]);
+
+    return response()->json(['data'=>json_decode($response),'port_status'=>$port_status,'port_id'=>$getSim->id,'message'=>'success'],200);
+
+    }else if($data->reason!='OK' || is_null($data)){
+
+    $port_status = false;
+
+    \DB::update("UPDATE sim_modules SET current_port_state=? WHERE sim_port_number=?",[false,$port_id]);
+
+        return response()->json(['data'=>json_decode($response),'port_status'=>$port_status,'message'=>'failed'],300);
+
     }
   }
 
 }
-
-
-return response()->json(['data'=>json_decode($response),'id'=>$getSim->id,'message'=>'success'],200);
-
 }catch(\Exception $e){
 
-    return response()->json(['data'=>NULL,'message'=>'error','error'=>$e->getMessage()],500);
+    return response()->json(['data'=>NULL,'message'=>'error','error'=>$e->getMessage(),'errorLine'=>$e->getLine()],500);
 
 }
 }
@@ -318,6 +374,9 @@ public function show_sim_by_sim_number($sim_number){
         }
 
 }
+
+
+
 
 /**
      * This displays the entire information about a sim card fetching by the port number.

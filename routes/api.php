@@ -159,6 +159,13 @@ Route::get('/get-stream',[\App\Http\Controllers\SmsModelController::class,'gtstr
 //for sending Push Notification to app user
 Route::post('/push-sms-notification',[\App\Http\Controllers\SmsModelController::class,'sendPushNotification']);
 
+//PIN ENTIRE CONVERSATION FOR A NUMBER
+Route::post('/pin-conversation',[\App\Http\Controllers\SmsModelController::class,'pin_conversation'])->name('pin_conversation');
+
+//PIN ENTIRE CONVERSATION FOR A NUMBER
+Route::post('/unpin-conversation',[\App\Http\Controllers\SmsModelController::class,'unpin_conversation'])->name('unpin_conversation');
+
+
 //this for deleting sms
 Route::delete('/delete-sms-resource/{id}',[\App\Http\Controllers\SmsModelController::class,'deleteResource']);
 
@@ -211,6 +218,10 @@ Route::get('/get-all-port-state',[\App\Http\Controllers\SimModuleController::cla
 
 //TEST ENDPOINTS
 Route::post('/get-issues-done/{port_id}',[\App\Http\Controllers\SimModuleController::class,'get_port_state']);
+
+
+//this endpoint pins a message
+Route::post('/pin-sms/{id}',[\App\Http\Controllers\SmsModelController::class,'pin_sms']);
 
 
 //for viewing all archived sms

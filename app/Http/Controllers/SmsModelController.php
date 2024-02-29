@@ -49,7 +49,7 @@ public function __construct(){
      * @header Accept * / *
      * @header Content-Type application/json;utf-8
      * @header Authorization Bearer AUTH_TOKEN
-     * @header Host 54.179.122.227:52538
+     * @header Host 54.179.122.227:53696
      */
 
 public function get_sms_stat($port_id,$slots,$type){
@@ -190,7 +190,7 @@ public function get_sms_by_port_num($port_num){
 
     try{
 
-      $msgs = \App\Models\SmsModel::distinct()->select('sim_number_sent_to','port_sent_from','read_status','_msg','created_at')->where(['port_sent_from'=>$port_num,'active_state'=>true])->whereNotNull('_msg')->orderBy('created_at','DESC')->get();
+      $msgs = \App\Models\SmsModel::distinct()->select('sim_number_sent_to','port_sent_from','read_status','_msg','created_at','pin_status','pin_time')->where(['port_sent_from'=>$port_num,'active_state'=>true])->whereNotNull('_msg')->orderBy('pin_time','DESC')->get();
 
             //converting the messages into a unique associative array
           $msg = collect($msgs)->unique('sim_number_sent_to')->toArray();
@@ -647,7 +647,7 @@ public function delete_multiple_recipient_sms(Request $request){
 * @header Accept * / *
 * @header Content-Type application/json
 * @header Authorization Bearer AUTH_TOKEN
-* @header Host 54.179.122.227:52538
+* @header Host 54.179.122.227:53696
 * @header charset utf-8
 *
  * @response{
@@ -709,6 +709,8 @@ if($response=='connection_failure'){
         return response()->json(['data'=>[],'message'=>'msg_not_sent'],500);
     }else if($dat->code==6){
         return response()->json(['data'=>[],'message'=>'session_timed_out'],500);
+    }else if($dat->code==1 || $dat->reason=='access restricted!'){
+        return response()->json(['data'=>[],'message'=>'msg_not_sent_access_restricted'],500);
     }
 
     for($i=0;$i<sizeof($recipients);$i++){
@@ -784,12 +786,15 @@ public function send_single_sms(Request $request){
     $recipient = $request->recipient;
 
     //get the sim number that is sending the sms
-    $sim = \App\Models\SimModule::where(['sim_port_number'=>$sim_port_number])->first();
+    $sim = \App\Models\SimModule::where(['current_port_state'=>true,'sim_port_number'=>$sim_port_number])->first();
 
     if(!is_null($sim)){
         $sender = $sim->sim_number;
-    }
+    }else{
 
+    return response()->json(['data'=>null,'message'=>'sim_slot_not_setup_in_app','status'=>'failed'],500);
+
+}
     //forming the api call link with its parameters
      $this->mergedURL = $this->api_ip_address.'&port='.$sim_port_number.'&charset=Utf-8&recipients='.$recipient.'&sms='.rawurlencode($sms);
 
@@ -800,19 +805,27 @@ public function send_single_sms(Request $request){
         //decoding the response payload into a string
         $dat = json_decode($response);
 
-
         if($response=='connection_failure'){
             return response()->json(['data'=>null,'message'=>'fail_on_connection_failure'],500);
             }elseif($dat->code==5){
                 if($dat->message){
-                if($dat->message=='Not Registered'){
-                return response()->json(['data'=>null,'message'=>'sim_not_registered_msg_not_sent'],500);
+
+                    if($dat->message=='Not Registered'){
+
+                    return response()->json(['data'=>null,'message'=>'sim_not_registered_msg_not_sent'],500);
+
             }
+
         }
     }else if($dat->code==6){
-        return response()->json(['data'=>[],'message'=>'session_timed_out'],500);
-    }
 
+        return response()->json(['data'=>[],'message'=>'session_timed_out'],500);
+
+    }else if($dat->code==1 || $dat->reason=="access restricted!"){
+
+        return response()->json(['data'=>[],'message'=>'msg_not_sent_access_restricted'],500);
+
+    }else{
         //saving it in the database first of all
         $saveToDb = \App\Models\SmsModel::create([
             'sim_number_sent_to'=>$request->recipient,
@@ -828,11 +841,11 @@ public function send_single_sms(Request $request){
         ]);
 
             return response()->json(['data'=>$dat,'message'=>'success'],200);
+    }
 
-            }catch(\Exception $e){
-            return response()->json(['data'=>null,'message'=>'error','error'=>$e->getMessage()],404);
-        }
-
+ }catch(\Exception $e){
+    return response()->json(['data'=>null,'message'=>'error','error'=>$e->getMessage()],404);
+  }
 }
 
 
@@ -1094,6 +1107,155 @@ public function parse_sms(Request $request){
         return response()->json(['data'=>NULL,'message'=>'error'],404);
     }
     }
+
+
+
+    /**
+     * This pins a message
+     *
+     * @queryParam Integer id example: 1/2/3
+     *
+     * @header Connection keep-alive
+     * @header Accept * / *
+     * @header Content-Type application/octet-stream
+     * @header Authorization Bearer AUTH_TOKEN
+     *
+     * @bodyParam recipient_numbers String[] example: ['+1234903909','+962910990991']
+     * @response{
+     * 'data': \Illuminate\Http\Response $simData,
+     * 'message': 'success'
+     * }
+     */
+
+    public function pin_conversation(Request $request){
+
+        try{
+
+
+            $rules = [
+                'recipient_numbers'=>['required']
+            ];
+
+            $request->validate($rules);
+
+         $recipient_numbers =   $request->recipient_numbers;
+
+         foreach($recipient_numbers as $i){
+
+        $sms_item = \App\Models\SmsModel::where(['sim_number_sent_to'=>$i])->first();
+
+        if(!is_null($sms_item)){
+        $id =   $sms_item->id;
+        $sms_item->recipient_no_pin_status = true;
+        $sms_item->pin_time = date('Y-m-d h:i:s',time());
+        $sms_item->pin_status=true;
+        $sms_item->save();
+        }
+
+//           $sms = \DB::update("UPDATE sms_models SET recipient_no_pin_status=?,pin_time=? WHERE sim_number_sent_to=?",[true,date('Y-m-d h:i:s',time()),$i]);
+
+        }
+
+             return response()->json(['data'=>$sms_item,'status'=>true,'message'=>'Sms pin status updated successfully'],200);
+
+
+             }catch(\Exception $e){
+                 return response()->json(['data'=>null,'status'=>'failed','error'=>$e->getMessage()],500);
+             }
+
+    }
+
+
+    /**
+     * This pins a message
+     *
+     * @queryParam Integer id example: 1/2/3
+     *
+     * @header Connection keep-alive
+     * @header Accept * / *
+     * @header Content-Type application/octet-stream
+     * @header Authorization Bearer AUTH_TOKEN
+     *
+     * @bodyParam recipient_numbers String[] example: ['+1234903909','+962910990991']
+     * @response{
+     * 'data': \Illuminate\Http\Response $simData,
+     * 'message': 'success'
+     * }
+     */
+
+     public function unpin_conversation(Request $request){
+
+        try{
+
+
+            $rules = [
+                'recipient_numbers'=>['required']
+            ];
+
+            $request->validate($rules);
+
+         $recipient_numbers =   $request->recipient_numbers;
+
+         foreach($recipient_numbers as $i){
+
+        $sms_item = \App\Models\SmsModel::where(['sim_number_sent_to'=>$i])->first();
+
+        if(!is_null($sms_item)){
+        $id =   $sms_item->id;
+        $sms_item->recipient_no_pin_status = false;
+        $sms_item->pin_time = null;
+        $sms_item->pin_status=false;
+        $sms_item->save();
+        }
+        }
+
+             return response()->json(['data'=>$sms_item,'status'=>true,'message'=>'Sms pin status updated successfully'],200);
+
+
+             }catch(\Exception $e){
+                 return response()->json(['data'=>null,'status'=>'failed','error'=>$e->getMessage()],500);
+             }
+
+    }
+
+
+
+    /**
+     * This pins a message
+     *
+     * @queryParam Integer id example: 1/2/3
+     *
+     * @header Connection keep-alive
+     * @header Accept * / *
+     * @header Content-Type application/octet-stream
+     * @header Authorization Bearer AUTH_TOKEN
+     *
+     * @response{
+     * 'data': \Illuminate\Http\Response $simData,
+     * 'message': 'success'
+     * }
+     */
+
+public function pin_sms($id){
+
+    try{
+
+   $sms = \App\Models\SmsModel::findOrFail($id);
+   $sms->pin_status = true;
+   $sms->pin_time = date('Y-m-d h:i:s',time());
+   $sms->updated_at = date('Y-m-d h:i:s',time());
+
+   //saving the model
+    $res = $sms->save();
+
+    return response()->json(['data'=>$sms,'status'=>true,'message'=>'Sms pin status updated successfully'],200);
+
+
+    }catch(\Exception $e){
+        return response()->json(['data'=>null,'status'=>'failed','error'=>$e->getMessage()],500);
+    }
+
+}
 
 
 /**
